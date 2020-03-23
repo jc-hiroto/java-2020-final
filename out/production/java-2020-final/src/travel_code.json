@@ -1,0 +1,414 @@
+[
+    {
+        "travel_code": "48",
+        "travel_code_name": "北海道．札幌．小樽．函館．旭川"
+    },
+    {
+        "travel_code": "94",
+        "travel_code_name": "關西．大阪．京都．神戶．奈良"
+    },
+    {
+        "travel_code": "93",
+        "travel_code_name": "東京．箱根．輕井澤．伊豆．茨城"
+    },
+    {
+        "travel_code": "70",
+        "travel_code_name": "東北．青森．仙台．山形．花卷．新潟"
+    },
+    {
+        "travel_code": "49",
+        "travel_code_name": "北陸．名古屋．小松．富山．立山黑部"
+    },
+    {
+        "travel_code": "401",
+        "travel_code_name": "四國．中國．高松．廣島．岡山"
+    },
+    {
+        "travel_code": "41",
+        "travel_code_name": "九州．福岡．宮崎．鹿兒島．佐賀"
+    },
+    {
+        "travel_code": "80",
+        "travel_code_name": "琉球．沖繩．石垣島"
+    },
+    {
+        "travel_code": "98",
+        "travel_code_name": "首爾．清州"
+    },
+    {
+        "travel_code": "342",
+        "travel_code_name": "釜山．慶州．大邱"
+    },
+    {
+        "travel_code": "343",
+        "travel_code_name": "濟州島"
+    },
+    {
+        "travel_code": "69",
+        "travel_code_name": "曼谷．芭達雅．大城．桂河"
+    },
+    {
+        "travel_code": "405",
+        "travel_code_name": "華欣"
+    },
+    {
+        "travel_code": "74",
+        "travel_code_name": "泰北．清邁．清萊"
+    },
+    {
+        "travel_code": "75",
+        "travel_code_name": "普吉島．喀比"
+    },
+    {
+        "travel_code": "406",
+        "travel_code_name": "蘇梅島"
+    },
+    {
+        "travel_code": "68",
+        "travel_code_name": "新加坡"
+    },
+    {
+        "travel_code": "463",
+        "travel_code_name": "馬新．新馬雙國"
+    },
+    {
+        "travel_code": "72",
+        "travel_code_name": "沙巴．砂勞越"
+    },
+    {
+        "travel_code": "417",
+        "travel_code_name": "汶萊"
+    },
+    {
+        "travel_code": "52",
+        "travel_code_name": "吉隆坡"
+    },
+    {
+        "travel_code": "416",
+        "travel_code_name": "檳城．蘭卡威"
+    },
+    {
+        "travel_code": "91",
+        "travel_code_name": "長灘島"
+    },
+    {
+        "travel_code": "411",
+        "travel_code_name": "宿霧．薄荷島"
+    },
+    {
+        "travel_code": "410",
+        "travel_code_name": "巴拉望"
+    },
+    {
+        "travel_code": "79",
+        "travel_code_name": "馬尼拉．科隆島．愛妮島"
+    },
+    {
+        "travel_code": "63",
+        "travel_code_name": "峇里島．雅加達．泗水"
+    },
+    {
+        "travel_code": "89",
+        "travel_code_name": "越南．下龍灣．中越邊界"
+    },
+    {
+        "travel_code": "391",
+        "travel_code_name": "柬埔寨．吳哥窟．金邊"
+    },
+    {
+        "travel_code": "859",
+        "travel_code_name": " 峴港．芽莊．胡志明市"
+    },
+    {
+        "travel_code": "392",
+        "travel_code_name": "緬甸．寮國"
+    },
+    {
+        "travel_code": "426",
+        "travel_code_name": "北京．天津．承德"
+    },
+    {
+        "travel_code": "427",
+        "travel_code_name": "山西太原"
+    },
+    {
+        "travel_code": "428",
+        "travel_code_name": "大連．瀋陽．哈爾濱．北韓"
+    },
+    {
+        "travel_code": "429",
+        "travel_code_name": "蒙古．呼和浩特"
+    },
+    {
+        "travel_code": "430",
+        "travel_code_name": "江南．上海．杭州．蘇州"
+    },
+    {
+        "travel_code": "431",
+        "travel_code_name": "黃山．千島湖"
+    },
+    {
+        "travel_code": "432",
+        "travel_code_name": "山東．青島．濟南．煙台．泰山"
+    },
+    {
+        "travel_code": "433",
+        "travel_code_name": "長沙．武漢．張家界．長江三峽"
+    },
+    {
+        "travel_code": "434",
+        "travel_code_name": "江西南昌．廬山"
+    },
+    {
+        "travel_code": "435",
+        "travel_code_name": "河南．開封．洛陽．少林寺．龍門石窟"
+    },
+    {
+        "travel_code": "436",
+        "travel_code_name": "廈門．小三通"
+    },
+    {
+        "travel_code": "437",
+        "travel_code_name": "福州．武夷山"
+    },
+    {
+        "travel_code": "438",
+        "travel_code_name": "海南．海口．三亞"
+    },
+    {
+        "travel_code": "439",
+        "travel_code_name": "港澳珠圳"
+    },
+    {
+        "travel_code": "440",
+        "travel_code_name": "四川．重慶．成都．九寨溝"
+    },
+    {
+        "travel_code": "441",
+        "travel_code_name": "雲南．昆明．大理．麗江"
+    },
+    {
+        "travel_code": "442",
+        "travel_code_name": "貴州．貴陽．黃果樹"
+    },
+    {
+        "travel_code": "443",
+        "travel_code_name": "廣西．桂林．南寧"
+    },
+    {
+        "travel_code": "444",
+        "travel_code_name": "甘肅．西安"
+    },
+    {
+        "travel_code": "445",
+        "travel_code_name": "新疆．絲路"
+    },
+    {
+        "travel_code": "446",
+        "travel_code_name": "寧夏．銀川"
+    },
+    {
+        "travel_code": "447",
+        "travel_code_name": "西藏．青海"
+    },
+    {
+        "travel_code": "448",
+        "travel_code_name": "香港"
+    },
+    {
+        "travel_code": "449",
+        "travel_code_name": "澳門"
+    },
+    {
+        "travel_code": "824",
+        "travel_code_name": "神秘北朝鮮"
+    },
+    {
+        "travel_code": "825",
+        "travel_code_name": "精選長江三峽"
+    },
+    {
+        "travel_code": "826",
+        "travel_code_name": "稻城亞丁仙境"
+    },
+    {
+        "travel_code": "51",
+        "travel_code_name": "印度"
+    },
+    {
+        "travel_code": "384",
+        "travel_code_name": "斯里蘭卡"
+    },
+    {
+        "travel_code": "399",
+        "travel_code_name": "尼泊爾．不丹"
+    },
+    {
+        "travel_code": "368",
+        "travel_code_name": "土耳其"
+    },
+    {
+        "travel_code": "55",
+        "travel_code_name": "杜拜"
+    },
+    {
+        "travel_code": "412",
+        "travel_code_name": "伊朗．以色列．約旦"
+    },
+    {
+        "travel_code": "99",
+        "travel_code_name": "馬爾地夫"
+    },
+    {
+        "travel_code": "85",
+        "travel_code_name": "美西．舊金山．洛杉磯"
+    },
+    {
+        "travel_code": "409",
+        "travel_code_name": "阿拉斯加"
+    },
+    {
+        "travel_code": "82",
+        "travel_code_name": "美東．紐約．華盛頓．波士頓"
+    },
+    {
+        "travel_code": "43",
+        "travel_code_name": "美國其他"
+    },
+    {
+        "travel_code": "873",
+        "travel_code_name": "精選美加東"
+    },
+    {
+        "travel_code": "77",
+        "travel_code_name": "加拿大"
+    },
+    {
+        "travel_code": "58",
+        "travel_code_name": "夏威夷"
+    },
+    {
+        "travel_code": "57",
+        "travel_code_name": "古巴．墨西哥．尼加拉瓜．薩爾瓦多"
+    },
+    {
+        "travel_code": "95",
+        "travel_code_name": "阿根廷．巴西．智利．秘魯"
+    },
+    {
+        "travel_code": "96",
+        "travel_code_name": "布里斯本．黃金海岸"
+    },
+    {
+        "travel_code": "408",
+        "travel_code_name": "雪梨"
+    },
+    {
+        "travel_code": "45",
+        "travel_code_name": "柏斯．阿德雷德．塔斯馬尼亞．大堡礁"
+    },
+    {
+        "travel_code": "407",
+        "travel_code_name": "墨爾本"
+    },
+    {
+        "travel_code": "867",
+        "travel_code_name": "東澳雙城深度遊"
+    },
+    {
+        "travel_code": "50",
+        "travel_code_name": "南島．基督城．皇后鎮．但尼丁"
+    },
+    {
+        "travel_code": "47",
+        "travel_code_name": "北島．奧克蘭．羅吐魯阿"
+    },
+    {
+        "travel_code": "61",
+        "travel_code_name": "德國"
+    },
+    {
+        "travel_code": "394",
+        "travel_code_name": "瑞士"
+    },
+    {
+        "travel_code": "393",
+        "travel_code_name": "奧地利"
+    },
+    {
+        "travel_code": "452",
+        "travel_code_name": "精選奧捷"
+    },
+    {
+        "travel_code": "86",
+        "travel_code_name": "英國"
+    },
+    {
+        "travel_code": "414",
+        "travel_code_name": "法國"
+    },
+    {
+        "travel_code": "413",
+        "travel_code_name": "比利時．荷蘭．盧森堡"
+    },
+    {
+        "travel_code": "83",
+        "travel_code_name": "義大利"
+    },
+    {
+        "travel_code": "397",
+        "travel_code_name": "希臘"
+    },
+    {
+        "travel_code": "398",
+        "travel_code_name": "葡萄牙．西班牙"
+    },
+    {
+        "travel_code": "40",
+        "travel_code_name": "丹麥．挪威．瑞典．芬蘭"
+    },
+    {
+        "travel_code": "396",
+        "travel_code_name": "冰島"
+    },
+    {
+        "travel_code": "101",
+        "travel_code_name": "捷克．波蘭．匈牙利"
+    },
+    {
+        "travel_code": "404",
+        "travel_code_name": "克羅埃西亞"
+    },
+    {
+        "travel_code": "44",
+        "travel_code_name": "俄羅斯"
+    },
+    {
+        "travel_code": "395",
+        "travel_code_name": "波羅的海周邊"
+    },
+    {
+        "travel_code": "415",
+        "travel_code_name": "埃及"
+    },
+    {
+        "travel_code": "84",
+        "travel_code_name": "肯亞．南非"
+    },
+    {
+        "travel_code": "81",
+        "travel_code_name": "北非．摩洛哥．突尼西亞"
+    },
+    {
+        "travel_code": "100",
+        "travel_code_name": "馬達加斯加．模里西斯"
+    },
+    {
+        "travel_code": "92",
+        "travel_code_name": "關島"
+    },
+    {
+        "travel_code": "64",
+        "travel_code_name": "帛琉"
+    }
+]
