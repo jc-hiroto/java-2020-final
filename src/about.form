@@ -17,7 +17,7 @@
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <font name="The Light Font" size="72"/>
+          <font name="Eras Demi ITC" size="72"/>
           <foreground color="-15352669"/>
           <text value="FIND A PLACE"/>
         </properties>
@@ -38,7 +38,7 @@
         </constraints>
         <properties>
           <enabled value="true"/>
-          <font size="22"/>
+          <font name="Eras Lt BT" size="22"/>
           <foreground color="-16243414"/>
           <text value="a NTU ESOE 2020 OOP Course project."/>
         </properties>
@@ -59,7 +59,7 @@
         </constraints>
         <properties>
           <enabled value="true"/>
-          <font name="Roboto Thin" size="28"/>
+          <font name="Eras Lt BT" size="36"/>
           <foreground color="-16243414"/>
           <text value="- Group 5 -"/>
         </properties>
@@ -77,7 +77,7 @@
         </constraints>
         <properties>
           <background color="-13158601"/>
-          <font name="Mgen+ 1pp" size="14"/>
+          <font name="Eras Demi ITC" size="14"/>
           <foreground color="-1"/>
           <icon value="img/github-small.png"/>
           <iconTextGap value="7"/>

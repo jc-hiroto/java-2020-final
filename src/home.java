@@ -29,6 +29,7 @@ public class home {
     public static String metalUI = "javax.swing.plaf.metal.MetalLookAndFeel";
     public CardLayout layout = null;
     private JPanel window;
+    private JPanel settingsPanel;
 
     public home() {
 
@@ -87,10 +88,13 @@ public class home {
                 exitFromHome();
             }
         });
-    }
-    public void goToRegister(){
-        layout.show(cardHolder,"Register");
-        exitFromHome();
+        btnSettings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                layout.show(cardHolder,"Settings");
+                exitFromHome();
+            }
+        });
     }
 
     public void cardInit(){
@@ -98,7 +102,7 @@ public class home {
         cardHolder.add(loginPanel, "Login");
         cardHolder.add(registerPanel, "Register");
         cardHolder.add(aboutPanel, "About");
-
+        cardHolder.add(settingsPanel, "Settings");
         layout = (CardLayout)cardHolder.getLayout();
     }
 
@@ -127,7 +131,7 @@ public class home {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        JFrame frame = new JFrame("Home");
+        JFrame frame = new JFrame("Find a Place");
         frame.setSize(1000,800);
         frame.setContentPane(new home().window);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,5 +141,6 @@ public class home {
     private void createUIComponents() {
         loginPanel = new login().getPanel();
         aboutPanel = new about().getPanel();
+        settingsPanel = new settings().getPanel();
     }
 }
