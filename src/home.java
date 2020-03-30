@@ -17,6 +17,7 @@ public class home {
     private JButton btnInfo;
     private JButton btnLogin;
 <<<<<<< HEAD
+<<<<<<< HEAD
     private JPanel Home;
     private JPanel bottom;
     private JPanel homeContentHolder;
@@ -29,13 +30,19 @@ public class home {
     private JPanel registerPanel;
 =======
 >>>>>>> parent of f6adda2... 20200330: GUI update.
+=======
+>>>>>>> parent of f6adda2... 20200330: GUI update.
     public static String metalUI = "javax.swing.plaf.metal.MetalLookAndFeel";
     public CardLayout layout = null;
 
     public home() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         cardInit();
         btnHome.setVisible(false);
+=======
+
+>>>>>>> parent of f6adda2... 20200330: GUI update.
 =======
 
 >>>>>>> parent of f6adda2... 20200330: GUI update.
@@ -70,6 +77,7 @@ public class home {
 
             }
         });
+<<<<<<< HEAD
 <<<<<<< HEAD
         btnLogin.addActionListener(new ActionListener() {
             @Override
@@ -123,6 +131,10 @@ public class home {
 >>>>>>> parent of f6adda2... 20200330: GUI update.
     }
 
+=======
+    }
+
+>>>>>>> parent of f6adda2... 20200330: GUI update.
     public String getSearchField(){
         return searchField.getText();
     }
@@ -135,8 +147,12 @@ public class home {
         }
         JFrame frame = new JFrame("Home");
 <<<<<<< HEAD
+<<<<<<< HEAD
         frame.setSize(1000,800);
         frame.setContentPane(new home().window);
+=======
+        frame.setContentPane(new home().panel1);
+>>>>>>> parent of f6adda2... 20200330: GUI update.
 =======
         frame.setContentPane(new home().panel1);
 >>>>>>> parent of f6adda2... 20200330: GUI update.

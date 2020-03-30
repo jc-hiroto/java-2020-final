@@ -184,7 +184,11 @@
         </properties>
       </component>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <grid id="303be" binding="bottom" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+=======
+      <grid id="303be" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+>>>>>>> parent of f6adda2... 20200330: GUI update.
 =======
       <grid id="303be" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
 >>>>>>> parent of f6adda2... 20200330: GUI update.
@@ -208,6 +212,7 @@
             </properties>
           </component>
           <hspacer id="cf579">
+<<<<<<< HEAD
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -217,6 +222,15 @@
 <<<<<<< HEAD
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
 =======
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+>>>>>>> parent of f6adda2... 20200330: GUI update.
+=======
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <component id="94329" class="javax.swing.JButton" binding="btnInfo">
+            <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
 >>>>>>> parent of f6adda2... 20200330: GUI update.
             </constraints>
@@ -236,6 +250,7 @@
               <background color="-13744040"/>
               <font name="Mgen+ 1pp" size="20"/>
               <foreground color="-1"/>
+<<<<<<< HEAD
 <<<<<<< HEAD
               <hideActionText value="true"/>
               <icon value="img/home-small.png"/>
@@ -467,6 +482,13 @@
             <border type="none"/>
             <children/>
           </grid>
+=======
+              <icon value="img/user.png"/>
+              <iconTextGap value="8"/>
+              <text value="登入"/>
+            </properties>
+          </component>
+>>>>>>> parent of f6adda2... 20200330: GUI update.
 =======
               <icon value="img/user.png"/>
               <iconTextGap value="8"/>
