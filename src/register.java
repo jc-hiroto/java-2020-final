@@ -25,7 +25,4 @@ public class register {
     public JPanel getPanel(){
         return contentHolder;
     }
-    private void createUIComponents() {
-
-    }
 }
