@@ -1,176 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="src.home">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="window" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="5" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="870" height="498"/>
+      <xy x="20" y="20" width="870" height="561"/>
     </constraints>
     <properties>
       <background color="-15352669"/>
     </properties>
     <border type="empty"/>
     <children>
-      <grid id="f23ef" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="1000" height="700"/>
-          </grid>
-        </constraints>
-        <properties>
-          <background color="-1"/>
-        </properties>
-        <border type="none"/>
-        <children>
-          <hspacer id="bdbed">
-            <constraints>
-              <grid row="2" column="2" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-          <hspacer id="130ee">
-            <constraints>
-              <grid row="2" column="0" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-          <vspacer id="1955b">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </vspacer>
-          <component id="aad22" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Mgen+ 1pp" size="50" style="0"/>
-              <foreground color="-15514805"/>
-              <text value="想去哪？"/>
-            </properties>
-          </component>
-          <grid id="fb718" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="8" left="8" bottom="8" right="8"/>
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-15352669"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="2f4a7" class="javax.swing.JTextField" binding="searchField">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="700" height="50"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <font name="Mgen+ 1pp" size="26"/>
-                  <toolTipText value="你想去哪裡？"/>
-                </properties>
-              </component>
-              <component id="155a1" class="javax.swing.JButton" binding="btnSearch">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
-                    <minimum-size width="50" height="50"/>
-                    <preferred-size width="50" height="50"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <font name="Hiragino Maru Gothic Pro" size="22"/>
-                  <foreground color="-1"/>
-                  <hideActionText value="false"/>
-                  <horizontalTextPosition value="0"/>
-                  <icon value="img/search.png"/>
-                  <text value=""/>
-                </properties>
-              </component>
-            </children>
-          </grid>
-          <grid id="bf5f2" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="300" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <background color="-1"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="e0783" class="javax.swing.JButton" binding="btnRecommand">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="70" height="70"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <icon value="img/star.png"/>
-                  <text value=""/>
-                  <toolTipText value="推薦行程"/>
-                </properties>
-              </component>
-              <component id="18202" class="javax.swing.JButton" binding="btnStar">
-                <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="70" height="70"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <icon value="img/like.png"/>
-                  <text value=""/>
-                  <toolTipText value="我的收藏"/>
-                </properties>
-              </component>
-              <component id="fae23" class="javax.swing.JButton" binding="btnList">
-                <constraints>
-                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="70" height="70"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <icon value="img/briefcase.png"/>
-                  <text value=""/>
-                  <toolTipText value="我的訂單"/>
-                </properties>
-              </component>
-              <component id="ae29e" class="javax.swing.JButton" binding="btnExit">
-                <constraints>
-                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="70" height="70"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <icon value="img/exit.png"/>
-                  <inheritsPopupMenu value="false"/>
-                  <text value=""/>
-                  <toolTipText value="Exit"/>
-                </properties>
-              </component>
-              <hspacer id="10c80">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-              <hspacer id="afde7">
-                <constraints>
-                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-            </children>
-          </grid>
-          <vspacer id="f0a56">
-            <constraints>
-              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </vspacer>
-        </children>
-      </grid>
       <component id="84d1b" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -183,27 +22,34 @@
           <verticalTextPosition value="3"/>
         </properties>
       </component>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <grid id="303be" binding="bottom" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-=======
-      <grid id="303be" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
->>>>>>> parent of f6adda2... 20200330: GUI update.
-=======
-      <grid id="303be" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
->>>>>>> parent of f6adda2... 20200330: GUI update.
+      <grid id="303be" binding="bottom" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <maximum-size width="-1" height="48"/>
+          </grid>
         </constraints>
         <properties>
           <background color="-15352669"/>
         </properties>
         <border type="none"/>
         <children>
+          <component id="b055c" class="javax.swing.JButton" binding="btnLogin">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-13744040"/>
+              <font name="Mgen+ 1pp" size="20"/>
+              <foreground color="-1"/>
+              <icon value="img/user.png"/>
+              <iconTextGap value="8"/>
+              <text value="登入"/>
+            </properties>
+          </component>
           <component id="da991" class="javax.swing.JButton" binding="btnSettings">
             <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-15352669"/>
@@ -211,52 +57,16 @@
               <text value=""/>
             </properties>
           </component>
-          <hspacer id="cf579">
-<<<<<<< HEAD
+          <component id="6b2a6" class="javax.swing.JButton" binding="btnHome">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-          <component id="94329" class="javax.swing.JButton" binding="btnInfo">
-            <constraints>
-<<<<<<< HEAD
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-=======
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
->>>>>>> parent of f6adda2... 20200330: GUI update.
-=======
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-          <component id="94329" class="javax.swing.JButton" binding="btnInfo">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
->>>>>>> parent of f6adda2... 20200330: GUI update.
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-15352669"/>
-              <icon value="img/info.png"/>
-              <label value=""/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="b055c" class="javax.swing.JButton" binding="btnLogin">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <actionCommand value=""/>
               <background color="-13744040"/>
               <font name="Mgen+ 1pp" size="20"/>
               <foreground color="-1"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <hideActionText value="true"/>
-              <icon value="img/home-small.png"/>
               <iconTextGap value="8"/>
-              <label value=""/>
-              <text value=""/>
+              <text value="回首頁"/>
               <visible value="true"/>
             </properties>
           </component>
@@ -265,17 +75,6 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
-          <component id="c9e66" class="javax.swing.JButton" binding="btnAbout">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-15352669"/>
-              <foreground color="-15352669"/>
-              <icon value="img/info.png"/>
-              <text value=""/>
-            </properties>
-          </component>
         </children>
       </grid>
       <grid id="4cf05" binding="cardHolder" layout-manager="CardLayout" hgap="0" vgap="0">
@@ -482,20 +281,6 @@
             <border type="none"/>
             <children/>
           </grid>
-=======
-              <icon value="img/user.png"/>
-              <iconTextGap value="8"/>
-              <text value="登入"/>
-            </properties>
-          </component>
->>>>>>> parent of f6adda2... 20200330: GUI update.
-=======
-              <icon value="img/user.png"/>
-              <iconTextGap value="8"/>
-              <text value="登入"/>
-            </properties>
-          </component>
->>>>>>> parent of f6adda2... 20200330: GUI update.
         </children>
       </grid>
     </children>
