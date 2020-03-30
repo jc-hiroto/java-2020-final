@@ -23,13 +23,12 @@ public class home {
     private JPanel cardHolder;
     private JPanel aboutPanel;
     private JButton btnHome;
+    private JButton btnAbout;
     public static String metalUI = "javax.swing.plaf.metal.MetalLookAndFeel";
+    public CardLayout layout = null;
 
     public home() {
-        cardHolder.add(homePanel, "Home");
-        cardHolder.add(loginPanel, "Login");
-        cardHolder.add(aboutPanel, "About");
-        CardLayout layout = (CardLayout)cardHolder.getLayout();
+        cardInit();
         btnHome.setVisible(false);
         btnExit.addActionListener(new ActionListener() {
             @Override
@@ -66,20 +65,42 @@ public class home {
             @Override
             public void actionPerformed(ActionEvent actionEvent){
                 layout.show(cardHolder, "Login");
-                btnLogin.setVisible(false);
-                btnHome.setVisible(true);
+                exitFromHome();
             }
         });
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                layout.show(cardHolder, "Home");
-                btnHome.setVisible(false);
-                btnLogin.setVisible(true);
+                backToHome();
+            }
+        });
+        btnAbout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                layout.show(cardHolder, "About");
+                exitFromHome();
             }
         });
     }
-
+    public void cardInit(){
+        cardHolder.add(homePanel, "Home");
+        cardHolder.add(loginPanel, "Login");
+        cardHolder.add(aboutPanel, "About");
+        layout = (CardLayout)cardHolder.getLayout();
+    }
+    public void backToHome(){
+        layout.show(cardHolder, "Home");
+        btnHome.setVisible(false);
+        btnLogin.setVisible(true);
+        btnSettings.setVisible(true);
+        btnAbout.setVisible(true);
+    }
+    public void exitFromHome(){
+        btnHome.setVisible(true);
+        btnLogin.setVisible(false);
+        btnSettings.setVisible(false);
+        btnAbout.setVisible(false);
+    }
     public String getSearchField() {
         return searchField.getText();
     }
@@ -93,7 +114,7 @@ public class home {
         JFrame frame = new JFrame("Home");
         frame.setContentPane(new home().window);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setSize(1000,800);
         frame.setVisible(true);
     }
 
