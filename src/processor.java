@@ -1,8 +1,8 @@
 public class processor{
-    public db dbObject = null;
+    //public db dbObject = null;
 
     public processor(){
-        dbObject()  //link to DB and initial DB
+        //dbObject();  //link to DB and initial DB
     }
 
     /**
@@ -12,9 +12,9 @@ public class processor{
      * @param sortBy : false = sort by price , true = sort by date , CHOOSE by user
      * @return not sure, maube a list or a string
      */
-    public list searchAvailableTrip(String destination , String date,boolean sortBy){
+    //public list searchAvailableTrip(String destination , String date,boolean sortBy){
 
-    }
+    //}
 
     /**
      *  ***ALL PARAMETER expect numberOFReverse should be enter automatically by system , not user.
@@ -26,7 +26,7 @@ public class processor{
      * @return : string ((Success or fail) + info)
      */
     public String reserveTrip(String id , String leavingDate , String arrivalDate , int numberOfReverse , int productKey ){
-
+        return null;
     }
 
     /**
@@ -37,7 +37,7 @@ public class processor{
      * @return
      */
     public String editTrip(String id , int orderId , int editNum){
-
+        return null;
     }
 
     /**
@@ -47,7 +47,7 @@ public class processor{
      * @return
      */
     public String searchOrder(String id , int orderId){
-
+        return null;
     }
 
     

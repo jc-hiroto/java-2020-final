@@ -30,11 +30,12 @@ public class home {
     public CardLayout layout = null;
     private JPanel window;
     private JPanel settingsPanel;
+    private JButton btnLogout;
 
     public home() {
-
         cardInit();
         btnHome.setVisible(false);
+        loginButtonInit();
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -78,7 +79,6 @@ public class home {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 backToHome();
-                btnLogin.setVisible(true);
             }
         });
         btnAbout.addActionListener(new ActionListener() {
@@ -92,6 +92,14 @@ public class home {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(cardHolder,"Settings");
+                exitFromHome();
+            }
+        });
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                loginButtonInit();
+                layout.show(cardHolder,"Login");
                 exitFromHome();
             }
         });
@@ -111,14 +119,26 @@ public class home {
         btnHome.setVisible(false);
         btnAbout.setVisible(true);
         btnSettings.setVisible(true);
+        loginButtonInit();
     }
 
     public void exitFromHome(){
         btnHome.setVisible(true);
         btnLogin.setVisible(false);
+        btnLogout.setVisible(false);
         btnSettings.setVisible(false);
         btnAbout.setVisible(false);
 
+    }
+    public void loginButtonInit(){
+        if(login.getLoginStatus()){
+            btnLogin.setVisible(false);
+            btnLogout.setVisible(true);
+        }
+        else{
+            btnLogin.setVisible(true);
+            btnLogout.setVisible(false);
+        }
     }
 
     public String getSearchField(){
