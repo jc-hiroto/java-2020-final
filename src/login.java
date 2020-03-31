@@ -121,7 +121,7 @@ public class login<loginStatus> {
 
     public boolean emailValid(String email){
         boolean result = true;
-        if(email.isEmpty() || email.equals(null)){
+        if(email.isEmpty() || email == null){
             result = false;
         }
         else if(!email.contains("@")){
@@ -135,7 +135,7 @@ public class login<loginStatus> {
 
     public boolean passwordValid(String email){
         boolean result = true;
-        if(email.isEmpty() || email.equals(null)){
+        if(email.isEmpty() || email == null){
             result = false;
         }
         else{

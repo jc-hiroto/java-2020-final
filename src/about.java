@@ -12,6 +12,8 @@ public class about {
     public about() {
         visitGitHubPageButton.addActionListener(new ActionListener() {
             @Override
+            // github 按鈕超連結，以chrome開啟。
+            // TODO: 目前僅macOS可用，設定多系統通用
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     Runtime.getRuntime().exec(new String[] {"/usr/bin/open", "-a", "/Applications/Google Chrome.app", "https://github.com/jc-hiroto/java-2020-final"});
