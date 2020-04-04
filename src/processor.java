@@ -59,7 +59,7 @@ public class processor{
      * @return
      */
     public static boolean mailAddressValidChecker(String mailAddress){
-        EmailValidator validator = EmailValidator.getInstance()
+        EmailValidator validator = EmailValidator.getInstance();
         return validator.isValid(mailAddress);
     }
     

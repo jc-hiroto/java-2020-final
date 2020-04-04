@@ -44,7 +44,7 @@ public class register{
 
     public boolean checkFieldData() throws Exception {
             boolean result = true;
-            if(mailAddressValidChecker(getEmail())){
+            if(processor.mailAddressValidChecker(getEmail())){
                 if(passwordValid(getPassword(passwordField),getPassword(passwordCheckField))){
                     // ACCEPT.
                     result = true;
