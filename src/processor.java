@@ -1,4 +1,5 @@
 package src;
+import org.apache.commons.validator.routines.EmailValidator;
 
 public class processor{
     //public db dbObject = null;
@@ -52,5 +53,14 @@ public class processor{
         return null;
     }
 
+    /**
+     * Check if email address is valid . (Call in login and register.java)
+     * @param mailAddress
+     * @return
+     */
+    public static boolean mailAddressValidChecker(String mailAddress){
+        EmailValidator validator = EmailValidator.getInstance();
+        return validator.isValid(mailAddress);
+    }
     
 }

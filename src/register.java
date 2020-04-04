@@ -57,7 +57,7 @@ public class register{
 
     public boolean checkFieldData() throws Exception {
             boolean result = true;
-            if(emailValid(getEmail())){
+            if(processor.mailAddressValidChecker(getEmail())){
                 if(passwordValid(getPassword(passwordField),getPassword(passwordCheckField))){
                     // ACCEPT.
                     result = true;
@@ -88,21 +88,6 @@ public class register{
         rawPass.append(passStr);
         StringBuffer encryptPass = passwordHash.encrypt(rawPass);
         return encryptPass;
-    }
-
-
-    public boolean emailValid(String email){
-        boolean result = true;
-        if(email.isEmpty()){
-            result = false;
-        }
-        else if(!email.contains("@")){
-            result = false;
-        }
-        else{
-            result = true;
-        }
-        return result;
     }
 
     public boolean passwordValid(StringBuffer pass1, StringBuffer pass2){
