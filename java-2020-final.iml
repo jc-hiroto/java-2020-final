@@ -13,5 +13,6 @@
     <orderEntry type="library" name="json-simple-1.1.1" level="project" />
     <orderEntry type="library" name="bcprov-ext-jdk15on-165" level="project" />
     <orderEntry type="library" name="commons-validator-1.6-tests" level="project" />
+    <orderEntry type="library" name="commons-validator-1.6-javadoc" level="project" />
   </component>
 </module>

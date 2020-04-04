@@ -3,37 +3,71 @@ package src;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 class db {
-    public static void connectToDB() {
-        Connection conn = null;
+    private static Connection connection = null;
+    private static String url = "jdbc:sqlite:/Users/james/Documents/GitHub/java-2020-final/src/DB/trip_app.db";
+    public static boolean connectToDB() {
+
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             System.out.println(e);
         }
         try {
-            // db parameters
-            String url = "jdbc:sqlite:/Users/james/Documents/GitHub/java-2020-final/src/DB/trip_app.db";
-            // create a connection to the database
-
-            conn = DriverManager.getConnection(url);
+            connection = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
         }
+        if (connection == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public static String getInsertSql(String userName,String userEmail,StringBuffer userPass) {
+        System.out.println("INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
+                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')");
+        return  "INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
+                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')";
     }
 
     public static boolean newUser(String name,String email,StringBuffer password){
-        return true;
+        Statement stmt = null;
+        boolean flag = false;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connectToDB();
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            stmt.executeUpdate(getInsertSql(name, email, password));
+            connection.commit();
+            System.out.println("INSERT Table  successfully.");
+            flag = true;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            flag = false;
+        }finally{
+            try {
+                if(stmt != null){
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                flag = false;
+            }
+            try {
+                if(connection != null){
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                flag = false;
+            }
+        }
+        return flag;
     }
 }
