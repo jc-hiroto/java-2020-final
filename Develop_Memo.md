@@ -43,6 +43,10 @@
 
 ### GUI  
 @jc-hiroto 
+- 20200323: GUI Test
+  - GUI介面測試，開始首頁製作
+- 20200323-2: GUI update
+  - 首頁製作完成，尚未串接其他頁面。
 
 ### Android 移植  
 @kenny950292
