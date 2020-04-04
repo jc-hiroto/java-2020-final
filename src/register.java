@@ -24,10 +24,8 @@ public class register{
                     if(checkFieldData())
                     {
                         errorAlert.setVisible(false);
-                        System.out.println("Name: "+getName());
-                        System.out.println("Email: "+getEmail());
                         try {
-                            System.out.println("Pass: "+getPassword(passwordField));
+                            
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
