@@ -4,5 +4,14 @@
     <excludeFromCompile>
       <file url="file://$PROJECT_DIR$/src/hash/JsonParser.java" />
     </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="java-2020-final" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

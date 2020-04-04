@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/java-2020-final.iml" filepath="$PROJECT_DIR$/java-2020-final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/java-2020-final.iml" filepath="$PROJECT_DIR$/.idea/java-2020-final.iml" />
     </modules>
   </component>
 </project>
