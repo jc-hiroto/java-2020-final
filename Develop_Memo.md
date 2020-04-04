@@ -1,10 +1,19 @@
-# development memo  
+# Development Memo  
 108-2物件導向程式設計期末專題  
+
+[![Build Status](https://travis-ci.com/jc-hiroto/java-2020-final.svg?branch=master)](https://travis-ci.com/jc-hiroto/java-2020-final)
+[![GitHub issues](https://img.shields.io/github/issues/jc-hiroto/java-2020-final)](https://github.com/jc-hiroto/java-2020-final/issues)
+[![CodeFactor](https://www.codefactor.io/repository/github/jc-hiroto/java-2020-final/badge)](https://www.codefactor.io/repository/github/jc-hiroto/java-2020-final)
+[![codecov](https://codecov.io/gh/jc-hiroto/java-2020-final/branch/master/graph/badge.svg)](https://codecov.io/gh/jc-hiroto/java-2020-final)
 ## Menu
 [TOC]
 ## Info
+[![Build Status](https://travis-ci.com/jc-hiroto/java-2020-final.svg?branch=master)](https://travis-ci.com/jc-hiroto/java-2020-final)
+[![GitHub issues](https://img.shields.io/github/issues/jc-hiroto/java-2020-final)](https://github.com/jc-hiroto/java-2020-final/issues)
+[![CodeFactor](https://www.codefactor.io/repository/github/jc-hiroto/java-2020-final/badge)](https://www.codefactor.io/repository/github/jc-hiroto/java-2020-final)
+[![codecov](https://codecov.io/gh/jc-hiroto/java-2020-final/branch/master/graph/badge.svg)](https://codecov.io/gh/jc-hiroto/java-2020-final)
+
 ### Project PDF
-{%pdf https://raw.githubusercontent.com/jc-hiroto/java-2020-final/master/docs/108-2%20OOP%20Final%20Project%20v0309.pdf%}
 <a href= https://github.com/jc-hiroto/java-2020-final/blob/master/docs/108-2%20OOP%20Final%20Project%20v0309.pdf>source</a>
 ### Project Authors
 - 張博皓 ` @jc-hiroto `
@@ -95,7 +104,6 @@
 
 ### 資料庫  
 `@RaymondKao`
-`master`
 - `master` 20200404: password hash/ Json parser update
 :::info
 - 增加加密與JSON提取程式
@@ -112,9 +120,14 @@
 :::danger
 - 有關於密碼的字串傳遞都將使用StringBuffer，增加安全性（getPassword char[] to StringBuffer 尚未解決，仍須以 String 為中繼）
 :::
-- `master` 20200404-03: DB update
+- `master` 20200404-03: DB update `@jc-hiroto`
 :::info
 - 加入SQLite新增資料語法（註冊部分）
+:::
+- `master` 20200404-04: Register DB update `@jc-hiroto`
+:::success
+- 完成註冊頁面串接 SQLite DB ，可用 INSERT 寫入新使用者資訊
+- 增加註冊成功與失敗提示訊息
 :::
 
 ### 後端資料處理  
@@ -132,6 +145,13 @@
 - 解決 apache validator 包問題
 - 同步所有 .jar 檔
 :::
+- `mailValidChecker` 20200404: Finish mailValidChecker
+:::success
+- IntelliJ比較好用
+- 所有的mail檢查都統一呼叫processor的method
+:::
+- [(PR #1)](https://github.com/jc-hiroto/java-2020-final/pull/1) Merge `mailValidChecker` -> `master`
+
 ### GUI  
 `@jc-hiroto`
 - `master` 20200323: GUI Test
