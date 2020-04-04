@@ -7,9 +7,9 @@ import java.sql.Statement;
 
 
 class db {
-    private Connection connection = null;
-    private String url = "jdbc:sqlite:/Users/james/Documents/GitHub/java-2020-final/src/DB/trip_app.db";
-    public boolean connectToDB() {
+    private static Connection connection = null;
+    private static String url = "jdbc:sqlite:/Users/james/Documents/GitHub/java-2020-final/src/DB/trip_app.db";
+    public static boolean connectToDB() {
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -28,31 +28,28 @@ class db {
         return true;
     }
 
-    public void closeConnection(){
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static String getInsertSql(String userName,String userEmail,StringBuffer userPass) {
-        return  "INSERT INTO USER (USER_NAME,USER_EMAIL,USER_PASS) " +
-                "VALUES ("+userName+",'"+userEmail+"',"+userPass.toString()+");";
+        System.out.println("INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
+                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')");
+        return  "INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
+                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')";
     }
 
-    public boolean newUser(String name,String email,StringBuffer password){
+    public static boolean newUser(String name,String email,StringBuffer password){
         Statement stmt = null;
+        boolean flag = false;
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:data/test.db");
+            connectToDB();
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
             stmt.executeUpdate(getInsertSql(name, email, password));
             connection.commit();
             System.out.println("INSERT Table  successfully.");
+            flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            flag = false;
         }finally{
             try {
                 if(stmt != null){
@@ -60,7 +57,7 @@ class db {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
+                flag = false;
             }
             try {
                 if(connection != null){
@@ -68,9 +65,9 @@ class db {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
+                flag = false;
             }
         }
-        return true;
+        return flag;
     }
 }

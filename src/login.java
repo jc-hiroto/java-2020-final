@@ -52,6 +52,7 @@ public class login<loginStatus> {
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(loginCardHolder, "Login");
                 btnBack.setVisible(false);
+                btnRegister.setVisible(true);
                 emailField.setText("");
                 passwordField.setText("");
                 errorAlert.setVisible(false);

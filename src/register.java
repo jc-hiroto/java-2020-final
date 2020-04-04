@@ -15,8 +15,15 @@ public class register{
     private JTextField nameField;
     private JPanel contentHolder;
     private JPanel errorAlert;
+    private JPanel regSuccessAlert;
+    private JPanel regErrorAlert;
+    private static boolean registerStats = false;
 
     public register() {
+        clearField();
+        regSuccessAlert.setVisible(false);
+        regErrorAlert.setVisible(false);
+        errorAlert.setVisible(false);
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -25,7 +32,7 @@ public class register{
                     {
                         errorAlert.setVisible(false);
                         try {
-                            
+                            registerStats = db.newUser(getName(), getEmail(), getPassword(passwordField));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -35,6 +42,14 @@ public class register{
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                if(registerStats){
+                    clearField();
+                    regSuccessAlert.setVisible(true);
+                }
+                else{
+                    clearField();
+                    regErrorAlert.setVisible(true);
                 }
             }
         });
