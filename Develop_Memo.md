@@ -44,6 +44,34 @@
 
 ### GUI  
 @jc-hiroto 
+- 20200323: GUI Test
+    - 介面製作測試
+    - 開始製作首頁
+- 20200323-2: GUI update
+    - 首頁製作完成
+- 20200330: GUI update
+    - 開始製作登入與關於頁面
+- GUI Update: Error
+    - 我把介面的code搞爛了
+    - 可編譯執行但會產生 null pointer 錯誤
+- Restore: GUI
+    - 還原版本
+- Restore: GUI
+    - 還原版本
+- Restore: Fix GUI crash.
+    - 發現 null pointer 錯誤是因為在 form 處選擇 custom create 但是 java檔案中沒有相應的程式碼可參考
+    - 新舊版本進行手動合併後，還原版本
+- 20200330-1: GUI Update
+    - 更新登入頁面與關於頁面
+- 20200330-2: GUI fix
+    - 修正不同功能頁面切換的方式修正
+- 20200330-3: GUI update.
+    - 
+- 20200320-4: GUI update.
+- 20200331: GUI update
+    - 增加簡單的登入與註冊輸入值檢查
+    - 增加登入成功畫面
+    - 增加登入失敗畫面
 
 ### Android 移植  
 @kenny950292
