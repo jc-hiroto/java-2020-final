@@ -1,5 +1,6 @@
 # develop memo  
-108-2物件導向程式設計期末專題
+108-2物件導向程式設計期末專題  
+<a href= https://github.com/jc-hiroto/java-2020-final/blob/master/docs/108-2%20OOP%20Final%20Project%20v0309.pdf>Project PDF</a>
 ## 開發項目
 ### 資料庫串接  
 @RaymondKao
@@ -43,10 +44,6 @@
 
 ### GUI  
 @jc-hiroto 
-- 20200323: GUI Test
-  - GUI介面測試，開始首頁製作
-- 20200323-2: GUI update
-  - 首頁製作完成，尚未串接其他頁面。
 
 ### Android 移植  
 @kenny950292
