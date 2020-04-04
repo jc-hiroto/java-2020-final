@@ -1,6 +1,10 @@
+package src.hash;
 //AES ECB PKCS7 padding mode
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
@@ -11,13 +15,17 @@ public class passwordHash {
     private final static String key = "0123456789ABCDEF";
 
     //encode text function
-    public StringBuffer encrypt(StringBuffer plainText) throws Exception {
-	    
+    public static StringBuffer encrypt(StringBuffer plainText) throws Exception {
+	    if(plainText.length() == 0){
+	        StringBuffer ERR = new StringBuffer();
+	        ERR.append("ERR");
+	        return ERR;
+	    }
 		try {
     		//generate the size of input text and key
     		byte[] input = String.valueOf(plainText).getBytes();
 	        byte[] keyBytes = key.getBytes();
-	        
+            Security.addProvider(new BouncyCastleProvider());
     		Cipher cipher = Cipher.getInstance(cI, "BC");
             SecretKeySpec skeySpec = new SecretKeySpec(keyBytes, alg);
             
@@ -36,7 +44,7 @@ public class passwordHash {
     }
     
     //decode text function
-    public StringBuffer decrypt(StringBuffer cipherText) throws Exception {
+    public static StringBuffer decrypt(StringBuffer cipherText) throws Exception {
             
     	try {
     		//generate the size of input text and key

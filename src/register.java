@@ -1,5 +1,7 @@
 package src;
 
+import src.hash.passwordHash;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,21 +20,29 @@ public class register{
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(checkFieldData())
-                {
-                    errorAlert.setVisible(false);
-                    System.out.println("Name: "+getName());
-                    System.out.println("Email: "+getEmail());
-                    System.out.println("Pass: "+getPassword(passwordField));
-                }
-                else{
-                    errorAlert.setVisible(true);
+                try {
+                    if(checkFieldData())
+                    {
+                        errorAlert.setVisible(false);
+                        System.out.println("Name: "+getName());
+                        System.out.println("Email: "+getEmail());
+                        try {
+                            System.out.println("Pass: "+getPassword(passwordField));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        errorAlert.setVisible(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
-    public boolean checkFieldData(){
+    public boolean checkFieldData() throws Exception {
             boolean result = true;
             if(emailValid(getEmail())){
                 if(passwordValid(getPassword(passwordField),getPassword(passwordCheckField))){
@@ -59,14 +69,18 @@ public class register{
         return emailField.getText();
     }
 
-    public String getPassword(JPasswordField field){
-        return new String(field.getPassword());
+    public StringBuffer getPassword(JPasswordField field) throws Exception {
+        String passStr = new String(field.getPassword());
+        StringBuffer rawPass = new StringBuffer();
+        rawPass.append(passStr);
+        StringBuffer encryptPass = passwordHash.encrypt(rawPass);
+        return encryptPass;
     }
 
 
     public boolean emailValid(String email){
         boolean result = true;
-        if(email.isEmpty() || email.equals(null)){
+        if(email.isEmpty()){
             result = false;
         }
         else if(!email.contains("@")){
@@ -78,13 +92,13 @@ public class register{
         return result;
     }
 
-    public boolean passwordValid(String pass1, String pass2){
+    public boolean passwordValid(StringBuffer pass1, StringBuffer pass2){
         boolean result = false;
-        if(pass1.isEmpty() || pass1.equals(null) || pass2.isEmpty() || pass2.equals(null)){
+        if(pass1.toString().equals("ERR") || pass2.toString().equals("ERR")){
             result = false;
         }
         else{
-            if(pass1.equals(pass2)){
+            if(pass1.toString().equals(pass2.toString())){
                 result = true;
             }
             else{

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import src.db;
+import src.hash.*;
 import java.util.*;
 
 public class login<loginStatus> {
@@ -59,27 +61,31 @@ public class login<loginStatus> {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                if(emailValid(getEmail()) && passwordValid(getPassword()))
-                {
-                    errorAlert.setVisible(false);
-                    loadingBar.setVisible(true);
-                    btnLogin.setVisible(false);
-                    btnRegister.setVisible(false);
-                    if(true){
-                        // TODO: ADD verification method to check login status.
-                        layout.show(loginCardHolder, "Success");
-                        System.out.println("Email: "+getEmail());
-                        System.out.println("Pass: "+getPassword());
-                        setLoginStatus(true);
+                try {
+                    if(emailValid(getEmail()) && passwordValid(getPassword()))
+                    {
+                        errorAlert.setVisible(false);
+                        loadingBar.setVisible(true);
+                        btnLogin.setVisible(false);
+                        btnRegister.setVisible(false);
+                        if(true){
+                            // TODO: ADD verification method to check login status.
+                            layout.show(loginCardHolder, "Success");
+                            System.out.println("Email: "+getEmail());
+                            System.out.println("Pass: "+getPassword());
+                            setLoginStatus(true);
+                        }
+                        else{
+                            layout.show(loginCardHolder,"Error");
+                            btnRegister.setVisible(true);
+                            setLoginStatus(false);
+                        }
                     }
                     else{
-                        layout.show(loginCardHolder,"Error");
-                        btnRegister.setVisible(true);
-                        setLoginStatus(false);
+                        errorAlert.setVisible(true);
                     }
-                }
-                else{
-                    errorAlert.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -114,8 +120,12 @@ public class login<loginStatus> {
     public String getEmail(){
         return emailField.getText();
     }
-    public String getPassword(){
-        return new String(passwordField.getPassword());
+    public StringBuffer getPassword() throws Exception {
+        String passStr = new String(passwordField.getPassword());
+        StringBuffer rawPass = new StringBuffer();
+        rawPass.append(passStr);
+        StringBuffer encryptPass = passwordHash.encrypt(rawPass);
+        return encryptPass;
     }
 
 
@@ -133,9 +143,9 @@ public class login<loginStatus> {
         return result;
     }
 
-    public boolean passwordValid(String email){
+    public boolean passwordValid(StringBuffer pass){
         boolean result = true;
-        if(email.isEmpty() || email == null){
+        if(pass.toString().equals("ERR")){
             result = false;
         }
         else{

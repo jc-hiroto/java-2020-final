@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 class db {
-    public static void connectDB() {
+    public static void connectToDB() {
         Connection conn = null;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -31,5 +31,9 @@ class db {
                 System.out.println(ex.getMessage());
             }
         }
+    }
+
+    public static boolean newUser(String name,String email,StringBuffer password){
+        return true;
     }
 }

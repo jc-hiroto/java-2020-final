@@ -1,3 +1,5 @@
+package src.hash;
+
 import java.io.FileNotFoundException;
 import java.lang.StringIndexOutOfBoundsException;
 import java.io.FileReader;
@@ -17,7 +19,7 @@ public class ReadJsonFile{
 
 
 	try(FileReader reader = new FileReader("travel_code.json")){
-		JSONOArray rawTravelCodeList = jsonParser.parser(reader);
+		JSONArray rawTravelCodeList = jsonParser.parser(reader);
 		rawTravelCodeList.forEach(tvlc -> ParseTravelCodeObject((JSONObject) tvlc));
 	}catch(FileNotFoundException){
 		e.printStackTrace();
