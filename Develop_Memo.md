@@ -1,12 +1,39 @@
-# develop memo  
+# development memo  
 108-2物件導向程式設計期末專題  
 <a href= https://github.com/jc-hiroto/java-2020-final/blob/master/docs/108-2%20OOP%20Final%20Project%20v0309.pdf>Project PDF</a>
+## Info
+### 使用 libraries
+#### 介面
+- javax.swing.*
+- java.awt.*
+#### 資料庫 (使用SQLite)
+- java.sql.Connection
+- java.sql.DriverManager
+- java.sql.SQLException
+- sqlite-jdbc-3.30.1
+#### 加密
+- javax.crypto.Cipher
+- javax.crypto.spec.SecretKeySpec
+- java.security.Security
+- org.bouncycastle.jce.provider.BouncyCastleProvider
+- org.apache.commons.codec.binary.Base64.decodeBase64
+- org.apache.commons.codec.binary.Base64.encodeBase64
+
+#### JSON 解析
+- org.json.simple.JSONArray
+- org.json.simple.JSONObject
+- org.json.JSONException
+- org.json.simple.parser.JSONParser
+- org.json.simple.parser.ParseException
+
 ## 開發項目
 ### 資料庫串接  
 @RaymondKao
   - 加入現有資料
+      - SQLite + java + csv 匯入
   - 訂單資料紀錄
   - 會員資料紀錄（選用）
+      - 密碼採用 AES 加密
   - 我的最愛紀錄（選用）
 ### 後端資料處理  
 @Tetrapod1206
@@ -18,6 +45,11 @@
 @jc-hiroto 
   - 首頁
   - 訂單管理頁面
+    - 表單顯示與標題換行（研究中）
+        - <a href= https://codertw.com/程式語言/299633>Jlabel實現內容自動換行簡單例項</a>
+        - <a href=https://stackoverflow.com/questions/10432385/how-to-make-a-jtable-not-editable-in-java>stackoverflow - How to make a jtable not editable in java?
+</a>
+        - <a href=http://yhhuang1966.blogspot.com/2014/05/java-swing-jtable.html>Java Swing 測試 : 表格 JTable</a>
   - 搜尋行程功能
   - 會員登入頁面（選用）
   - 會員註冊頁面（選用）
@@ -38,41 +70,89 @@
 
 ### 資料庫  
 @RaymondKao
+- 20200404: password hash/ Json parser update
+
+- 20200404: Create SQLite DB and connection code ( @jc-hiroto )
+:::success
+- 已匯入csv中旅遊資料至SQLite DB中 (DB/trip_app.db)
+- 完成連線到資料庫的程式 (db.java)
+:::
+- 20200404-02: implement AES encrypt ( @jc-hiroto )
+:::info
+- 串接AES加密至登入與註冊頁面
+:::
+:::danger
+- 有關於密碼的字串傳遞都將使用StringBuffer，增加安全性（getPassword char[] to StringBuffer 尚未解決，仍須以 String 為中繼）
+:::
 
 ### 後端資料處理  
 @Tetrapod1206
-
+- set the definition of all process method
+:::info
+- 增加後端功能與資料庫用 java 檔 (processor.java, db.java)
+:::
 ### GUI  
 @jc-hiroto 
 - 20200323: GUI Test
-    - 介面製作測試
-    - 開始製作首頁
+:::info
+- 介面製作測試
+- 開始製作首頁
+:::
 - 20200323-2: GUI update
-    - 首頁製作完成
+:::success
+- 首頁製作完成
+:::
 - 20200330: GUI update
-    - 開始製作登入與關於頁面
+:::info
+- 開始製作登入與關於頁面 (login.form / ~.java) (about.form / ~.java)
+:::
 - GUI Update: Error
-    - 我把介面的code搞爛了
-    - 可編譯執行但會產生 null pointer 錯誤
+:::warning
+- 我把介面的code搞爛了
+- 可編譯執行但會產生 null pointer 錯誤
+:::
 - Restore: GUI
-    - 還原版本
+:::warning
+- 還原版本
+:::
 - Restore: GUI
-    - 還原版本
+:::warning
+- 還原版本
+:::
 - Restore: Fix GUI crash.
-    - 發現 null pointer 錯誤是因為在 form 處選擇 custom create 但是 java檔案中沒有相應的程式碼可參考
-    - 新舊版本進行手動合併後，還原版本
+:::warning
+- 發現 null pointer 錯誤是因為在 form 處選擇 custom create 但是 java檔案中沒有相應的程式碼可參考
+- 新舊版本進行手動合併後，還原版本
+:::
 - 20200330-1: GUI Update
-    - 更新登入頁面與關於頁面
+:::info
+- 更新登入頁面與關於頁面 (login.form / ~.java) (about.form / ~.java)
+:::
 - 20200330-2: GUI fix
-    - 修正不同功能頁面切換的方式修正
+:::info
+- 修正不同功能頁面切換的方式
+:::
 - 20200330-3: GUI update.
-    - 
+:::info
+- 增加註冊頁面（register.form / ~.java）
+:::
 - 20200320-4: GUI update.
+:::info
+- 增加設定頁面
+:::
 - 20200331: GUI update
-    - 增加簡單的登入與註冊輸入值檢查
-    - 增加登入成功畫面
-    - 增加登入失敗畫面
-
+:::info
+- 增加簡單的登入與註冊輸入值檢查
+- 增加登入成功畫面 (in login.form / ~.java)
+- 增加登入失敗畫面 (in login.form / ~.java)
+:::
+- 20200401: GUI update, add comments
+:::info
+- 新增註解 (home.form / ~.java)
+- 開始製作推薦行程頁面 (in home.form / ~.java)
+- 新增行程管理頁面 (in home.form / ~.java)
+- 愚人節快樂 :stuck_out_tongue_winking_eye: 
+:::
 ### Android 移植  
 @kenny950292
 
