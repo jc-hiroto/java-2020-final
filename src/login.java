@@ -62,7 +62,7 @@ public class login<loginStatus> {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 try {
-                    if(emailValid(getEmail()) && passwordValid(getPassword()))
+                    if(processor.mailAddressValidChecker(getEmail()) && passwordValid(getPassword()))
                     {
                         errorAlert.setVisible(false);
                         loadingBar.setVisible(true);
