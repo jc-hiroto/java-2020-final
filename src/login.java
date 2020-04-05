@@ -1,6 +1,7 @@
 package src;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.util.*;
 public class login<loginStatus> {
     private JPanel contentHolder;
     private JLabel loginLabel;
+    private JLabel userNameDisplay;
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton btnLogin;
@@ -28,6 +30,7 @@ public class login<loginStatus> {
     private JPanel loadingPanel;
     private static boolean loginstatus = false;
     private CardLayout layout = null;
+    private String userName = null;
 
     public login() {
         errorAlert.setVisible(false);
@@ -69,11 +72,11 @@ public class login<loginStatus> {
                         loadingBar.setVisible(true);
                         btnLogin.setVisible(false);
                         btnRegister.setVisible(false);
-                        if(true){
-                            // TODO: ADD verification method to check login status.
+                        userName = db.userAuth(getEmail(), getPassword());
+                        if(userName != "ERR"){
+                            userNameDisplay.setText(userName);
                             layout.show(loginCardHolder, "Success");
-                            System.out.println("Email: "+getEmail());
-                            System.out.println("Pass: "+getPassword());
+                            System.out.println("Login success, username: "+userName);
                             setLoginStatus(true);
                         }
                         else{
@@ -103,6 +106,8 @@ public class login<loginStatus> {
         btnBackLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                emailField.setText("");
+                passwordField.setText("");
                 layout.show(loginCardHolder,"Login");
                 btnRegister.setVisible(true);
                 btnLogin.setVisible(true);
@@ -118,6 +123,14 @@ public class login<loginStatus> {
         loginstatus = set;
     }
 
+    public String getUserName(){
+        if(userName.equals("ERR")){
+            return null;
+        }
+        else{
+            return userName;
+        }
+    }
     public String getEmail(){
         return emailField.getText();
     }
