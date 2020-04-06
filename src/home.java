@@ -157,6 +157,7 @@ public class home {
         btnHome.setVisible(false);
         btnAbout.setVisible(true);
         btnSettings.setVisible(true);
+        refreshLoginPanel();
         loginButtonInit();
     }
 
@@ -169,15 +170,27 @@ public class home {
         btnAbout.setVisible(false);
 
     }
+    public void refreshLoginPanel(){
+        boolean loginTemp = login.getLoginStatus();
+        String userNameTemp = login.getUserName();
+        cardHolder.remove(loginPanel);
+        loginPanel = new login().getPanel();
+        login.setLoginStatus(loginTemp);
+        login.setUserName(userNameTemp);
+        cardHolder.add(loginPanel,"Login");
+        cardInit();
+    }
     public void loginButtonInit(){
         // 根據登入情況決定會員按鈕顯示（登入／登出）
         if(login.getLoginStatus()){
             btnLogin.setVisible(false);
             btnLogout.setVisible(true);
+            btnLogout.setText(login.getUserName());
         }
         else{
             btnLogin.setVisible(true);
             btnLogout.setVisible(false);
+            btnLogout.setText("");
         }
     }
     public void initManageTable(){

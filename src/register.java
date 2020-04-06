@@ -37,17 +37,18 @@ public class register{
                             e.printStackTrace();
                         }
                         if(registerStats){
-                            clearField();
                             regSuccessAlert.setVisible(true);
+                            regErrorAlert.setVisible(false);
                         }
                         else{
-                            clearField();
                             regErrorAlert.setVisible(true);
+                            regSuccessAlert.setVisible(false);
                         }
                     }
                     else{
                         errorAlert.setVisible(true);
                     }
+                    clearField();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

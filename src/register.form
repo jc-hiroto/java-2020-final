@@ -180,9 +180,9 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <font name="Taipei Sans TC Beta" size="16" style="1"/>
+                      <font name="Taipei Sans TC Beta" size="18" style="1"/>
                       <foreground color="-48283"/>
-                      <text value="註冊失敗  請檢查輸入！"/>
+                      <text value="🤔 註冊失敗  請檢查輸入 🤔"/>
                     </properties>
                   </component>
                 </children>
@@ -203,7 +203,7 @@
             </constraints>
             <properties>
               <background color="-15352669"/>
-              <visible value="false"/>
+              <visible value="true"/>
             </properties>
             <border type="none">
               <font/>
@@ -228,7 +228,7 @@
                     <properties>
                       <font name="Taipei Sans TC Beta" size="16" style="1"/>
                       <foreground color="-15352669"/>
-                      <text value="耶依！註冊成功！ 點下方回登入頁"/>
+                      <text value="🙌 耶！註冊成功！ 點下方回登入頁 🙌"/>
                     </properties>
                   </component>
                 </children>
@@ -298,7 +298,7 @@
                 <properties>
                   <font name="Taipei Sans TC Beta" size="16" style="1"/>
                   <foreground color="-48283"/>
-                  <text value="Email / 密碼格式錯誤  請檢查輸入！"/>
+                  <text value="🤔 Email / 密碼格式錯誤  請檢查輸入 🤔"/>
                 </properties>
               </component>
             </children>

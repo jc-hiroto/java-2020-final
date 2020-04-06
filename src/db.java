@@ -106,6 +106,7 @@ class db {
 
     public static boolean checkUserExist(String email){
         boolean flag = false;
+        connectToDB();
         collectUserData();
         for(int i=0; i<USER_EMAIL.size();i++){
             if(USER_EMAIL.get(i).equals(email)){
@@ -118,11 +119,11 @@ class db {
 
     public static boolean newUser(String name,String email,StringBuffer password){
         boolean flag = false;
-        connectToDB();
         if(checkUserExist(email)){
             flag = false;
         }
         else{
+            connectToDB();
             Statement stmt = null;
             try {
                 connection.setAutoCommit(false);

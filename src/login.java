@@ -30,7 +30,7 @@ public class login<loginStatus> {
     private JPanel loadingPanel;
     private static boolean loginstatus = false;
     private CardLayout layout = null;
-    private String userName = null;
+    private static String userName = null;
 
     public login() {
         errorAlert.setVisible(false);
@@ -41,6 +41,11 @@ public class login<loginStatus> {
         layout = (CardLayout)loginCardHolder.getLayout();
         if(!getLoginStatus()){
             layout.show(loginCardHolder, "Login");
+            clearField();
+        }
+        else{
+            layout.show(loginCardHolder, "Success");
+            userNameDisplay.setText(userName);
         }
         btnRegister.addActionListener(new ActionListener() {
             @Override
@@ -56,8 +61,7 @@ public class login<loginStatus> {
                 layout.show(loginCardHolder, "Login");
                 btnBack.setVisible(false);
                 btnRegister.setVisible(true);
-                emailField.setText("");
-                passwordField.setText("");
+                clearField();
                 errorAlert.setVisible(false);
             }
         });
@@ -96,11 +100,13 @@ public class login<loginStatus> {
         btnLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                clearField();
                 setLoginStatus(false);
                 layout.show(loginCardHolder,"Login");
                 btnRegister.setVisible(true);
                 btnLogin.setVisible(true);
                 loadingBar.setVisible(false);
+                System.out.println("[Operation] User logout.");
             }
         });
         btnBackLogin.addActionListener(new ActionListener() {
@@ -122,8 +128,10 @@ public class login<loginStatus> {
     public static void setLoginStatus(boolean set){
         loginstatus = set;
     }
-
-    public String getUserName(){
+    public static void setUserName(String name){
+        userName = name;
+    }
+    public static String getUserName(){
         if(userName.equals("ERR")){
             return null;
         }
@@ -156,7 +164,10 @@ public class login<loginStatus> {
         }
         return result;
     }
-
+    public void clearField(){
+        emailField.setText("");
+        passwordField.setText("");
+    }
     public boolean passwordValid(StringBuffer pass){
         boolean result = true;
         if(pass.toString().equals("ERR")){
