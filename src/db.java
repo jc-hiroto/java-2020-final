@@ -23,7 +23,7 @@ class db {
         }
         try {
             connection = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
+            System.out.println("[Success] Connection to SQLite has been established.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -56,8 +56,6 @@ class db {
     }
 
     public static String getInsertSql(String userName,String userEmail,StringBuffer userPass) {
-        System.out.println("INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
-                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')");
         return  "INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
                 "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')";
     }
@@ -65,7 +63,7 @@ class db {
     public static String userAuth(String email, StringBuffer password){
         String flag = "ERR";
         connectToDB();
-        System.out.println("User data collected: "+ collectUserData());
+        System.out.println("[Success] User data collected: "+ collectUserData());
         for(int i = 0; i<USER_NAME.size(); i++){
             if(USER_EMAIL.get(i).equals(email)){
                 if(USER_PASS.get(i).equals(password.toString())){
@@ -106,22 +104,39 @@ class db {
         return USER_NAME.size(); // If success, return the number of user collected.
     }
 
-    public static boolean newUser(String name,String email,StringBuffer password){
-        Statement stmt = null;
+    public static boolean checkUserExist(String email){
         boolean flag = false;
-        try {
-            connectToDB();
-            connection.setAutoCommit(false);
-            stmt = connection.createStatement();
-            stmt.executeUpdate(getInsertSql(name, email, password));
-            connection.commit();
-            System.out.println("INSERT Table  successfully.");
-            flag = true;
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        collectUserData();
+        for(int i=0; i<USER_EMAIL.size();i++){
+            if(USER_EMAIL.get(i).equals(email)){
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    public static boolean newUser(String name,String email,StringBuffer password){
+        boolean flag = false;
+        connectToDB();
+        if(checkUserExist(email)){
             flag = false;
-        }finally{
-            closeConnection(stmt);
+        }
+        else{
+            Statement stmt = null;
+            try {
+                connection.setAutoCommit(false);
+                stmt = connection.createStatement();
+                stmt.executeUpdate(getInsertSql(name, email, password));
+                connection.commit();
+                System.out.println("[Success] Create new user.");
+                flag = true;
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                flag = false;
+            }finally{
+                closeConnection(stmt);
+            }
         }
         return flag;
     }

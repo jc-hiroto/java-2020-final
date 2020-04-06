@@ -36,20 +36,20 @@ public class register{
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        if(registerStats){
+                            clearField();
+                            regSuccessAlert.setVisible(true);
+                        }
+                        else{
+                            clearField();
+                            regErrorAlert.setVisible(true);
+                        }
                     }
                     else{
                         errorAlert.setVisible(true);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-                if(registerStats){
-                    clearField();
-                    regSuccessAlert.setVisible(true);
-                }
-                else{
-                    clearField();
-                    regErrorAlert.setVisible(true);
                 }
             }
         });
