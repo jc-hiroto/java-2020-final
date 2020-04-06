@@ -1,5 +1,6 @@
 package src;
 
+import org.apache.commons.io.FilenameUtils;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,10 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-
 class db {
     private static Connection connection = null;
-    private static String url = "jdbc:sqlite:/Users/james/Documents/GitHub/java-2020-final/src/DB/trip_app.db";
+    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app.db");
     private static ArrayList <String> USER_NAME = new ArrayList<String>();
     private static ArrayList <String> USER_EMAIL = new ArrayList<String>();
     private static ArrayList <String> USER_PASS = new ArrayList<String>();
