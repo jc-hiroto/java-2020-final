@@ -30,7 +30,7 @@ public class login<loginStatus> {
     private JPanel loadingPanel;
     private static boolean loginstatus = false;
     private CardLayout layout = null;
-    private static String userName = null;
+    private static String userName = "";
 
     public login() {
         errorAlert.setVisible(false);
@@ -132,8 +132,8 @@ public class login<loginStatus> {
         userName = name;
     }
     public static String getUserName(){
-        if(userName.equals("ERR")){
-            return null;
+        if(userName.equals("ERR") || !getLoginStatus()){
+            return "";
         }
         else{
             return userName;

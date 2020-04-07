@@ -44,11 +44,8 @@ public class home {
     private JPanel RListObj2_4;
     private JPanel RListObj2_5;
     private JPanel RListObj1_1;
-    private JPanel RListObj1_2;
-    private JPanel RListObj1_4;
     private JButton 詳情Button;
-    private JTextArea labelObjR_1_1;
-    private JPanel RListObj1_3;
+    private JLabel labelObjR_1_1;
     private JPanel managePanel;
     private JTabbedPane tabbedPane1;
     private JTable table1;
@@ -101,6 +98,7 @@ public class home {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent){
+                refreshLoginPanel();
                 layout.show(cardHolder, "Login");
                 exitFromHome();
             }
@@ -157,7 +155,6 @@ public class home {
         btnHome.setVisible(false);
         btnAbout.setVisible(true);
         btnSettings.setVisible(true);
-        refreshLoginPanel();
         loginButtonInit();
     }
 
