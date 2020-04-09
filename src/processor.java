@@ -1,6 +1,10 @@
 package src;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.desktop.SystemEventListener;
+
 public class processor{
     //public db dbObject = null;
 
@@ -62,5 +66,30 @@ public class processor{
         EmailValidator validator = EmailValidator.getInstance();
         return validator.isValid(mailAddress);
     }
-    
+
+
+    public static String textLineShifter(JTextArea targetarea,String rawString,int windowsSize,int leftOffset,int rightOffset) {
+        int totalWidth = windowsSize - leftOffset - rightOffset;
+        StringBuilder stringb = new StringBuilder();
+        rawString=rawString.replaceAll("\n","");
+        char[] chars = rawString.toCharArray();
+        FontMetrics fontMetrics = targetarea.getFontMetrics(targetarea.getFont());
+        int start = 0;
+        int oneLength = 0;
+        while (start + oneLength < rawString.length()) {
+            while (true) {
+                oneLength++;
+                if (start + oneLength > rawString.length()) {
+                    break;
+                }
+                if (fontMetrics.charsWidth(chars, start, oneLength) > totalWidth) {
+                    break;
+                }
+            }
+            stringb.append(chars, start, oneLength - 1).append("\n");
+            start = start + oneLength - 1;
+            oneLength = 0;
+        }
+        return stringb.toString();
+    }
 }
