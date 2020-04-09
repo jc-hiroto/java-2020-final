@@ -158,60 +158,45 @@
                       <grid id="39974" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <background color="-15352669"/>
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="c5e19" class="javax.swing.JTextField" binding="a20200408TextField" default-binding="true">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <background color="-4984340"/>
-                              <font name="Mgen+ 1pp" size="18"/>
-                              <foreground color="-13744040"/>
-                              <text value="2020/04/08"/>
-                            </properties>
-                          </component>
-                          <component id="d159f" class="javax.swing.JTextField" binding="a20200420TextField" default-binding="true">
-                            <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <background color="-4984340"/>
-                              <font name="Mgen+ 1pp" size="18"/>
-                              <foreground color="-13744040"/>
-                              <text value="2020/04/20"/>
-                            </properties>
-                          </component>
                           <component id="c27dc" class="javax.swing.JLabel">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <icon value="img/next-white.png"/>
                               <text value=""/>
                             </properties>
                           </component>
-                          <component id="5800a" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+                          <component id="25c07" class="com.toedter.calendar.JDateChooser" binding="JDateChooser1" custom-create="true" default-binding="true">
                             <constraints>
-                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                                <preferred-size width="200" height="30"/>
+                              </grid>
+                            </constraints>
+                          </component>
+                          <component id="297f2" class="com.toedter.calendar.JDateChooser" binding="JDateChooser2" custom-create="true" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                                <preferred-size width="200" height="30"/>
+                              </grid>
+                            </constraints>
+                          </component>
+                          <component id="19f39" class="javax.swing.JCheckBox" binding="onlyEmpty">
+                            <constraints>
+                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <background color="-4984340"/>
+                              <background color="-15352669"/>
                               <font name="Mgen+ 1pp" size="16"/>
-                              <foreground color="-15514805"/>
-                              <model>
-                                <item value="不限"/>
-                                <item value="有空位"/>
-                              </model>
+                              <foreground color="-1"/>
+                              <text value="只顯示有空位之行程"/>
                             </properties>
                           </component>
                         </children>
@@ -503,10 +488,13 @@
                                   <component id="eeb51" class="javax.swing.JTextArea" binding="textObjR1_1">
                                     <constraints>
                                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                        <minimum-size width="100" height="-1"/>
                                         <preferred-size width="150" height="50"/>
                                       </grid>
                                     </constraints>
                                     <properties>
+                                      <editable value="false"/>
+                                      <font name="Taipei Sans TC Beta" size="20" style="1"/>
                                       <lineWrap value="false"/>
                                       <text value=""/>
                                     </properties>
@@ -518,14 +506,18 @@
                                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                                 </constraints>
                               </hspacer>
-                              <component id="be30d" class="javax.swing.JButton" binding="詳情Button" default-binding="true">
+                              <component id="be30d" class="javax.swing.JButton" binding="看更多Button" default-binding="true">
                                 <constraints>
                                   <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                                    <preferred-size width="100" height="40"/>
+                                    <preferred-size width="100" height="30"/>
                                   </grid>
                                 </constraints>
                                 <properties>
-                                  <text value="詳情"/>
+                                  <background color="-15352669"/>
+                                  <enabled value="true"/>
+                                  <font name="Taipei Sans TC Beta" size="20" style="1"/>
+                                  <foreground color="-13744040"/>
+                                  <text value="看更多"/>
                                 </properties>
                               </component>
                             </children>
