@@ -49,12 +49,15 @@ public class home {
     private JPanel managePanel;
     private JTabbedPane tabbedPane1;
     private JTable table1;
+    private JTextField a20200408TextField;
+    private JTextField a20200420TextField;
+    private JComboBox comboBox1;
 
     public home() {
+
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
-
         // ================ 以下皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
         btnExit.addActionListener(new ActionListener() {
             @Override
