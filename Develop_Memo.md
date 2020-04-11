@@ -132,27 +132,78 @@ breaks: false
 ### GUI  
 `@jc-hiroto`
   - 首頁
+      - :heavy_check_mark: 搜尋列
+          - 搜尋選項 (日期或空位等等)
+          :::success
+          `master` 20200410: GUI update 已完成實作
+          :::
+          - 提示文字 (Hint text in JTextField)
+              - https://hant-kb.kutu66.com/java/post_752371
   - 訂單管理頁面
-    - 表單顯示與標題換行（研究中） `@jc-hiroto` `@Tetrapod1206`
-        - <a href= https://codertw.com/程式語言/299633>Jlabel實現內容自動換行簡單例項</a>
+    - 使用 JTable 呈現 (Custom cell renderer)
+        - https://www.maultech.com/chrislott/blog/20130513_swingtable.html
+        - https://stackoverflow.com/questions/3606864/jtable-buttons-in-custom-panel-in-cell
+        - https://stackoverflow.com/questions/3606864/jtable-buttons-in-custom-panel-in-cell/3606915#3606915
+        - https://stackoverflow.com/questions/8923089/swing-jtable-custom-rendering/9375212#9375212
+        - https://stackoverflow.com/questions/27156734/how-to-add-an-image-to-a-custom-jtable-row-button
+        - https://tips4java.wordpress.com/2009/07/12/table-button-column/
+            - [Example Code](https://gist.github.com/jc-hiroto/f714b7cdeab88d59e662d54cd75150c8)
+    - :heavy_check_mark: 表單顯示與標題換行 ~~(研究中)~~ `@jc-hiroto` `@Tetrapod1206`
+       - [Jlabel實現內容自動換行簡單例項](https://codertw.com/程式語言/299633)
         - <a href=https://stackoverflow.com/questions/10432385/how-to-make-a-jtable-not-editable-in-java>stackoverflow - How to make a jtable not editable in java?
 </a>
         - <a href=http://yhhuang1966.blogspot.com/2014/05/java-swing-jtable.html>Java Swing 測試 : 表格 JTable</a>
+        :::success
+        `master` 20200409-01: Textarea 已完成實作
+        :::
+    
+    -  :heavy_check_mark: 偵測 resize `@jc-hiroto` `@Tetrapod1206`
+        - http://www.java2s.com/Tutorials/Java/Swing_How_to/Basic/Handle_resize_event.htm
+        - https://stackoverflow.com/questions/2303305/window-resize-event
+        - https://stackoverflow.com/questions/8333187/how-to-check-current-window-size-in-java-swing
+        ```Java=
+        frame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent componentEvent) {
+                // do stuff
+            }
+        });
+        ```
+    :::success
+    `master` 20200409-01: Textarea 已完成實作
+    :::
   - 搜尋行程功能
-  - 會員登入頁面（選用）
-  - 會員註冊頁面（選用）
+      - 搜尋結果頁面
+  - :heavy_check_mark: 會員登入頁面
+    :::success
+    `master` 20200405-07: Login DB update 已完成實作
+    :::
+  - :heavy_check_mark: 會員註冊頁面
+    :::success
+    `master` 20200404-04: Register DB update 已完成實作
+    :::
   - 我的最愛頁面（選用）
-  - 推薦行程頁面（選用）
+  - 推薦行程頁面
+      - 多個選項 (依不同條件排序)
+          - 馬上出發 (出團時間排序)
+          - 找便宜 (價格排序)
+      -  顯示使用 JList (Custom cell renderer)
+          -  https://www.codejava.net/java-se/swing/jlist-custom-renderer-example
+          -  https://cachhoc.net/2014/04/25/java-swing-tuy-bien-jlist-jlist-custom-renderer/?lang=en
 ### Android 系統移植  
 `@kenny950292`
-  - GUI移植
-  - 多解析度、顯示方向支援
-  - 服務移植
+- GUI移植
+- 多解析度、顯示方向支援
+- 服務移植
+### 可執行檔封裝
+- .jar 檔案因為簽證無法執行問題
+    ```terminal
+    zip -d targetJAR.jar 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*SF'
+    ```
 ### 簡報  
 `@chewei-hsu`
-  - 系統demo
-  - 程式解釋
-  - 開發過程
+- 系統demo
+- 程式解釋
+- 開發過程
 
 ## 開發進度
 
@@ -171,8 +222,8 @@ breaks: false
 :::success
 - 完成串接AES加密至登入與註冊頁面
 :::
-:::danger
-- 有關於密碼的字串傳遞都將使用StringBuffer，增加安全性（getPassword char[] to StringBuffer 尚未解決，仍須以 String 為中繼）
+:::warning
+<a href=https://github.com/jc-hiroto/java-2020-final/issues/2>  :warning: **( Issue #2 )**</a>: 密碼參數傳遞安全隱患。中間傳遞仍須以 String 為中繼 ( char[] -> **String** -> StringBuffer ) ，中間之 String 變數會存在於記憶體中，容易被提取。
 :::
 - `master` 20200404-03: DB update `@jc-hiroto`
 :::info
@@ -189,10 +240,14 @@ breaks: false
 - 完成驗證使用者之 function (db.userAuth()) ，可比對帳號密碼資料並且回傳使用者名稱
 :::
 :::warning
-- 待完成: 註冊時檢查 Email 是否已被註冊過
+- 待完成: ~~註冊時檢查 Email 是否已被註冊過~~ ( 已完成: `master` 20200406-01 )
 - 待完成: 註冊密碼安全規則 (有空再說)
 :::
-- `master` 20200406-01: DB path translate `@Tetrapod1206`
+:::warning
+<a href=https://github.com/jc-hiroto/java-2020-final/issues/3>  :warning: **( Issue #3 )**</a>: 發現認證使用者的程式碼有效能隱患，採用全部提取的方法會在會員數龐大的情況下造成程式執行緩慢。
+:::
+
+- `master` 20200406: DB path translate `@Tetrapod1206`
 :::success
 - 將資料庫path改為由absolute改為relative
 - Mac與Windows對於檔案路徑的不同符號( / . \ )需要轉換
@@ -221,7 +276,7 @@ breaks: false
 - 增加後端功能與資料庫用 java 檔 (processor.java, db.java)
 :::
 - `mailValidChecker` 2020/4/4 I broke the program
-:::warning
+:::danger
 - 引入了外部的檢查函式，所有東西都壞掉了
 :::
 - `mailValidChecker` 20200404: Fix package problem `@jc-hiroto`
@@ -234,7 +289,7 @@ breaks: false
 - IntelliJ比較好用
 - 所有的mail檢查都統一呼叫processor的method
 :::
-- [(PR #1)](https://github.com/jc-hiroto/java-2020-final/pull/1) Merge `mailValidChecker` -> `master`
+- [`(PR #1)`](https://github.com/jc-hiroto/java-2020-final/pull/1) Merge `mailValidChecker` -> `master`
 
 ### GUI  
 `@jc-hiroto`
@@ -252,26 +307,29 @@ breaks: false
 - 開始製作登入與關於頁面 (login.form / ~.java) (about.form / ~.java)
 :::
 - `master` GUI Update: Error
-:::warning
+:::danger
 - 我把介面的code搞爛了
 - 可編譯執行但會產生 null pointer 錯誤
 :::
 - `master` Restore: GUI
-:::warning
+:::danger
 - 還原版本
 :::
 - `master` Restore: GUI
-:::warning
+:::danger
 - 還原版本
 :::
 - `master` Restore: Fix GUI crash.
-:::warning
-- 發現 null pointer 錯誤是因為在 form 處選擇 custom create 但是 java檔案中沒有相應的程式碼可參考
+:::danger
 - 新舊版本進行手動合併後，還原版本
 :::
+:::info
+- 發現 null pointer 錯誤是因為在 form 處選擇 custom create 但是 java檔案中沒有相應的程式碼可參考
+:::
+
 - `master` 20200330-1: GUI Update
 :::info
-- 更新登入頁面與關於頁面 (login.form / ~.java) (about.form / ~.java)
+- 更新登入頁面與關於頁面 ( login.form / ~.java ) ( about.form / ~.java )
 :::
 - `master` 20200330-2: GUI fix
 :::info
@@ -279,11 +337,11 @@ breaks: false
 :::
 - `master` 20200330-3: GUI update.
 :::info
-- 增加註冊頁面（register.form / ~.java）
+- 增加註冊頁面 （register.form / ~.java）
 :::
 - `master` 20200320-4: GUI update.
 :::info
-- 增加設定頁面
+- 增加設定頁面 （settings.form / ~.java）
 :::
 - `master` 20200331: GUI update
 :::info
@@ -303,6 +361,27 @@ breaks: false
 :::info
 - 改變 GUI 切換頁面的方式，改為每次呼叫頁面即初始化頁面 (home.refreshLoginPanel())。
 - 修正問題: 在會員頁面 (login.java) 登出後或是輸入到一半跳回首頁，確保下一次再次點入不會再出現上次操作遺留的資料。
+:::
+- `master` 20200409-01: Textarea `@Tetrapod1206`
+:::success
+- Recommend 當中的文字現在會根據視窗大小自動換行
+- 原先以 Label 製作的文字欄位改成 Textarea
+:::
+
+- `master` 20200410: GUI update
+:::success
+- 更改日期選擇器為 JDateChooser
+    - 資料串接完成
+    - 結束日期會根據出發日期有點選限制
+    - 預設日期是今天日期與五天後
+:::
+:::info
+- 更改下拉選單為勾選式
+:::
+:::warning
+- 待解決: 結束日期選擇限制需要是開始日期加一天，目前還是可以選同一天的狀態。
+- 待解決: 雖有選擇限制，日期資料到後端仍需檢查是否有效。 
+- 註: 日期未填會回傳 null，後端需 handle 
 :::
 ### Android 移植  
 `@kenny950292`
