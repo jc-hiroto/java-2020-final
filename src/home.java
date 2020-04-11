@@ -2,10 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
@@ -66,11 +63,13 @@ public class home {
     private JDateChooser JDateChooser1;
     private JDateChooser JDateChooser2;
     private JCheckBox onlyEmpty;
+    private JPanel errorAlert;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
     private ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
     private Date nowDate = Date.from(zdt.toInstant());
+    private String searchTemp = "";
 
     public home() {
         dateChooserInit();
@@ -90,11 +89,19 @@ public class home {
             // 搜尋按鈕
             // TODO: 串接搜尋 method，並跳轉到搜尋結果頁面
             public void actionPerformed(ActionEvent actionEvent) {
+                errorAlert.setVisible(false);
                 String searchContent = getSearchField();
-                System.out.println("Search: "+searchContent);
-                System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
-                System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
-                System.out.println("Only Empty?: "+onlyEmpty.isSelected());
+                boolean isValidDate = true; // 等待傳入日期偵測
+                if(searchContent.equals("輸入國家/城市關鍵字") || (!isValidDate) || searchContent.equals("")){
+                   searchContent = "";
+                   errorAlert.setVisible(true);
+                }
+                else{
+                    System.out.println("Search: "+searchContent);
+                    System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
+                    System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
+                    System.out.println("Only Empty?: "+onlyEmpty.isSelected());
+                }
             }
         });
         btnRecommand.addActionListener(new ActionListener() {
@@ -172,6 +179,34 @@ public class home {
             }
         });
         // ================ 以上皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
+        searchFieldListener();
+    }
+
+    public void searchFieldListener(){
+        searchField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                errorAlert.setVisible(false);
+                searchField.setText(searchTemp);
+                searchField.setForeground(new Color(8,37,42));
+            }
+        });
+
+        searchField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                if(searchField.getText().equals("")){
+                    searchField.setText("輸入國家/城市關鍵字");
+                    searchTemp = "";
+                    searchField.setForeground(new Color(175, 175, 175));
+                }
+                else{
+                    searchTemp = searchField.getText();
+                }
+            }
+        });
     }
     public void initRecommendContent(){
         String labelR_1_1 = "[春櫻紛飛遊釜慶]世界文化遺產~佛國寺、CNN評選賞櫻推薦~余佐川羅曼史橋+慶和火車站、甘川洞彩繪壁畫村、BIFF廣場+南浦洞購物樂五日<含稅>";
@@ -284,9 +319,11 @@ public class home {
             e.printStackTrace();
         }
         JFrame frame = new JFrame("Find a Place"); // 設定視窗標題
-        frame.setSize(1000,800); // 設定初始視窗大小
         windowSizeLimiter(frame, 800,800);
         frame.setContentPane(new home().window);
+        frame.pack();
+        frame.getContentPane().requestFocusInWindow();
+        frame.setSize(1000,800); // 設定初始視窗大小
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
