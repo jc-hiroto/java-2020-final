@@ -1,5 +1,3 @@
-package src.hash;
-
 import java.io.FileNotFoundException;
 import java.lang.StringIndexOutOfBoundsException;
 import java.io.FileReader;
@@ -12,32 +10,41 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 
-public class ReadJsonFile{
-	
-	@SuppressWarnings("unchecked");
-	JSONParser jsonParser = new JSONParser();
-
-
-	try(FileReader reader = new FileReader("travel_code.json")){
-		JSONArray rawTravelCodeList = jsonParser.parser(reader);
-		rawTravelCodeList.forEach(tvlc -> ParseTravelCodeObject((JSONObject) tvlc));
-	}catch(FileNotFoundException){
-		e.printStackTrace();
-	}catch(IOException){
-		e.printStackTrace();
-	}catch(ParseException){
-		e.printStackTrace();
-	}
-
-}
-
-private static class ParseTravelCodeObject(JSONObject travelCode){
-	
-}
-
 public class JsonParser{
 	
-	public String[] getTravelCodeInfo(JSONObject JsonParser.ReadJsonFile){
+	public JSONArray ReadJsonFile(){
+	
+		@SuppressWarnings("unchecked");
+		JSONParser jsonParser = new JSONParser();
 
+		try(FileReader reader = new FileReader("travel_code.json")){
+
+			JSONArray travelCodeList = jsonParser.parser(reader);
+			return travelCodeList;
+
+		}catch(FileNotFoundException){
+			e.printStackTrace();
+		}catch(IOException){
+			e.printStackTrace();
+		}catch(ParseException){
+			e.printStackTrace();
+		}
+
+	}	
+
+	public StringBuffer JsonToStringBuffer(JSONArray travelCodeList){
+		
+		StringBuffer[][] travelCodeInfo = new StringBuffer[travelCodeList.length()][2];
+
+		for(int i = 0; i < travelCodeList.length(); i++){
+			travelCodeInfo[i][0] = travelCodeList[i].getJSONObject("travel_code");
+			travelCodeInfo[i][1] = travelCodeList[i].getJSONObject("travel_code_name");
+		}
+
+		return travelCodeInfo;
+	}
+	
+	public StringBuffer getTravelCodeName(StringBuffer travelCodeName){
+		;
 	}
 }
