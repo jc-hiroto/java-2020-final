@@ -1,12 +1,9 @@
 package src;
 
 import org.apache.commons.io.FilenameUtils;
+
+import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
 class db {
     private static Connection connection = null;
@@ -20,6 +17,7 @@ class db {
     private static ArrayList <String> travel_code = new ArrayList<String>();
     private static ArrayList <String> start_date = new ArrayList<String>();
     private static ArrayList <String> end_date = new ArrayList<String>();
+
     public static boolean connectToDB() {
 
         try {
@@ -148,7 +146,7 @@ class db {
         return flag;
     }
 
-    public static String getTitle(String travelCode){
+    public static ArrayList<String> getTitle(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -161,17 +159,17 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return title;
     }
 
-    public static String getProductKey(String travelCode){
+    public static ArrayList<String> getProductKey(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -184,17 +182,17 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return product_key;
     }
 
-    public static String getPrice(String travelCode){
+    public static ArrayList<String> getPrice(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -207,19 +205,19 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return price;
     }
 
-    public static String getPriceBelowTravelCode(int price_limit){
+    public static ArrayList<String> getPriceBelowTravelCode(int price_limit){
         connectToDB();
-        String sql = "SELECT travel_code where price <= " + price_limit.toString();
+        String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
         Statement stmt = null;
         travel_code.clear();
         try {
@@ -230,17 +228,17 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return travel_code;
     }
 
-    public static String getStartDate(String travelCode){
+    public static ArrayList<String> getStartDate(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -253,17 +251,17 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return start_date;
     }
 
-    public static String getEndDate(String travelCode){
+    public static ArrayList<String> getEndDate(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -276,17 +274,17 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return end_date;
     }
 
-    public static String getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
+    public static ArrayList<String> getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
         connectToDB();
         String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
         Statement stmt = null;
@@ -299,11 +297,11 @@ class db {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1;
+            return null;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return null;
             }
         }
         return travel_code;

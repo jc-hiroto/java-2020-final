@@ -12,8 +12,6 @@
         <module name="java-2020-final" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="13">
-      <module name="java-2020-final" target="1.5" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="13" />
   </component>
 </project>
