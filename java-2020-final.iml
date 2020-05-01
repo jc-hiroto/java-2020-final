@@ -17,5 +17,8 @@
     <orderEntry type="library" name="commons-validator-1.6-javadoc" level="project" />
     <orderEntry type="library" name="json-simple-1.1.1" level="project" />
     <orderEntry type="library" name="commons-io-2.6-javadoc" level="project" />
+    <orderEntry type="library" name="DateChooser" level="project" />
+    <orderEntry type="library" name="jcalendar-1.4" level="project" />
+    <orderEntry type="library" name="xswingx" level="project" />
   </component>
 </module>

@@ -1,12 +1,9 @@
 package src;
 
 import org.apache.commons.io.FilenameUtils;
+
+import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
 class db {
     private static Connection connection = null;
@@ -14,6 +11,13 @@ class db {
     private static ArrayList <String> USER_NAME = new ArrayList<String>();
     private static ArrayList <String> USER_EMAIL = new ArrayList<String>();
     private static ArrayList <String> USER_PASS = new ArrayList<String>();
+    private static ArrayList <String> title = new ArrayList<String>();
+    private static ArrayList <String> product_key = new ArrayList<String>();
+    private static ArrayList <String> price = new ArrayList<String>();
+    private static ArrayList <String> travel_code = new ArrayList<String>();
+    private static ArrayList <String> start_date = new ArrayList<String>();
+    private static ArrayList <String> end_date = new ArrayList<String>();
+
     public static boolean connectToDB() {
 
         try {
@@ -140,5 +144,166 @@ class db {
             }
         }
         return flag;
+    }
+
+    public static ArrayList<String> getTitle(String travelCode){
+        connectToDB();
+        String sql = "SELECT travel_code";
+        Statement stmt = null;
+        title.clear();
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                title.add(rs.getString("title"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return title;
+    }
+
+    public static ArrayList<String> getProductKey(String travelCode){
+        connectToDB();
+        String sql = "SELECT travel_code";
+        Statement stmt = null;
+        product_key.clear();
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                product_key.add(rs.getString("product_key"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return product_key;
+    }
+
+    public static ArrayList<String> getPrice(String travelCode){
+        connectToDB();
+        String sql = "SELECT travel_code";
+        Statement stmt = null;
+        price.clear();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                price.add(rs.getString("price"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return price;
+    }
+
+    public static ArrayList<String> getPriceBelowTravelCode(int price_limit){
+        connectToDB();
+        String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
+        Statement stmt = null;
+        travel_code.clear();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                travel_code.add(rs.getString("travel_code"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return travel_code;
+    }
+
+    public static ArrayList<String> getStartDate(String travelCode){
+        connectToDB();
+        String sql = "SELECT travel_code";
+        Statement stmt = null;
+        start_date.clear();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                start_date.add(rs.getString("start_date"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return start_date;
+    }
+
+    public static ArrayList<String> getEndDate(String travelCode){
+        connectToDB();
+        String sql = "SELECT travel_code";
+        Statement stmt = null;
+        end_date.clear();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                end_date.add(rs.getString("end_date"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return end_date;
+    }
+
+    public static ArrayList<String> getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
+        connectToDB();
+        String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
+        Statement stmt = null;
+        travel_code.clear();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                travel_code.add(rs.getString("travel_code"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return travel_code;
     }
 }
