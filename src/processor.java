@@ -5,10 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.desktop.SystemEventListener;
 
-public class processor{
+public class Processor {
     //public db dbObject = null;
 
-    public processor(){
+    public Processor(){
         //dbObject();  //link to DB and initial DB
     }
 
