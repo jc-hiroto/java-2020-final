@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import  src.TravelData;
 
 class db {
     private static Connection connection = null;
@@ -146,7 +147,7 @@ class db {
         return flag;
     }
 
-    public static src.TravelData getTitle(String travelCode){
+    public static TravelData getTitle(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -166,10 +167,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(title);
+        return new TravelData(title);
     }
 
-    public static src.TravelData getProductKey(String travelCode){
+    public static TravelData getProductKey(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -189,10 +190,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(product_key);
+        return new TravelData(product_key);
     }
 
-    public static src.TravelData getPrice(String travelCode){
+    public static TravelData getPrice(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -212,10 +213,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(price);
+        return new TravelData(price);
     }
 
-    public static src.TravelData getPriceBelowTravelCode(int price_limit){
+    public static TravelData getPriceBelowTravelCode(int price_limit){
         connectToDB();
         String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
         Statement stmt = null;
@@ -235,10 +236,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(travel_code);
+        return new TravelData(travel_code);
     }
 
-    public static src.TravelData getStartDate(String travelCode){
+    public static TravelData getStartDate(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -258,10 +259,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(start_date);
+        return new TravelData(start_date);
     }
 
-    public static src.TravelData getEndDate(String travelCode){
+    public static TravelData getEndDate(String travelCode){
         connectToDB();
         String sql = "SELECT travel_code";
         Statement stmt = null;
@@ -281,10 +282,10 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(end_date);
+        return new TravelData(end_date);
     }
 
-    public static src.TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
+    public static TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
         connectToDB();
         String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
         Statement stmt = null;
@@ -304,6 +305,6 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(travel_code);
+        return new TravelData(travel_code);
     }
 }
