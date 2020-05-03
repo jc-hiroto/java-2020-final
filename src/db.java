@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import  src.TravelData;
 
 /**
  * this class is to define all logic used in database
@@ -155,7 +156,7 @@ class db {
      * @param travelCode
      * @return title of the selected travelCode program
      */
-    public static src.TravelData getTitle(String travelCode){
+    public static TravelData getTitle(String travelCode){
         connectToDB();
         String sql = "SELECT " + travelCode;
         Statement stmt = null;
@@ -175,15 +176,16 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(title);
+        return new TravelData(title);
     }
+
 
     /**
      * Get the product key of the travel program ex. VDR0000007686
      * @param travelCode
      * @return product key of the selected travelCode program
      */
-    public static src.TravelData getProductKey(String travelCode){
+    public static TravelData getProductKey(String travelCode){
         connectToDB();
         String sql = "SELECT " + travelCode;
         Statement stmt = null;
@@ -203,7 +205,7 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(product_key);
+        return new TravelData(product_key);
     }
 
     /**
@@ -211,7 +213,7 @@ class db {
      * @param travelCode
      * @return price of the selected travelCode program
      */
-    public static src.TravelData getPrice(String travelCode){
+    public static TravelData getPrice(String travelCode){
         connectToDB();
         String sql = "SELECT " + travelCode;
         Statement stmt = null;
@@ -231,8 +233,9 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(price);
+        return new TravelData(price);
     }
+
 
     /**
      * Special method for user search
@@ -241,7 +244,7 @@ class db {
      * @param price_limit
      * @return travelCode number under price limit
      */
-    public static src.TravelData getPriceBelowTravelCode(int price_limit){
+    public static TravelData getPriceBelowTravelCode(int price_limit){
         connectToDB();
         String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
         Statement stmt = null;
@@ -261,7 +264,7 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(travel_code);
+        return new TravelData(travel_code);
     }
 
     /**
@@ -269,7 +272,7 @@ class db {
      * @param travelCode
      * @return start date of the selected travelCode program
      */
-    public static src.TravelData getStartDate(String travelCode){
+    public static TravelData getStartDate(String travelCode){
         connectToDB();
         String sql = "SELECT " + travelCode;
         Statement stmt = null;
@@ -289,7 +292,7 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(start_date);
+        return new TravelData(start_date);
     }
 
     /**
@@ -297,7 +300,7 @@ class db {
      * @param travelCode
      * @return end date of the selected travelCode program
      */
-    public static src.TravelData getEndDate(String travelCode){
+    public static TravelData getEndDate(String travelCode){
         connectToDB();
         String sql = "SELECT " + travelCode;
         Statement stmt = null;
@@ -317,7 +320,7 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(end_date);
+        return new TravelData(end_date);
     }
 
     /**
@@ -328,7 +331,7 @@ class db {
      * @param end_date_limit
      * @return travelCode number between the date range
      */
-    public static src.TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
+    public static TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
         connectToDB();
         String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
         Statement stmt = null;
@@ -348,6 +351,6 @@ class db {
                 return null;
             }
         }
-        return new src.TravelData(travel_code);
+        return new TravelData(travel_code);
     }
 }
