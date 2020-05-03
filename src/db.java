@@ -5,6 +5,9 @@ import org.apache.commons.io.FilenameUtils;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * this class is to define all logic used in database
+ */
 class db {
     private static Connection connection = null;
     private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app.db");
@@ -36,6 +39,7 @@ class db {
         }
         return true;
     }
+
     public static boolean closeConnection(Statement stmt){
         boolean flag = false;
         try {
@@ -146,9 +150,14 @@ class db {
         return flag;
     }
 
+    /**
+     * Get the travel program title ex.馬達加斯加 猴麵包樹 夢幻生態天堂10天
+     * @param travelCode
+     * @return title of the selected travelCode program
+     */
     public static src.TravelData getTitle(String travelCode){
         connectToDB();
-        String sql = "SELECT travel_code";
+        String sql = "SELECT " + travelCode;
         Statement stmt = null;
         title.clear();
         try {
@@ -169,9 +178,14 @@ class db {
         return new src.TravelData(title);
     }
 
+    /**
+     * Get the product key of the travel program ex. VDR0000007686
+     * @param travelCode
+     * @return product key of the selected travelCode program
+     */
     public static src.TravelData getProductKey(String travelCode){
         connectToDB();
-        String sql = "SELECT travel_code";
+        String sql = "SELECT " + travelCode;
         Statement stmt = null;
         product_key.clear();
         try {
@@ -192,9 +206,14 @@ class db {
         return new src.TravelData(product_key);
     }
 
+    /**
+     * Get the price of the travel program ex.155900
+     * @param travelCode
+     * @return price of the selected travelCode program
+     */
     public static src.TravelData getPrice(String travelCode){
         connectToDB();
-        String sql = "SELECT travel_code";
+        String sql = "SELECT " + travelCode;
         Statement stmt = null;
         price.clear();
         try {
@@ -215,6 +234,13 @@ class db {
         return new src.TravelData(price);
     }
 
+    /**
+     * Special method for user search
+     * Get the travelCode under given price limit
+     * Call other method after this to get specific program's title, product key, price, date
+     * @param price_limit
+     * @return travelCode number under price limit
+     */
     public static src.TravelData getPriceBelowTravelCode(int price_limit){
         connectToDB();
         String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
@@ -238,9 +264,14 @@ class db {
         return new src.TravelData(travel_code);
     }
 
+    /**
+     * Get the start date of the travel program ex.2020-03-12
+     * @param travelCode
+     * @return start date of the selected travelCode program
+     */
     public static src.TravelData getStartDate(String travelCode){
         connectToDB();
-        String sql = "SELECT travel_code";
+        String sql = "SELECT " + travelCode;
         Statement stmt = null;
         start_date.clear();
         try {
@@ -261,9 +292,14 @@ class db {
         return new src.TravelData(start_date);
     }
 
+    /**
+     * Get the end date of the travel program ex.2020-03-21
+     * @param travelCode
+     * @return end date of the selected travelCode program
+     */
     public static src.TravelData getEndDate(String travelCode){
         connectToDB();
-        String sql = "SELECT travel_code";
+        String sql = "SELECT " + travelCode;
         Statement stmt = null;
         end_date.clear();
         try {
@@ -284,6 +320,14 @@ class db {
         return new src.TravelData(end_date);
     }
 
+    /**
+     * Special method for user search
+     * Get the travelCode between given start date & end date
+     * Call other method after this to get specific program's title, product key, price, date
+     * @param start_date_limit
+     * @param end_date_limit
+     * @return travelCode number between the date range
+     */
     public static src.TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
         connectToDB();
         String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
