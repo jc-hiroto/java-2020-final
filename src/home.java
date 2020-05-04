@@ -11,8 +11,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
-
 import com.toedter.calendar.JDateChooser;
+import src.Processor;
+import src.TravelData;
+import src.hash.searchEngine;
 
 public class home {
     private JPanel panel1;
@@ -68,6 +70,7 @@ public class home {
     private ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
     private Date nowDate = Date.from(zdt.toInstant());
     private String searchTemp = "";
+    private searchEngine travelCodeSearchEngine = new searchEngine();
 
     public home() {
         dateChooserInit();
@@ -99,6 +102,7 @@ public class home {
                     System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
                     System.out.println("Only Empty?: "+onlyEmpty.isSelected());
+                    travelCodeSearchEngine.searchTravelCode(searchContent);
                 }
             }
         });
@@ -173,7 +177,7 @@ public class home {
                 });
         window.addComponentListener(new ComponentAdapter( ) {
             public void componentResized(ComponentEvent ev) {
-                textObjR1_1.setText(src.Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
+                textObjR1_1.setText(Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
             }
         });
         // ================ 以上皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
@@ -210,7 +214,7 @@ public class home {
         String labelR_1_1 = "[春櫻紛飛遊釜慶]世界文化遺產~佛國寺、CNN評選賞櫻推薦~余佐川羅曼史橋+慶和火車站、甘川洞彩繪壁畫村、BIFF廣場+南浦洞購物樂五日<含稅>";
         textObjR1_1.setFont(textObjR1_1.getFont().deriveFont(20f));
         textObjR1_1.setText(labelR_1_1);
-        textObjR1_1.setText(src.Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
+        textObjR1_1.setText(Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
     }
     public void dateChooserInit(){
         Calendar cal = Calendar.getInstance();
