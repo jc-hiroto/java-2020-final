@@ -5,6 +5,8 @@ import org.apache.commons.io.FilenameUtils;
 import java.sql.*;
 import java.util.ArrayList;
 import  src.TravelData;
+import  src.ProductData;
+import  src.ProductCombination;
 
 /**
  * this class is to define all logic used in database
@@ -15,6 +17,7 @@ class db {
     private static ArrayList <String> USER_NAME = new ArrayList<String>();
     private static ArrayList <String> USER_EMAIL = new ArrayList<String>();
     private static ArrayList <String> USER_PASS = new ArrayList<String>();
+    private static ArrayList <String> all = new ArrayList<String>();
     private static ArrayList <String> title = new ArrayList<String>();
     private static ArrayList <String> product_key = new ArrayList<String>();
     private static ArrayList <String> price = new ArrayList<String>();
@@ -72,25 +75,25 @@ class db {
     public static String userAuth(String email, StringBuffer password){
         String flag = "ERR";
         connectToDB();
-        System.out.println("[Success] User data collected: "+ collectUserData());
-        for(int i = 0; i<USER_NAME.size(); i++){
-            if(USER_EMAIL.get(i).equals(email)){
-                if(USER_PASS.get(i).equals(password.toString())){
-                    flag = USER_NAME.get(i);
-                }
-                else{
-                    flag = "ERR";
-                }
+        System.out.println("[Success] User data collected: " + collectUserData(email));
+
+        if(USER_EMAIL.toString().equals(email)){
+            if(USER_PASS.toString().equals(password.toString())){
+                flag = USER_NAME.toString();
+                return flag;
+            } else{
+                return flag + "in user password";
             }
+        } else{
+            return flag + "in user email";
         }
-        return flag;
     }
 
-    public static int collectUserData(){
-        String sql = "SELECT USER_NAME, USER_EMAIL, USER_PASS FROM USER";
+    public static String collectUserData(String user_email){
+        String flag = "ERR";
+        String sql = "SELECT USER_NAME, USER_PASS FROM USER WHERE USER_NAME = " + user_email;
         Statement stmt = null;
         USER_NAME.clear();
-        USER_EMAIL.clear();
         USER_PASS.clear();
         try {
             stmt  = connection.createStatement();
@@ -98,25 +101,24 @@ class db {
             // loop through the result set
             while (rs.next()) {
                USER_NAME.add(rs.getString("USER_NAME"));
-               USER_EMAIL.add(rs.getString("USER_EMAIL"));
                USER_PASS.add(rs.getString("USER_PASS"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return -1; // If there is a exception, return -1 for instead.
-        }finally{
+            return flag; // If there is a exception, return ERR for instead.
+        } finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return -1;
+                return flag;
             }
         }
-        return USER_NAME.size(); // If success, return the number of user collected.
+        return USER_NAME.toString(); // If success, return user name.
     }
 
     public static boolean checkUserExist(String email){
         boolean flag = false;
         connectToDB();
-        collectUserData();
+        collectUserData(email);
         for(int i=0; i<USER_EMAIL.size();i++){
             if(USER_EMAIL.get(i).equals(email)){
                 flag = true;
@@ -152,13 +154,44 @@ class db {
     }
 
     /**
+     * Get the travel program all info
+     * @param travelCode
+     * @return all info of the selected travelCode program
+     */
+    public static TravelData getAll(String travelCode){
+        String flag = "ERR";
+        connectToDB();
+        String sql = "SELECT * FROM trip_data WHERE travel_code = " + travelCode;
+        Statement stmt = null;
+        all.clear();
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                ProductData temp = new ProductData(rs.getString("title"),~~~);
+                productDataList.add(temp);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return all.add(flag);
+        }finally {
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
+        return new TravelData(all);
+    }
+
+    /**
      * Get the travel program title ex.馬達加斯加 猴麵包樹 夢幻生態天堂10天
      * @param travelCode
      * @return title of the selected travelCode program
      */
     public static TravelData getTitle(String travelCode){
         connectToDB();
-        String sql = "SELECT " + travelCode;
+        String sql = "SELECT title FROM trip_data WHERE travel_code = " + travelCode;
         Statement stmt = null;
         title.clear();
         try {
@@ -187,7 +220,7 @@ class db {
      */
     public static TravelData getProductKey(String travelCode){
         connectToDB();
-        String sql = "SELECT " + travelCode;
+        String sql = "SELECT product_key FROM trip_data WHERE travel_code = " + travelCode;
         Statement stmt = null;
         product_key.clear();
         try {
@@ -215,7 +248,7 @@ class db {
      */
     public static TravelData getPrice(String travelCode){
         connectToDB();
-        String sql = "SELECT " + travelCode;
+        String sql = "SELECT price FROM trip_data WHERE travel_code = " + travelCode;
         Statement stmt = null;
         price.clear();
         try {
@@ -246,7 +279,7 @@ class db {
      */
     public static TravelData getPriceBelowTravelCode(int price_limit){
         connectToDB();
-        String sql = "SELECT travel_code where price <= " + Integer.toString(price_limit);
+        String sql = "SELECT travel_code FROM trip_data WHERE price <= " + Integer.toString(price_limit);
         Statement stmt = null;
         travel_code.clear();
         try {
@@ -274,7 +307,7 @@ class db {
      */
     public static TravelData getStartDate(String travelCode){
         connectToDB();
-        String sql = "SELECT " + travelCode;
+        String sql = "SELECT start_date FROM trip_data WHERE travel_code = " + travelCode;
         Statement stmt = null;
         start_date.clear();
         try {
@@ -302,7 +335,7 @@ class db {
      */
     public static TravelData getEndDate(String travelCode){
         connectToDB();
-        String sql = "SELECT " + travelCode;
+        String sql = "SELECT end_date FROM trip_data WHERE travel_code = " + travelCode;
         Statement stmt = null;
         end_date.clear();
         try {
@@ -333,7 +366,7 @@ class db {
      */
     public static TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
         connectToDB();
-        String sql = "SELECT travel_code where " + start_date_limit + " > start_date and " + end_date_limit + " < end_date_limit";
+        String sql = "SELECT travel_code FROM trip_data WHERE start_date < " + start_date_limit + " and end_date_limit > " + end_date_limit;
         Statement stmt = null;
         travel_code.clear();
         try {
