@@ -31,8 +31,6 @@ public class passwordHash {
             
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
             byte[] encrypted = new byte[cipher.getOutputSize(input.length)];
-            int ctLength = cipher.update(input, 0, input.length, encrypted, 0);
-            ctLength += cipher.doFinal(encrypted, ctLength);
             
             String s = new String(encodeBase64(encrypted));
             return new StringBuffer(s);
@@ -58,8 +56,6 @@ public class passwordHash {
             
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);
         	byte[] decrypted = new byte[cipher.getOutputSize(ctLength)];
-            int ptLength = cipher.update(input, 0, ctLength, decrypted, 0);
-            ptLength += cipher.doFinal(decrypted, ptLength);
             
             String s = new String(decrypted, "UTF-8");
             return new StringBuffer(s);
