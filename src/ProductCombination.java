@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class ProductCombination {
 
-    public int price,upperBound,lowerBound;
-    public Date startDate,endDate;
+    private int price,upperBound,lowerBound;
+    private Date startDate,endDate;
 
     public ProductCombination(){
         price = 0;
@@ -29,5 +29,37 @@ public class ProductCombination {
         lowerBound = old.lowerBound;
         startDate = old.startDate;
         endDate = old.endDate;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+    public void setLowerBound(int lowerBound) {
+        this.lowerBound = lowerBound;
+    }
+    public void setUpperBound(int upperBound) {
+        this.upperBound = upperBound;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+    public int getLowerBound() {
+        return lowerBound;
+    }
+    public int getUpperBound() {
+        return upperBound;
+    }
+    public Date getStartDate(){
+        return startDate;
+    }
+    public Date getEndDate(){
+        return endDate;
     }
 }
