@@ -1,0 +1,52 @@
+package src;
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+import src.ProductData;
+import src.ProductCombination;
+
+public class JListCustomRenderer extends JFrame{
+    private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
+    public JListCustomRenderer(){
+        //displayData = data;
+        ProductData prd1 = new ProductData("波蘭+波羅的海三小國+北歐6國全覽12日","VDR0000001255","code1");
+        prd1.addCombination(new ProductCombination());
+        ProductData prd2 = new ProductData("幸福北歐~極光玻璃屋帝王蟹 10天(縱遊 瑞典、 挪威、 芬蘭、愛沙尼亞)","VDR0000001732","code2");
+        prd2.addCombination(new ProductCombination());
+        ProductData prd3 = new ProductData("馬達加斯加 猴麵包樹 夢幻生態天堂10天","VDR0000007686","code3");
+        prd3.addCombination(new ProductCombination());
+        displayData.add(prd1);
+        displayData.add(prd2);
+        displayData.add(prd3);
+        add(createPanel());
+        setTitle("test RENDERER");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400,200);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    public JPanel createPanel(){
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10,10,10,10));
+        panel.add(new JScrollPane(createList()),BorderLayout.CENTER);
+        return panel;
+    }
+    public JList<ProductData> createList(){
+        DefaultListModel<ProductData> model = new DefaultListModel<ProductData>();
+        for(ProductData val : displayData)
+            model.addElement(val);
+        JList<ProductData> list = new JList<ProductData>(model);
+        list.setCellRenderer(new ProductRenderer());
+        return list;
+    }
+    public static void main (String[] args){
+
+        new JListCustomRenderer();
+    }
+}

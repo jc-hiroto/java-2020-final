@@ -36,6 +36,10 @@ public class ProductData {
         this.code = code;
     }
 
+    @Override
+    public String toString(){
+        return new String(title);
+    }
     public String getTitle(){
         return new String(this.title);
     }
@@ -50,5 +54,8 @@ public class ProductData {
     }
     public ArrayList<ProductCombination> getCombination(){
         return detail;
+    }
+    public ProductCombination getFirstCombination(){
+        return new ProductCombination(detail.get(0));
     }
 }
