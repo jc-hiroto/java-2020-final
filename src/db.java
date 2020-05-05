@@ -13,7 +13,7 @@ import  src.ProductCombination;
  */
 class db {
     private static Connection connection = null;
-    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app.db");
+    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
     private static ArrayList <String> USER_NAME = new ArrayList<String>();
     private static ArrayList <String> USER_EMAIL = new ArrayList<String>();
     private static ArrayList <String> USER_PASS = new ArrayList<String>();
@@ -169,12 +169,12 @@ class db {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                ProductData temp = new ProductData(rs.getString("title"),~~~);
-                productDataList.add(temp);
+                //ProductData temp = new ProductData(rs.getString("title"));
+                //productDataList.add(temp);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return all.add(flag);
+            //return all.add(flag);
         }finally {
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
