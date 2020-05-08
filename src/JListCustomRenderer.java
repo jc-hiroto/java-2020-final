@@ -24,12 +24,7 @@ public class JListCustomRenderer extends JFrame{
         displayData.add(prd1);
         displayData.add(prd2);
         displayData.add(prd3);
-        add(createPanel());
-        setTitle("test RENDERER");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000,600);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        //add(createPanel());
     }
     public JPanel createPanel(){
         JPanel panel = new JPanel(new BorderLayout());
@@ -44,9 +39,5 @@ public class JListCustomRenderer extends JFrame{
         JList<ProductData> list = new JList<ProductData>(model);
         list.setCellRenderer(new ProductRenderer());
         return list;
-    }
-    public static void main (String[] args){
-
-        new JListCustomRenderer();
     }
 }
