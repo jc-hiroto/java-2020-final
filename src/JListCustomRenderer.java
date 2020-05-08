@@ -15,11 +15,11 @@ public class JListCustomRenderer extends JFrame{
     private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
     public JListCustomRenderer(){
         //displayData = data;
-        ProductData prd1 = new ProductData("波蘭+波羅的海三小國+北歐6國全覽12日","VDR0000001255","code1");
+        ProductData prd1 = new ProductData("關西山陰米其林６天～海上沙漠．白鷺姬路城．足立美術館．天橋立","VDR0598182453","401");
         prd1.addCombination(new ProductCombination());
-        ProductData prd2 = new ProductData("幸福北歐~極光玻璃屋帝王蟹 10天(縱遊 瑞典、 挪威、 芬蘭、愛沙尼亞)","VDR0000001732","code2");
+        ProductData prd2 = new ProductData("幸福北歐~極光玻璃屋帝王蟹 10天(縱遊 瑞典、 挪威、 芬蘭、愛沙尼亞)","VDR0000001732","40");
         prd2.addCombination(new ProductCombination());
-        ProductData prd3 = new ProductData("馬達加斯加 猴麵包樹 夢幻生態天堂10天","VDR0000007686","code3");
+        ProductData prd3 = new ProductData("馬達加斯加 猴麵包樹 夢幻生態天堂10天","VDR0000007686","100");
         prd3.addCombination(new ProductCombination());
         displayData.add(prd1);
         displayData.add(prd2);
@@ -27,7 +27,7 @@ public class JListCustomRenderer extends JFrame{
         add(createPanel());
         setTitle("test RENDERER");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,200);
+        setSize(1000,600);
         setLocationRelativeTo(null);
         setVisible(true);
     }
