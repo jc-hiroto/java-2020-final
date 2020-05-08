@@ -15,10 +15,10 @@ public class ProductData {
         detail = new ArrayList<ProductCombination>();
     }
 
-    public ProductData(String getTitle,String getKey,String getCode){
-        title = getTitle;
-        key = getKey;
-        code = getCode;
+    public ProductData(String title,String key,String code){
+        this.title = title;
+        this.key = key;
+        this.code = code;
         detail = new ArrayList<ProductCombination>();
     }
 
@@ -36,6 +36,10 @@ public class ProductData {
         this.code = code;
     }
 
+    @Override
+    public String toString(){
+        return new String(title);
+    }
     public String getTitle(){
         return new String(this.title);
     }
@@ -50,5 +54,8 @@ public class ProductData {
     }
     public ArrayList<ProductCombination> getCombination(){
         return detail;
+    }
+    public ProductCombination getFirstCombination(){
+        return new ProductCombination(detail.get(0));
     }
 }

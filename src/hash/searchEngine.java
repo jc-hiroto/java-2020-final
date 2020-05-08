@@ -46,7 +46,24 @@ public class searchEngine{
 	}
 
 	public String searchTravelCode(String searchWord){
-		return index.search(searchWord);
+		for(int i = 0; i < index.getTravelCode().size(); i++){
+			if(index.getTravelCodeName().get(i).contains(searchWord)){
+				System.out.println("Using word: "+searchWord+" Find result TravelCode: "+index.getTravelCode().get(i)+" for category: "+ index.getTravelCodeName().get(i));
+				return index.getTravelCode().get(i);
+			}
+		}
+		System.out.println("Using word: "+searchWord+". Result not found!");
+		return "ERR";
 	}
-	
+
+	public String reverseSearch(String code){
+		for(int i = 0; i < index.getTravelCode().size(); i++){
+			if(index.getTravelCode().get(i).equals(code)){
+				System.out.println("Using code: "+code+" Find result Category: "+index.getTravelCodeName().get(i));
+				return index.getTravelCodeName().get(i);
+			}
+		}
+		System.out.println("Using code: "+code+". Result not found!");
+		return "ERR";
+	}
 }
