@@ -243,7 +243,7 @@ class db {
      */
     public static ArrayList<ProductData> getDateBetween(String travelCode,String start_date_limit, String end_date_limit) throws SQLException {
         connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode + "\' and start_date <= '" + start_date_limit + "' and end_date >= '" + end_date_limit + "'";
+        String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode + "\' and start_date >= Date('" + start_date_limit + "') and end_date <= Date('" + end_date_limit + "')";
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
