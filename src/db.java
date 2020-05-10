@@ -6,6 +6,8 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+
 import  src.TravelData;
 import  src.ProductData;
 import  src.ProductCombination;
@@ -90,7 +92,7 @@ class db {
 
     public static String collectUserData(String user_email){
         String flag = "ERR";
-        String sql = "SELECT USER_NAME, USER_PASS FROM USER WHERE USER_NAME = " + user_email;
+        String sql = "SELECT USER_NAME, USER_PASS FROM USER WHERE USER_NAME = '" + user_email + "'";
         Statement stmt = null;
         USER_NAME.clear();
         USER_PASS.clear();
@@ -164,9 +166,6 @@ class db {
         productDataList.clear();
         int index = -1;
         boolean exists = false;
-        try {
-            stmt  = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 exists = false;
                 for(int i = 0; i<productDataList.size();i++){
@@ -207,69 +206,173 @@ class db {
         }
         return productDataList;
     }
-
-
-
-    /**
-     * Special method for user search
-     * Get the travelCode under given price limit
-     * Call other method after this to get specific program's title, product key, price, date
-     * @param price_limit
-     * @return travelCode number under price limit
-
-    public static TravelData getPriceBelowTravelCode(int price_limit){
+    public static List getPriceBetween(int price_limit_bottom, int price_limit_top) throws SQLException {
         connectToDB();
-        String sql = "SELECT travel_code FROM trip_data WHERE price <= " + Integer.toString(price_limit);
+        String sql = "SELECT * FROM trip_data WHERE price BETWEEN '" + price_limit_bottom + "' and '" + price_limit_top + "'";
         Statement stmt = null;
-        travel_code.clear();
+        List<Object> productDataList = new ArrayList<Object>();
+
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                travel_code.add(rs.getString("travel_code"));
-            }
+
+            ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
+            do{
+                ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
+                pdd.detail.add(pdc);
+            } while(rs.next());
+            productDataList.add(pdd);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
+            System.out.println(e.fillInStackTrace());
+            throw e;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
                 return null;
             }
         }
-        return new TravelData(travel_code);
+        return productDataList;
     }
-
 
     /**
      * Special method for user search
-     * Get the travelCode between given start date & end date
-     * Call other method after this to get specific program's title, product key, price, date
+     * Get the travel data info between given start date & end date
      * @param start_date_limit
      * @param end_date_limit
-     * @return travelCode number between the date range
-     *
-    public static TravelData getDateBetweenTravelCode(String start_date_limit, String end_date_limit){
+     * @return all info of the selected program under date limit
+     */
+    public static List getDateBetween(String start_date_limit, String end_date_limit) throws SQLException {
         connectToDB();
-        String sql = "SELECT travel_code FROM trip_data WHERE start_date < " + start_date_limit + " and end_date_limit > " + end_date_limit;
+        String sql = "SELECT * FROM trip_data WHERE start_date <= '" + start_date_limit + "' and end_date_limit >= '" + end_date_limit + "'";
         Statement stmt = null;
-        travel_code.clear();
+        List<Object> productDataList = new ArrayList<Object>();
+
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                travel_code.add(rs.getString("travel_code"));
-            }
+
+            ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
+            do{
+                ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
+                pdd.detail.add(pdc);
+            } while(rs.next());
+            productDataList.add(pdd);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
+            System.out.println(e.fillInStackTrace());
+            throw e;
         }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
                 return null;
             }
         }
-        return new TravelData(travel_code);
+        return productDataList;
     }
-    */
+
+    public static List getPeopleBetween(int upper_bound_limit, int lower_bound_limit) throws SQLException {
+        connectToDB();
+        String sql = "SELECT * FROM trip_data WHERE upper_bound <= '" + upper_bound_limit + "' and lower_bound >= '" + lower_bound_limit + "'";
+        Statement stmt = null;
+        List<Object> productDataList = new ArrayList<Object>();
+
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
+            do{
+                ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
+                pdd.detail.add(pdc);
+            } while(rs.next());
+            productDataList.add(pdd);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.fillInStackTrace());
+            throw e;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return productDataList;
+    }
+
+    /**
+     * Special method for user search
+     * Get the travel data info under given upper_bound limit
+     * @param upper_bound_limit
+     * @return all info of the selected program under people limit
+     */
+    public static List getPeopleBelow(int upper_bound_limit) throws SQLException {
+        connectToDB();
+        String sql = "SELECT * FROM trip_data WHERE upper_bound <= '" + upper_bound_limit + "'";
+        Statement stmt = null;
+        List<Object> productDataList = new ArrayList<Object>();
+
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
+            do{
+                ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
+                pdd.detail.add(pdc);
+            } while(rs.next());
+            productDataList.add(pdd);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.fillInStackTrace());
+            throw e;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return productDataList;
+    }
+
+    /**
+     * Special method for user search
+     * Get the travel data info under given lower_bound limit
+     * @param lower_bound_limit
+     * @return all info of the selected program under people limit
+     */
+    public static List getPeopleAbove(int lower_bound_limit) throws SQLException {
+        connectToDB();
+        String sql = "SELECT * FROM trip_data WHERE lower_bound >= '" + lower_bound_limit + "'";
+        Statement stmt = null;
+        List<Object> productDataList = new ArrayList<Object>();
+
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
+            do{
+                ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
+                pdd.detail.add(pdc);
+            } while(rs.next());
+            productDataList.add(pdd);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.fillInStackTrace());
+            throw e;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if(!closeStats){
+                return null;
+            }
+        }
+        return productDataList;
+    }
 }
+
