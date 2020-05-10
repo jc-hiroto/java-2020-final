@@ -25,6 +25,7 @@ public class JListCustomRenderer extends JFrame{
         displayData.add(prd2);
         displayData.add(prd3);
         //add(createPanel());
+         */
     }
     public JPanel createPanel(ArrayList<ProductData> PD){
         if(PD != null){

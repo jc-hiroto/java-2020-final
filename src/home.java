@@ -346,7 +346,6 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
-        Panel = new JListCustomRenderer().createPanel();
         recommendPanel = new JListCustomRenderer().createPanel(null);
         searchResultPanel = new JListCustomRenderer().createPanel(null);
         initManageTable(); // 初始化形成管理頁面的表格

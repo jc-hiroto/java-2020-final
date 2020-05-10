@@ -76,50 +76,51 @@ class db {
     public static String userAuth(String email, StringBuffer password){
         String flag = "ERR";
         connectToDB();
-        System.out.println("[Success] User data collected: " + collectUserData(email));
-
-        if(USER_EMAIL.toString().equals(email)){
-            if(USER_PASS.toString().equals(password.toString())){
-                flag = USER_NAME.toString();
-                return flag;
-            } else{
-                return flag + "in user password";
+        System.out.println("[Success] User data collected: "+ collectUserData());
+        for(int i = 0; i<USER_NAME.size(); i++){
+            if(USER_EMAIL.get(i).equals(email)){
+                if(USER_PASS.get(i).equals(password.toString())){
+                    flag = USER_NAME.get(i);
+                }
+                else{
+                    flag = "ERR";
+                }
             }
-        } else{
-            return flag + "in user email";
         }
+        return flag;
     }
 
-    public static String collectUserData(String user_email){
-        String flag = "ERR";
-        String sql = "SELECT USER_NAME, USER_PASS FROM USER WHERE USER_NAME = '" + user_email + "'";
+    public static int collectUserData(){
+        String sql = "SELECT USER_NAME, USER_EMAIL, USER_PASS FROM USER";
         Statement stmt = null;
         USER_NAME.clear();
+        USER_EMAIL.clear();
         USER_PASS.clear();
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             // loop through the result set
             while (rs.next()) {
-               USER_NAME.add(rs.getString("USER_NAME"));
-               USER_PASS.add(rs.getString("USER_PASS"));
+                USER_NAME.add(rs.getString("USER_NAME"));
+                USER_EMAIL.add(rs.getString("USER_EMAIL"));
+                USER_PASS.add(rs.getString("USER_PASS"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return flag; // If there is a exception, return ERR for instead.
-        } finally{
+            return -1; // If there is a exception, return -1 for instead.
+        }finally{
             boolean closeStats = closeConnection(stmt);
             if(!closeStats){
-                return flag;
+                return -1;
             }
         }
-        return USER_NAME.toString(); // If success, return user name.
+        return USER_NAME.size(); // If success, return the number of user collected.
     }
 
     public static boolean checkUserExist(String email){
         boolean flag = false;
         connectToDB();
-        collectUserData(email);
+        collectUserData();
         for(int i=0; i<USER_EMAIL.size();i++){
             if(USER_EMAIL.get(i).equals(email)){
                 flag = true;
@@ -166,6 +167,9 @@ class db {
         productDataList.clear();
         int index = -1;
         boolean exists = false;
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 exists = false;
                 for(int i = 0; i<productDataList.size();i++){
