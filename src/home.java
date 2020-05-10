@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -105,7 +106,11 @@ public class home {
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
                     System.out.println("Only Empty?: "+onlyEmpty.isSelected());
                     String code = travelCodeSearchEngine.searchTravelCode(searchContent);
-                    searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code));
+                    try {
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getDateBetween(code,dateFormat.format(JDateChooser1.getDate()),dateFormat.format(JDateChooser2.getDate())));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     cardHolder.remove(searchResultPanel);
                     cardInit();
                     layout.show(cardHolder,"SearchResult");
@@ -245,7 +250,6 @@ public class home {
         cardHolder.add(managePanel, "Manage");
         cardHolder.add(searchResultPanel,"SearchResult");
         cardHolder.add(old_recommendPanel,"old_recc");
-        cardHolder.add(productDataPanel,"productData");
         layout = (CardLayout)cardHolder.getLayout();
     }
 
