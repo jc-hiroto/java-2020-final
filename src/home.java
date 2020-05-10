@@ -65,6 +65,7 @@ public class home {
     private JPanel errorAlert;
     private JPanel searchResultPanel;
     private JPanel recommendPanel;
+    private JPanel productDataPanel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -244,6 +245,7 @@ public class home {
         cardHolder.add(managePanel, "Manage");
         cardHolder.add(searchResultPanel,"SearchResult");
         cardHolder.add(old_recommendPanel,"old_recc");
+        cardHolder.add(productDataPanel,"productData");
         layout = (CardLayout)cardHolder.getLayout();
     }
 

@@ -56,9 +56,23 @@ public class ProductData {
     public ArrayList<ProductCombination> getCombination(){
         return detail;
     }
-    public ProductCombination getFirstCombination(){
-        if(detail.size()>0)
-            return new ProductCombination(detail.get(0));
-        return new ProductCombination(0,0,0,new Date(2020,1,1),new Date(2020,1,1));
+    public int getCheapestPrice(){
+        int min = detail.get(0).getPrice();
+        for(int i=0; i<detail.size(); i++){
+           if(detail.get(i).getPrice() < min) {
+               min = detail.get(i).getPrice();
+           }
+        }
+        return min;
     }
+    public int getLowestBound(){
+        int min = detail.get(0).getLowerBound();
+        for(int i=0; i<detail.size(); i++){
+            if(detail.get(i).getLowerBound() < min) {
+                min = detail.get(i).getLowerBound();
+            }
+        }
+        return min;
+    }
+
 }

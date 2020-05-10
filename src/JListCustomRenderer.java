@@ -1,5 +1,8 @@
 package src;
-import java.awt.BorderLayout;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -14,6 +17,7 @@ import src.ProductCombination;
 public class JListCustomRenderer extends JFrame{
     private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
     public JListCustomRenderer(){
+
         /*
         ProductData prd1 = new ProductData("關西山陰米其林６天～海上沙漠．白鷺姬路城．足立美術館．天橋立","VDR0598182453","401");
         prd1.addCombination(new ProductCombination());
@@ -31,10 +35,32 @@ public class JListCustomRenderer extends JFrame{
         if(PD != null){
             displayData = PD;
         }
+        JPanel cardHolder = new JPanel(new CardLayout());
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10,10,10,10));
-        panel.add(new JScrollPane(createList()),BorderLayout.CENTER);
-        return panel;
+        JPanel panel2 = new JPanel(new BorderLayout());
+        cardHolder.add(panel,"List");
+        cardHolder.add(panel2,"Info");
+        CardLayout cl = (CardLayout)(cardHolder.getLayout());
+        cl.show(cardHolder, "List");
+        JList jlist = createList();
+        MouseListener mouseListener = new MouseAdapter() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                JList<String> theList = (JList) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+                    if (index >= 0) {
+                        Object o = theList.getModel().getElementAt(index);
+                        System.out.println("Double-clicked on: " + o);
+                        cl.show(cardHolder,"Info");
+                    }
+                }
+            }
+        };
+        jlist.addMouseListener(mouseListener);
+        panel.setBorder(new EmptyBorder(5,5,5,5));
+        panel.setBackground(new Color(21,188,163));
+        panel.add(new JScrollPane(jlist),BorderLayout.CENTER);
+        return cardHolder;
     }
     public JList<ProductData> createList(){
         DefaultListModel<ProductData> model = new DefaultListModel<ProductData>();

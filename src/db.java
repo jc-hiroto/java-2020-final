@@ -155,6 +155,41 @@ class db {
         return flag;
     }
 
+    public static void extractProductData(ResultSet rs) throws SQLException, ParseException {
+        productDataList.clear();
+        int index = -1;
+        boolean exists = false;
+        while (rs.next()) {
+            exists = false;
+            for(int i = 0; i<productDataList.size();i++){
+                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
+                    index = i;
+                    exists = true;
+                    System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
+                    break;
+                }
+            }
+            if(exists){
+                ProductData PDtmp = productDataList.get(index);
+                Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
+                ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                PDtmp.addCombination(PCtemp);
+                System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
+            }
+            else {
+                ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
+                Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
+                ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                newPDtmp.addCombination(newPCtemp);
+                productDataList.add(newPDtmp);
+                System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
+            }
+        }
+        System.out.println("[INFO] Total data set amount: "+productDataList.size());
+    }
+
     /**
      * Get the travel program all info
      * @param travelCode
@@ -164,41 +199,10 @@ class db {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode+"\'";
         Statement stmt = null;
-        productDataList.clear();
-        int index = -1;
-        boolean exists = false;
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                exists = false;
-                for(int i = 0; i<productDataList.size();i++){
-                    if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                        index = i;
-                        exists = true;
-                        System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
-                        break;
-                    }
-                }
-                if(exists){
-                    ProductData PDtmp = productDataList.get(index);
-                    Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
-                    Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
-                    ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
-                    PDtmp.addCombination(PCtemp);
-                    System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                }
-                else {
-                    ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
-                    Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
-                    Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
-                    ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
-                    newPDtmp.addCombination(newPCtemp);
-                    productDataList.add(newPDtmp);
-                    System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
-                }
-            }
-            System.out.println("[INFO] Total data set amount: "+productDataList.size());
+            extractProductData(rs);
         } catch (SQLException | ParseException e) {
             System.out.println(e.getMessage());
             //return all.add(flag);
