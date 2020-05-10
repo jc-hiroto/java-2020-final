@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ProductData {
     private String title,key,code;
-    private ArrayList<ProductCombination> detail;
+    public ArrayList<ProductCombination> detail;
 
     public ProductData(){
         title = null;
