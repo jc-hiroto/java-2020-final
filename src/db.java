@@ -3,6 +3,8 @@ package src;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import  src.TravelData;
 import  src.ProductData;
@@ -176,22 +178,22 @@ class db {
                 }
                 if(exists){
                     ProductData PDtmp = productDataList.get(index);
-                    Date start = rs.getTimestamp("start_date");
-                    Date end = rs.getTimestamp("end_date");
+                    Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                    Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                     ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
                     PDtmp.addCombination(PCtemp);
                     System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
                 }
                 else {
                     ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
-                    Date start = rs.getTimestamp("start_date");
-                    Date end = rs.getTimestamp("end_date");
+                    Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                    Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                     ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
                     productDataList.add(newPDtmp);
                     System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException e) {
             System.out.println(e.getMessage());
             //return all.add(flag);
         }finally {
