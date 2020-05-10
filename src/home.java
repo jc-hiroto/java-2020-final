@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import com.toedter.calendar.JDateChooser;
 import src.hash.searchEngine;
+import src.db;
 
 public class home {
     private JPanel panel1;
@@ -102,7 +103,10 @@ public class home {
                     System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
                     System.out.println("Only Empty?: "+onlyEmpty.isSelected());
-                    travelCodeSearchEngine.searchTravelCode(searchContent);
+                    String code = travelCodeSearchEngine.searchTravelCode(searchContent);
+                    searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code));
+                    cardHolder.remove(searchResultPanel);
+                    cardInit();
                     layout.show(cardHolder,"SearchResult");
                     exitFromHome();
                 }
@@ -342,8 +346,8 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
-        recommendPanel = new JListCustomRenderer().createPanel();
-        searchResultPanel = new JListCustomRenderer().createPanel();
+        recommendPanel = new JListCustomRenderer().createPanel(null);
+        searchResultPanel = new JListCustomRenderer().createPanel(null);
         initManageTable(); // 初始化形成管理頁面的表格
         // TODO: 讓表格 jTable 無法被編輯，研究中。
         // public boolean isCellEditable(int row, int column){return false;}

@@ -13,7 +13,7 @@ public class travelSearchIndex {
     public void addIndex(String tCode, String tCodeName){
         travelCode.add(tCode);
         travelCodeName.add(tCodeName);
-        System.out.println("Data: "+tCode+" - "+tCodeName+" ADDED! "+travelCode.size()+" Data added.");
+        //System.out.println("Data: "+tCode+" - "+tCodeName+" ADDED! "+travelCode.size()+" Data added.");
     }
     public ArrayList<String> getTravelCode(){
         return travelCode;
