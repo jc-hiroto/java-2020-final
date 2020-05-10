@@ -3,10 +3,11 @@ import src.ProductCombination;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ProductData {
     private String title,key,code;
-    private ArrayList<ProductCombination> detail;
+    public ArrayList<ProductCombination> detail;
 
     public ProductData(){
         title = null;
@@ -56,6 +57,8 @@ public class ProductData {
         return detail;
     }
     public ProductCombination getFirstCombination(){
-        return new ProductCombination(detail.get(0));
+        if(detail.size()>0)
+            return new ProductCombination(detail.get(0));
+        return new ProductCombination(0,0,0,new Date(2020,1,1),new Date(2020,1,1));
     }
 }

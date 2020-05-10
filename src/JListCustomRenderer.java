@@ -14,7 +14,7 @@ import src.ProductCombination;
 public class JListCustomRenderer extends JFrame{
     private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
     public JListCustomRenderer(){
-        //displayData = data;
+        /*
         ProductData prd1 = new ProductData("關西山陰米其林６天～海上沙漠．白鷺姬路城．足立美術館．天橋立","VDR0598182453","401");
         prd1.addCombination(new ProductCombination());
         ProductData prd2 = new ProductData("幸福北歐~極光玻璃屋帝王蟹 10天(縱遊 瑞典、 挪威、 芬蘭、愛沙尼亞)","VDR0000001732","40");
@@ -26,7 +26,10 @@ public class JListCustomRenderer extends JFrame{
         displayData.add(prd3);
         //add(createPanel());
     }
-    public JPanel createPanel(){
+    public JPanel createPanel(ArrayList<ProductData> PD){
+        if(PD != null){
+            displayData = PD;
+        }
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(10,10,10,10));
         panel.add(new JScrollPane(createList()),BorderLayout.CENTER);

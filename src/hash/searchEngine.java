@@ -38,7 +38,7 @@ public class searchEngine{
 	}
 	// Convert JSON to string buffer and return travel code info in a 2-dim string buffer (default)
 	public void JsonToIndex(){
-		System.out.println(travelCodeArray.size());
+		//System.out.println(travelCodeArray.size());
 		for(int i = 0; i < travelCodeArray.size(); i++){
 			JSONObject travelCodeObj = (JSONObject)travelCodeArray.get(i);
 			index.addIndex((String) travelCodeObj.get("travel_code"), (String) travelCodeObj.get("travel_code_name"));
@@ -59,7 +59,7 @@ public class searchEngine{
 	public String reverseSearch(String code){
 		for(int i = 0; i < index.getTravelCode().size(); i++){
 			if(index.getTravelCode().get(i).equals(code)){
-				System.out.println("Using code: "+code+" Find result Category: "+index.getTravelCodeName().get(i));
+				getTravelCodeName().get(i));
 				return index.getTravelCodeName().get(i);
 			}
 		}
