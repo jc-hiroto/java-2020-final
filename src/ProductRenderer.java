@@ -5,10 +5,13 @@ import java.io.FileOutputStream;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-
+import src.Processor;
 import src.ProductData;
 import src.ProductCombination;
 import src.hash.searchEngine;
+
+import static src.Processor.textCutter;
+
 public class ProductRenderer extends JPanel implements ListCellRenderer<ProductData> {
     private JLabel lbTitle = new JLabel();
     private JLabel lbIcon = new JLabel();
@@ -34,8 +37,8 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
     public Component getListCellRendererComponent(JList<? extends ProductData> list, ProductData productData, int index, boolean isSelected, boolean cellHasFocus) {
         String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+productData.getCode()+"-1x.png";
         lbIcon.setIcon(new ImageIcon(imgFilepath));
-        lbTitle.setText(productData.getTitle());
         lbTitle.setFont(new Font(Font.DIALOG,Font.BOLD,20));
+        lbTitle.setText(textCutter(productData.getTitle(),650,lbTitle.getFontMetrics(lbTitle.getFont())));
         lbCat.setText("分類:  "+ sEngine.reverseSearch(productData.getCode()));
         lbCat.setForeground(Color.GRAY);
         lbCat.setFont(new Font(Font.DIALOG,Font.BOLD,15));

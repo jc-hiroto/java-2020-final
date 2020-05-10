@@ -1,17 +1,12 @@
 package src;
 import org.apache.commons.validator.routines.EmailValidator;
-
+import java.lang.Math;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.desktop.SystemEventListener;
 
 public class Processor {
-    //public db dbObject = null;
-
-    public Processor(){
-        //dbObject();  //link to DB and initial DB
-    }
-
+    private static final int []travelCode= {100,101,342,343,368,384,391,392,393,394,395};
     /**
      * 
      * @param destination : input as string , enter by user
@@ -19,9 +14,9 @@ public class Processor {
      * @param sortBy : false = sort by price , true = sort by date , CHOOSE by user
      * @return not sure, maube a list or a string
      */
-    //public list searchAvailableTrip(String destination , String date,boolean sortBy){
-
-    //}
+    public static src.TravelData searchAvailableTrip(String destination , String date, boolean sortBy){
+        return null;
+    }
 
     /**
      *  ***ALL PARAMETER expect numberOFReverse should be enter automatically by system , not user.
@@ -32,7 +27,7 @@ public class Processor {
      * @param productKey
      * @return : string ((Success or fail) + info)
      */
-    public String reserveTrip(String id , String leavingDate , String arrivalDate , int numberOfReverse , int productKey ){
+    public static String reserveTrip(String id , String leavingDate , String arrivalDate , int numberOfReverse , int productKey ){
         return null;
     }
 
@@ -43,7 +38,7 @@ public class Processor {
      * @param editNum : if want to remove the order , enter 0
      * @return
      */
-    public String editTrip(String id , int orderId , int editNum){
+    public static String editTrip(String id , int orderId , int editNum){
         return null;
     }
 
@@ -53,7 +48,7 @@ public class Processor {
      * @param orderId
      * @return
      */
-    public String searchOrder(String id , int orderId){
+    public static String searchOrder(String id , int orderId){
         return null;
     }
 
@@ -91,5 +86,34 @@ public class Processor {
             oneLength = 0;
         }
         return stringb.toString();
+    }
+
+    public static String textCutter(String rawString, int size, FontMetrics fontMetrics){
+        StringBuilder stringb = new StringBuilder();
+        stringb.append("<html><body><p>");
+        rawString=rawString.replaceAll("\n","");
+        char[] chars = rawString.toCharArray();
+        int start = 0;
+        int oneLength = 0;
+        while (start + oneLength < rawString.length()) {
+            while (true) {
+                oneLength++;
+                if (start + oneLength > rawString.length()) {
+                    break;
+                }
+                if (fontMetrics.charsWidth(chars, start, oneLength) > size) {
+                    break;
+                }
+            }
+            stringb.append(chars, start, oneLength - 1).append("<br>");
+            start = start + oneLength - 1;
+            oneLength = 0;
+        }
+        stringb.append("</p></body></html>");
+        return stringb.toString();
+    }
+
+    public static int randomTravelCodeGene(){
+        return travelCode[(int)Math.random()*1000%travelCode.length];
     }
 }
