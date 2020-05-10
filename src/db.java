@@ -168,6 +168,7 @@ class db {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
+                exists = false;
                 for(int i = 0; i<productDataList.size();i++){
                     if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
                         index = i;
@@ -189,10 +190,12 @@ class db {
                     Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
                     Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                     ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                    newPDtmp.addCombination(newPCtemp);
                     productDataList.add(newPDtmp);
                     System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
                 }
             }
+            System.out.println("[INFO] Total data set amount: "+productDataList.size());
         } catch (SQLException | ParseException e) {
             System.out.println(e.getMessage());
             //return all.add(flag);
