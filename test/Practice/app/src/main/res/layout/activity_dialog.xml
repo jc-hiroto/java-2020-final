@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:padding="10dp">
+
+    <Button
+            android:id="@+id/btn_dialog1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="默認對話"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            />
+    <Button
+            android:id="@+id/btn_dialog2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="單選對話"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+    />
+    <Button
+            android:id="@+id/btn_dialog3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="看的出來的單選對話"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+    />
+    <Button
+            android:id="@+id/btn_dialog4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="多選對話"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+    />
+
+    <Button
+            android:id="@+id/btn_dialog5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自定義"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+    />
+
+</LinearLayout>

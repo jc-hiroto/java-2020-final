@@ -12,9 +12,8 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import com.toedter.calendar.JDateChooser;
-import src.Processor;
-import src.TravelData;
 import src.hash.searchEngine;
+import src.db;
 
 public class home {
     private JPanel panel1;
@@ -42,7 +41,7 @@ public class home {
     private JPanel window;
     private JPanel settingsPanel;
     private JButton btnLogout;
-    private JPanel recommendPanel;
+    private JPanel old_recommendPanel;
     private JPanel recommendHolder;
     private JButton prevButton;
     private JButton nextButton;
@@ -64,6 +63,8 @@ public class home {
     private JDateChooser JDateChooser2;
     private JCheckBox onlyEmpty;
     private JPanel errorAlert;
+    private JPanel searchResultPanel;
+    private JPanel recommendPanel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -102,7 +103,12 @@ public class home {
                     System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
                     System.out.println("Only Empty?: "+onlyEmpty.isSelected());
-                    travelCodeSearchEngine.searchTravelCode(searchContent);
+                    String code = travelCodeSearchEngine.searchTravelCode(searchContent);
+                    searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code));
+                    cardHolder.remove(searchResultPanel);
+                    cardInit();
+                    layout.show(cardHolder,"SearchResult");
+                    exitFromHome();
                 }
             }
         });
@@ -236,6 +242,8 @@ public class home {
         cardHolder.add(settingsPanel, "Settings");
         cardHolder.add(recommendPanel, "Recommend");
         cardHolder.add(managePanel, "Manage");
+        cardHolder.add(searchResultPanel,"SearchResult");
+        cardHolder.add(old_recommendPanel,"old_recc");
         layout = (CardLayout)cardHolder.getLayout();
     }
 
@@ -338,6 +346,8 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
+        recommendPanel = new JListCustomRenderer().createPanel(null);
+        searchResultPanel = new JListCustomRenderer().createPanel(null);
         initManageTable(); // 初始化形成管理頁面的表格
         // TODO: 讓表格 jTable 無法被編輯，研究中。
         // public boolean isCellEditable(int row, int column){return false;}

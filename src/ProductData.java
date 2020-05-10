@@ -3,6 +3,7 @@ import src.ProductCombination;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ProductData {
     private String title,key,code;
@@ -15,10 +16,10 @@ public class ProductData {
         detail = new ArrayList<ProductCombination>();
     }
 
-    public ProductData(String getTitle,String getKey,String getCode){
-        title = getTitle;
-        key = getKey;
-        code = getCode;
+    public ProductData(String title,String key,String code){
+        this.title = title;
+        this.key = key;
+        this.code = code;
         detail = new ArrayList<ProductCombination>();
     }
 
@@ -36,6 +37,10 @@ public class ProductData {
         this.code = code;
     }
 
+    @Override
+    public String toString(){
+        return new String(title);
+    }
     public String getTitle(){
         return new String(this.title);
     }
@@ -50,5 +55,10 @@ public class ProductData {
     }
     public ArrayList<ProductCombination> getCombination(){
         return detail;
+    }
+    public ProductCombination getFirstCombination(){
+        if(detail.size()>0)
+            return new ProductCombination(detail.get(0));
+        return new ProductCombination(0,0,0,new Date(2020,1,1),new Date(2020,1,1));
     }
 }

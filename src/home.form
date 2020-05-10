@@ -427,7 +427,7 @@
             <border type="none"/>
             <children/>
           </grid>
-          <grid id="91047" binding="recommendPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="91047" binding="old_recommendPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <card name="Card6"/>
@@ -908,6 +908,26 @@
                 </constraints>
               </vspacer>
             </children>
+          </grid>
+          <grid id="58be8" binding="searchResultPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <card name="Card7"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </grid>
+          <grid id="819d4" binding="recommendPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <card name="Card9"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
           </grid>
         </children>
       </grid>
