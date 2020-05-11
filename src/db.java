@@ -195,7 +195,7 @@ class db {
      * @param travelCode
      * @return all info of the selected travelCode program
      */
-    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit,int upper_bound_limit, int lower_bound_limit) throws SQLException {
+    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE";
         if(travelCode != ""){
