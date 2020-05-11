@@ -123,7 +123,7 @@ public class home {
                     int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
                     int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,false));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
