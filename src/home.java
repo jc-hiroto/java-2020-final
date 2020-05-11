@@ -118,7 +118,7 @@ public class home {
                     String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
                     String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate,0,0));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
