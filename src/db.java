@@ -195,9 +195,27 @@ class db {
      * @param travelCode
      * @return all info of the selected travelCode program
      */
-    public static ArrayList<ProductData> getResult(String travelCode){
+    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit) throws SQLException {
         connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode+"\'";
+        String sql = "SELECT * FROM trip_data WHERE";
+        if(travelCode != ""){
+            sql += " travel_code = \'" + travelCode+"\'";
+        }
+        if(price_limit_top != 0){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
+            }
+            sql += " price BETWEEN \'" + price_limit_bottom + "\' and \'" + price_limit_top + "\'";
+        }
+        if(start_date_limit != ""){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
+            }
+            sql += " start_date >= Date('" + start_date_limit + "') and end_date <= Date('" + end_date_limit + "')";
+        }
+        if(sql.endsWith("WHERE")){
+            sql = sql.substring(0, sql.length()-6);
+        }
         Statement stmt = null;
         try {
             stmt  = connection.createStatement();
@@ -215,7 +233,7 @@ class db {
         return productDataList;
     }
 
-    public static ArrayList<ProductData> getPriceBetween(String travelCode, int price_limit_bottom, int price_limit_top) throws SQLException {
+/*    public static ArrayList<ProductData> getPriceBetween(String travelCode, int price_limit_bottom, int price_limit_top) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode + "\' and price BETWEEN \'" + price_limit_bottom + "\' and \'" + price_limit_top + "\'";
         Statement stmt = null;
@@ -232,7 +250,7 @@ class db {
             }
         }
         return productDataList;
-    }
+    }*/
 
     /**
      * Special method for user search
@@ -241,7 +259,7 @@ class db {
      * @param end_date_limit
      * @return all info of the selected program under date limit
      */
-    public static ArrayList<ProductData> getDateBetween(String travelCode,String start_date_limit, String end_date_limit) throws SQLException {
+ /*   public static ArrayList<ProductData> getDateBetween(String travelCode,String start_date_limit, String end_date_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode + "\' and start_date >= Date('" + start_date_limit + "') and end_date <= Date('" + end_date_limit + "')";
         Statement stmt = null;
@@ -259,7 +277,7 @@ class db {
             }
         }
         return productDataList;
-    }
+    }*/
 
     public static List getPeopleBetween(int upper_bound_limit, int lower_bound_limit) throws SQLException {
         connectToDB();

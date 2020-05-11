@@ -62,7 +62,7 @@ public class home {
     private JTable table1;
     private JDateChooser JDateChooser1;
     private JDateChooser JDateChooser2;
-    private JCheckBox onlyEmpty;
+    private JCheckBox dateSearch;
     private JPanel errorAlert;
     private JPanel searchResultPanel;
     private JPanel recommendPanel;
@@ -96,18 +96,23 @@ public class home {
                 errorAlert.setVisible(false);
                 String searchContent = getSearchField();
                 boolean isValidDate = true; // 等待傳入日期偵測
-                if(searchContent.equals("輸入國家/城市關鍵字") || (!isValidDate) || searchContent.equals("")){
+                if(!isValidDate){
                    searchContent = "";
                    errorAlert.setVisible(true);
                 }
                 else{
+                    if(searchContent.equals("輸入國家/城市關鍵字")|| searchContent.equals("")){
+                        searchContent = "";
+                    }
                     System.out.println("Search: "+searchContent);
                     System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
-                    System.out.println("Only Empty?: "+onlyEmpty.isSelected());
+                    System.out.println("date Search?: "+dateSearch.isSelected());
                     String code = travelCodeSearchEngine.searchTravelCode(searchContent);
+                    String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
+                    String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getDateBetween(code,dateFormat.format(JDateChooser1.getDate()),dateFormat.format(JDateChooser2.getDate())));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -194,6 +199,19 @@ public class home {
         });
         // ================ 以上皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
         searchFieldListener();
+        dateSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(dateSearch.isSelected()){
+                    JDateChooser1.setVisible(true);
+                    JDateChooser2.setVisible(true);
+                }
+                else {
+                    JDateChooser1.setVisible(false);
+                    JDateChooser2.setVisible(false);
+                }
+            }
+        });
     }
 
     public void searchFieldListener(){
@@ -238,6 +256,8 @@ public class home {
         JDateChooser1.setDate(nowDate);
         JDateChooser2.setDate(newDate);
         JDateChooser2.setMinSelectableDate(JDateChooser1.getDate());
+        JDateChooser1.setVisible(false);
+        JDateChooser2.setVisible(false);
     }
     public void cardInit(){
         // 初始化所有頁面
