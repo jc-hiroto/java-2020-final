@@ -195,7 +195,7 @@ class db {
      * @param travelCode
      * @return all info of the selected travelCode program
      */
-    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit, boolean sortByPrice) throws SQLException {
+    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit, int sortType) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE";
         if(travelCode != ""){
@@ -222,11 +222,21 @@ class db {
         if(sql.endsWith("WHERE")){
             sql = sql.substring(0, sql.length()-6);
         }
-        if(sortByPrice){
-            sql += " ORDER BY price ASC";
-        }
-        else{
-            sql += " ORDER BY start_date ASC";
+        switch(sortType){
+            case 0:
+                break;
+            case 1:
+                sql += " ORDER BY price ASC";
+                break;
+            case 2:
+                sql += " ORDER BY price DESC";
+                break;
+            case 3:
+                sql += " ORDER BY start_date ASC";
+                break;
+            case 4:
+                sql += " ORDER BY start_date DESC";
+                break;
         }
         System.out.println(sql);
         Statement stmt = null;

@@ -224,7 +224,7 @@
                               <highValue value="30000"/>
                               <lowValue value="30000"/>
                               <maximum value="200000"/>
-                              <minimum value="5000"/>
+                              <minimum value="4000"/>
                             </properties>
                           </component>
                           <component id="b2f30" class="javax.swing.JCheckBox" binding="checkBoxPeople">
@@ -348,6 +348,7 @@
                           <font name="Mgen+ 1pp" size="16"/>
                           <foreground color="-16243414"/>
                           <model>
+                            <item value="關閉排序"/>
                             <item value="越便宜越好"/>
                             <item value="越貴越好"/>
                             <item value="越早越好"/>

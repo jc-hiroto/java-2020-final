@@ -145,8 +145,9 @@ public class home {
                     int priceBottom = checkBoxPrice.isSelected()?rangeSliderPrice.getLowValue():0;
                     int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
                     int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
+                    System.out.println(comboBox1.getSelectedIndex());
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,false));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,comboBox1.getSelectedIndex()));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
