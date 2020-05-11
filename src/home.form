@@ -161,7 +161,7 @@
                           <toolTipText value="你想去哪裡？"/>
                         </properties>
                       </component>
-                      <grid id="39974" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="39974" layout-manager="GridLayoutManager" row-count="2" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
@@ -173,7 +173,7 @@
                         <children>
                           <component id="c27dc" class="javax.swing.JLabel" binding="dateArrow">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <icon value="img/next-white.png"/>
@@ -182,14 +182,14 @@
                           </component>
                           <component id="25c07" class="com.toedter.calendar.JDateChooser" binding="JDateChooser1" custom-create="true" default-binding="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                              <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="200" height="30"/>
                               </grid>
                             </constraints>
                           </component>
                           <component id="297f2" class="com.toedter.calendar.JDateChooser" binding="JDateChooser2" custom-create="true" default-binding="true">
                             <constraints>
-                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                              <grid row="0" column="5" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="200" height="30"/>
                               </grid>
                             </constraints>
@@ -218,10 +218,10 @@
                           </component>
                           <component id="2e9b9" class="com.jidesoft.swing.RangeSlider" binding="rangeSliderPrice">
                             <constraints>
-                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <highValue value="100000"/>
+                              <highValue value="30000"/>
                               <lowValue value="30000"/>
                               <maximum value="200000"/>
                               <minimum value="5000"/>
@@ -229,7 +229,7 @@
                           </component>
                           <component id="b2f30" class="javax.swing.JCheckBox" binding="checkBoxPeople">
                             <constraints>
-                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <background color="-15352669"/>
@@ -240,9 +240,46 @@
                           </component>
                           <component id="f6be9" class="com.jidesoft.swing.RangeSlider" binding="rangeSliderPeople">
                             <constraints>
-                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
+                          </component>
+                          <component id="1a978" class="javax.swing.JLabel" binding="priceLowDisplay">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-16243414"/>
+                              <text value="Label"/>
+                            </properties>
+                          </component>
+                          <component id="2cecd" class="javax.swing.JLabel" binding="priceHighDisplay">
+                            <constraints>
+                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-16243414"/>
+                              <text value="Label"/>
+                            </properties>
+                          </component>
+                          <component id="281bf" class="javax.swing.JLabel" binding="peopleLowDisplay">
+                            <constraints>
+                              <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-16243414"/>
+                              <text value="Label"/>
+                            </properties>
+                          </component>
+                          <component id="e1f5a" class="javax.swing.JLabel" binding="peopleHighDisplay">
+                            <constraints>
+                              <grid row="1" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-15352669"/>
+                              <foreground color="-16243414"/>
+                              <text value="Label"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>

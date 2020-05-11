@@ -1,6 +1,8 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -72,6 +74,10 @@ public class home {
     private JCheckBox checkBoxPeople;
     private RangeSlider rangeSliderPeople;
     private JLabel dateArrow;
+    private JLabel priceLowDisplay;
+    private JLabel priceHighDisplay;
+    private JLabel peopleLowDisplay;
+    private JLabel peopleHighDisplay;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -239,6 +245,13 @@ public class home {
                 else {
                     rangeSliderPeople.setEnabled(false);
                 }
+            }
+        });
+        rangeSliderPrice.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                priceLowDisplay.setText(""+rangeSliderPrice.getLowValue());
+                priceHighDisplay.setText(""+rangeSliderPrice.getHighValue());
             }
         });
     }
