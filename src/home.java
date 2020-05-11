@@ -81,6 +81,7 @@ public class home {
     private JComboBox comboBox1;
     private JProgressBar progressBar1;
     private JLabel loading;
+    private JPanel reccListHolder;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -162,7 +163,15 @@ public class home {
         btnRecommand.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                initRecommendContent();
+                cardHolder.remove(recommendPanel);
+                try {
+                    reccListHolder = new JListCustomRenderer().createPanel
+                            (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
+                                    0,0,"","",0,0,0));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                cardInit();
                 layout.show(cardHolder, "Recommend");
                 exitFromHome();
             }
@@ -322,12 +331,6 @@ public class home {
             }
         });
     }
-    public void initRecommendContent(){
-        String labelR_1_1 = "[春櫻紛飛遊釜慶]世界文化遺產~佛國寺、CNN評選賞櫻推薦~余佐川羅曼史橋+慶和火車站、甘川洞彩繪壁畫村、BIFF廣場+南浦洞購物樂五日<含稅>";
-        textObjR1_1.setFont(textObjR1_1.getFont().deriveFont(20f));
-        textObjR1_1.setText(labelR_1_1);
-        textObjR1_1.setText(Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
-    }
     public void dateChooserInit(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(nowDate);
@@ -447,7 +450,7 @@ public class home {
 
     }
 
-    private void createUIComponents() {
+    private void createUIComponents() throws SQLException {
         // 自訂設定區域（有勾選 customCreate 的都要加在這裡，不然會產生 nullPointer 錯誤）
         loginPanel = new login().getPanel(); // loginPanel直接呼叫login.java的頁面
         aboutPanel = new about().getPanel(); // 同上
@@ -456,6 +459,9 @@ public class home {
         JDateChooser2 = new JDateChooser();
         recommendPanel = new JListCustomRenderer().createPanel(null);
         searchResultPanel = new JListCustomRenderer().createPanel(null);
+        reccListHolder = new JListCustomRenderer().createPanel
+                (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
+                        0,0,"","",0,0,0));
         initManageTable(); // 初始化形成管理頁面的表格
         // TODO: 讓表格 jTable 無法被編輯，研究中。
         // public boolean isCellEditable(int row, int column){return false;}

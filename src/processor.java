@@ -6,7 +6,8 @@ import java.awt.*;
 import java.awt.desktop.SystemEventListener;
 
 public class Processor {
-    private static final int []travelCode= {100,101,342,343,368,384,391,392,393,394,395};
+    private static final int []travelCode= {40,41,43,44,100,101,342,343,368,384,391,392,393,394,395,396,397,398,399,
+            401,404,405,406,407,408,409,410,411,412,413,414,415,416,417,426,427,428,430,431,432,433,435,436,439,440,441,442};
 
     /**
      *  ***ALL PARAMETER expect numberOFReverse should be enter automatically by system , not user.
@@ -104,6 +105,6 @@ public class Processor {
     }
 
     public static int randomTravelCodeGene(){
-        return travelCode[(int)Math.random()*1000%travelCode.length];
+        return travelCode[(int)((Math.random()*100)%travelCode.length)];
     }
 }

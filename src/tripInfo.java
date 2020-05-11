@@ -1,10 +1,17 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
 import src.ProductData;
 import src.ProductCombination;
 import src.hash.searchEngine;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -17,18 +24,34 @@ public class tripInfo {
     private JLabel lbKey;
     private JLabel lbCat;
     private JTable table1;
-    private JButton 下訂單Button;
+    private JButton btnOrder;
     private ProductData PDHold;
     private ArrayList<ProductCombination> PCArrayL;
 
     public tripInfo(ProductData PD){
         PDHold = PD;
         PCArrayL = PD.getCombination();
+        btnOrder.setVisible(false);
         String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+PD.getCode()+"-1x.png";
         lbIcon.setIcon(new ImageIcon(imgFilepath));
         lbTitle.setText(""+PD.getTitle());
         lbKey.setText("產品編號："+PD.getKey());
         lbCat.setText("分類："+ new searchEngine().reverseSearch(PD.getCode()));
+        table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ListSelectionModel selectionModel = table1.getSelectionModel();
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                btnOrder.setVisible(true);
+            }
+        });
+        btnOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int sRow = table1.getSelectedRow();
+                System.out.println("[INFO] Selected row: "+ sRow);
+                System.out.println("[INFO] Selected row Starting date: "+ table1.getValueAt(sRow,0));
+            }
+        });
     }
     public JPanel getPanel(){
         return tripInfoPanel;
