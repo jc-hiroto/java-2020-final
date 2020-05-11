@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import com.toedter.calendar.JDateChooser;
 import src.hash.searchEngine;
+import com.jidesoft.swing.*;
 import src.db;
 
 public class home {
@@ -66,7 +67,10 @@ public class home {
     private JPanel errorAlert;
     private JPanel searchResultPanel;
     private JPanel recommendPanel;
-    private JPanel productDataPanel;
+    private JCheckBox checkBoxPrice;
+    private RangeSlider rangeSliderPrice;
+    private JCheckBox checkBoxPeople;
+    private RangeSlider rangeSliderPeople;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -77,6 +81,8 @@ public class home {
 
     public home() {
         dateChooserInit();
+        rangeSliderPrice.setEnabled(false);
+        rangeSliderPeople.setEnabled(false);
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
@@ -203,12 +209,34 @@ public class home {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(dateSearch.isSelected()){
-                    JDateChooser1.setVisible(true);
-                    JDateChooser2.setVisible(true);
+                    JDateChooser1.setEnabled(true);
+                    JDateChooser2.setEnabled(true);
                 }
                 else {
-                    JDateChooser1.setVisible(false);
-                    JDateChooser2.setVisible(false);
+                    JDateChooser1.setEnabled(false);
+                    JDateChooser2.setEnabled(false);
+                }
+            }
+        });
+        checkBoxPrice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(checkBoxPrice.isSelected()){
+                    rangeSliderPrice.setEnabled(true);
+                }
+                else {
+                    rangeSliderPrice.setEnabled(false);
+                }
+            }
+        });
+        checkBoxPeople.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(checkBoxPeople.isSelected()){
+                    rangeSliderPeople.setEnabled(true);
+                }
+                else {
+                    rangeSliderPeople.setEnabled(false);
                 }
             }
         });
@@ -256,8 +284,8 @@ public class home {
         JDateChooser1.setDate(nowDate);
         JDateChooser2.setDate(newDate);
         JDateChooser2.setMinSelectableDate(JDateChooser1.getDate());
-        JDateChooser1.setVisible(false);
-        JDateChooser2.setVisible(false);
+        JDateChooser1.setEnabled(false);
+        JDateChooser2.setEnabled(false);
     }
     public void cardInit(){
         // 初始化所有頁面
