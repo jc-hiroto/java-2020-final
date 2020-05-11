@@ -71,6 +71,7 @@ public class home {
     private RangeSlider rangeSliderPrice;
     private JCheckBox checkBoxPeople;
     private RangeSlider rangeSliderPeople;
+    private JLabel dateArrow;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
