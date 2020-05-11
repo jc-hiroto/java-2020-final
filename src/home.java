@@ -124,8 +124,12 @@ public class home {
                     String code = travelCodeSearchEngine.searchTravelCode(searchContent);
                     String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
                     String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
+                    int priceTop = checkBoxPrice.isSelected()?rangeSliderPrice.getHighValue():0;
+                    int priceBottom = checkBoxPrice.isSelected()?rangeSliderPrice.getLowValue():0;
+                    int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
+                    int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate,0,0));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,false));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

@@ -7,16 +7,6 @@ import java.awt.desktop.SystemEventListener;
 
 public class Processor {
     private static final int []travelCode= {100,101,342,343,368,384,391,392,393,394,395};
-    /**
-     * 
-     * @param destination : input as string , enter by user
-     * @param date : input as string , enter by user
-     * @param sortBy : false = sort by price , true = sort by date , CHOOSE by user
-     * @return not sure, maube a list or a string
-     */
-    public static src.TravelData searchAvailableTrip(String destination , String date, boolean sortBy){
-        return null;
-    }
 
     /**
      *  ***ALL PARAMETER expect numberOFReverse should be enter automatically by system , not user.
@@ -38,7 +28,7 @@ public class Processor {
      * @param editNum : if want to remove the order , enter 0
      * @return
      */
-    public static String editTrip(String id , int orderId , int editNum){
+    public static String editOrder(String id , int orderId , int editNum){
         return null;
     }
 

@@ -21,5 +21,6 @@
     <orderEntry type="library" name="DateChooser" level="project" />
     <orderEntry type="library" name="jcalendar-1.4" level="project" />
     <orderEntry type="library" name="xswingx" level="project" />
+    <orderEntry type="library" name="jide-common-3.7.3" level="project" />
   </component>
 </module>
