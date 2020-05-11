@@ -195,7 +195,7 @@ class db {
      * @param travelCode
      * @return all info of the selected travelCode program
      */
-    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit) throws SQLException {
+    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit,int upper_bound_limit, int lower_bound_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE";
         if(travelCode != ""){
@@ -213,9 +213,16 @@ class db {
             }
             sql += " start_date >= Date('" + start_date_limit + "') and end_date <= Date('" + end_date_limit + "')";
         }
+        if(upper_bound_limit != 0){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
+            }
+            sql += " upper_bound <= '" + upper_bound_limit + "' and lower_bound >= '" + lower_bound_limit + "'";
+        }
         if(sql.endsWith("WHERE")){
             sql = sql.substring(0, sql.length()-6);
         }
+        System.out.println(sql);
         Statement stmt = null;
         try {
             stmt  = connection.createStatement();
@@ -278,7 +285,7 @@ class db {
         }
         return productDataList;
     }*/
-
+/*
     public static List getPeopleBetween(int upper_bound_limit, int lower_bound_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE upper_bound <= '" + upper_bound_limit + "' and lower_bound >= '" + lower_bound_limit + "'";
@@ -315,7 +322,7 @@ class db {
      * @param upper_bound_limit
      * @return all info of the selected program under people limit
      */
-    public static List getPeopleBelow(int upper_bound_limit) throws SQLException {
+ /*   public static List getPeopleBelow(int upper_bound_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE upper_bound <= '" + upper_bound_limit + "'";
         Statement stmt = null;
@@ -351,7 +358,7 @@ class db {
      * @param lower_bound_limit
      * @return all info of the selected program under people limit
      */
-    public static List getPeopleAbove(int lower_bound_limit) throws SQLException {
+ /*   public static List getPeopleAbove(int lower_bound_limit) throws SQLException {
         connectToDB();
         String sql = "SELECT * FROM trip_data WHERE lower_bound >= '" + lower_bound_limit + "'";
         Statement stmt = null;
@@ -379,5 +386,5 @@ class db {
             }
         }
         return productDataList;
-    }
+    }*/
 }

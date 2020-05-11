@@ -66,6 +66,7 @@ public class home {
     private JPanel errorAlert;
     private JPanel searchResultPanel;
     private JPanel recommendPanel;
+    private JLabel dateArrow;
     private JPanel productDataPanel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
@@ -112,7 +113,7 @@ public class home {
                     String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
                     String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,0,0,startDate,endDate,0,0));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -205,10 +206,12 @@ public class home {
                 if(dateSearch.isSelected()){
                     JDateChooser1.setVisible(true);
                     JDateChooser2.setVisible(true);
+                    dateArrow.setVisible(true);
                 }
                 else {
                     JDateChooser1.setVisible(false);
                     JDateChooser2.setVisible(false);
+                    dateArrow.setVisible(false);
                 }
             }
         });
@@ -258,6 +261,7 @@ public class home {
         JDateChooser2.setMinSelectableDate(JDateChooser1.getDate());
         JDateChooser1.setVisible(false);
         JDateChooser2.setVisible(false);
+        dateArrow.setVisible(false);
     }
     public void cardInit(){
         // 初始化所有頁面
