@@ -78,6 +78,9 @@ public class home {
     private JLabel priceHighDisplay;
     private JLabel peopleLowDisplay;
     private JLabel peopleHighDisplay;
+    private JComboBox comboBox1;
+    private JProgressBar progressBar1;
+    private JLabel loading;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -88,8 +91,21 @@ public class home {
 
     public home() {
         dateChooserInit();
+        loading.setVisible(false);
+        rangeSliderPrice.setHighValue(100000);
+        rangeSliderPrice.setLowValue(30000);
+        rangeSliderPeople.setLowValue(25);
+        rangeSliderPeople.setHighValue(75);
         rangeSliderPrice.setEnabled(false);
         rangeSliderPeople.setEnabled(false);
+        priceLowDisplay.setText("$ "+rangeSliderPrice.getLowValue());
+        priceHighDisplay.setText("$ "+rangeSliderPrice.getHighValue());
+        peopleLowDisplay.setText(rangeSliderPeople.getLowValue()+" 人");
+        peopleHighDisplay.setText(rangeSliderPeople.getHighValue()+" 人");
+        priceHighDisplay.setEnabled(false);
+        priceLowDisplay.setEnabled(false);
+        peopleHighDisplay.setEnabled(false);
+        peopleLowDisplay.setEnabled(false);
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
@@ -107,6 +123,7 @@ public class home {
             // TODO: 串接搜尋 method，並跳轉到搜尋結果頁面
             public void actionPerformed(ActionEvent actionEvent) {
                 errorAlert.setVisible(false);
+                loading.setVisible(true);
                 String searchContent = getSearchField();
                 boolean isValidDate = true; // 等待傳入日期偵測
                 if(!isValidDate){
@@ -137,6 +154,7 @@ public class home {
                     cardInit();
                     layout.show(cardHolder,"SearchResult");
                     exitFromHome();
+                    loading.setVisible(false);
                 }
             }
         });
@@ -222,6 +240,7 @@ public class home {
                 if(dateSearch.isSelected()){
                     JDateChooser1.setEnabled(true);
                     JDateChooser2.setEnabled(true);
+
                 }
                 else {
                     JDateChooser1.setEnabled(false);
@@ -234,9 +253,14 @@ public class home {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(checkBoxPrice.isSelected()){
                     rangeSliderPrice.setEnabled(true);
+                    priceHighDisplay.setEnabled(true);
+                    priceLowDisplay.setEnabled(true);
+
                 }
                 else {
                     rangeSliderPrice.setEnabled(false);
+                    priceHighDisplay.setEnabled(false);
+                    priceLowDisplay.setEnabled(false);
                 }
             }
         });
@@ -245,17 +269,28 @@ public class home {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(checkBoxPeople.isSelected()){
                     rangeSliderPeople.setEnabled(true);
+                    peopleHighDisplay.setEnabled(true);
+                    peopleLowDisplay.setEnabled(true);
                 }
                 else {
                     rangeSliderPeople.setEnabled(false);
+                    peopleHighDisplay.setEnabled(false);
+                    peopleLowDisplay.setEnabled(false);
                 }
             }
         });
         rangeSliderPrice.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                priceLowDisplay.setText(""+rangeSliderPrice.getLowValue());
-                priceHighDisplay.setText(""+rangeSliderPrice.getHighValue());
+                priceLowDisplay.setText("$ "+rangeSliderPrice.getLowValue());
+                priceHighDisplay.setText("$ "+rangeSliderPrice.getHighValue());
+            }
+        });
+        rangeSliderPeople.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                peopleLowDisplay.setText(rangeSliderPeople.getLowValue()+" 人");
+                peopleHighDisplay.setText(rangeSliderPeople.getHighValue()+" 人");
             }
         });
     }
