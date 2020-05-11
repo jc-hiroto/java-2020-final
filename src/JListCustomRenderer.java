@@ -1,15 +1,10 @@
 package src;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import src.ProductData;
 import src.ProductCombination;
@@ -35,11 +30,15 @@ public class JListCustomRenderer extends JFrame{
         if(PD != null){
             displayData = PD;
         }
+        JPanel frame = new JPanel(new BorderLayout());
         JPanel cardHolder = new JPanel(new CardLayout());
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel panel2 = new JPanel(new BorderLayout());
+        JButton btnBack = new JButton("回搜尋結果");
+        btnBack.setBackground(Color.WHITE);
+        btnBack.setForeground(new Color(21, 188, 163));
+        btnBack.setFont(new Font(Font.DIALOG,Font.BOLD,18));
+        btnBack.setVisible(false);
         cardHolder.add(panel,"List");
-        cardHolder.add(panel2,"Info");
         CardLayout cl = (CardLayout)(cardHolder.getLayout());
         cl.show(cardHolder, "List");
         JList jlist = createList();
@@ -51,16 +50,36 @@ public class JListCustomRenderer extends JFrame{
                     if (index >= 0) {
                         Object o = theList.getModel().getElementAt(index);
                         System.out.println("Double-clicked on: " + o);
+                        ProductData target = new ProductData();
+                        for(int i=0; i<displayData.size(); i++){
+                            if(displayData.get(i).getTitle().equals(o.toString())){
+                                target = displayData.get(i);
+                                break;
+                            }
+                        }
+                        tripInfo info = new tripInfo(target);
+                        JPanel panel2 = info.getPanel();
+                        cardHolder.add(panel2,"Info");
                         cl.show(cardHolder,"Info");
+                        btnBack.setVisible(true);
                     }
                 }
             }
         };
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cl.show(cardHolder,"List");
+                btnBack.setVisible(false);
+            }
+        });
         jlist.addMouseListener(mouseListener);
         panel.setBorder(new EmptyBorder(5,5,5,5));
         panel.setBackground(new Color(21,188,163));
         panel.add(new JScrollPane(jlist),BorderLayout.CENTER);
-        return cardHolder;
+        frame.add(cardHolder);
+        frame.add(btnBack, BorderLayout.SOUTH);
+        return frame;
     }
     public JList<ProductData> createList(){
         DefaultListModel<ProductData> model = new DefaultListModel<ProductData>();

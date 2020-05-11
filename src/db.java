@@ -165,7 +165,7 @@ class db {
                 if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
                     index = i;
                     exists = true;
-                    System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
+                    //System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
                     break;
                 }
             }
@@ -175,7 +175,7 @@ class db {
                 Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                 ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
                 PDtmp.addCombination(PCtemp);
-                System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
+                //System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
             }
             else {
                 ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
@@ -184,7 +184,7 @@ class db {
                 ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
                 newPDtmp.addCombination(newPCtemp);
                 productDataList.add(newPDtmp);
-                System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
+                //System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
             }
         }
         System.out.println("[INFO] Total data set amount: "+productDataList.size());
