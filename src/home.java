@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import com.jidesoft.swing.RangeSlider;
 import com.toedter.calendar.JDateChooser;
 import src.hash.searchEngine;
 import com.jidesoft.swing.*;
@@ -250,7 +251,6 @@ public class home {
                 if(dateSearch.isSelected()){
                     JDateChooser1.setEnabled(true);
                     JDateChooser2.setEnabled(true);
-
                 }
                 else {
                     JDateChooser1.setEnabled(false);
@@ -336,6 +336,8 @@ public class home {
         cal.setTime(nowDate);
         cal.add(Calendar.DATE, 5); // Date2 offset days
         Date newDate = cal.getTime();
+        JDateChooser1 = new JDateChooser();
+        JDateChooser2 = new JDateChooser();
         JDateChooser1.setFont(new Font("Mgen+ 1pp", Font.PLAIN,16));
         JDateChooser2.setFont(new Font("Mgen+ 1pp", Font.PLAIN,16));
         JDateChooser1.setDate(nowDate);

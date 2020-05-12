@@ -3,28 +3,21 @@ package src;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList;
 
 import  src.TravelData;
+import  src.UserData;
 import  src.ProductData;
 import  src.ProductCombination;
-import java.util.Date;
 
 /**
  * this class is to define all logic used in database
  */
 class db {
     private static Connection connection = null;
-    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
-    private static ArrayList <String> USER_NAME = new ArrayList<String>();
-    private static ArrayList <String> USER_EMAIL = new ArrayList<String>();
-    private static ArrayList <String> USER_PASS = new ArrayList<String>();
-    private static ArrayList <ProductData> productDataList = new ArrayList<ProductData>();
-    private static ArrayList <ProductCombination> productDataCombination = new ArrayList<ProductCombination>();
-    private static ProductCombination productCombination;
+    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app.db");
+    private static UserData usr = new UserData();
 
     public static boolean connectToDB() {
 
@@ -68,6 +61,13 @@ class db {
         return flag;
     }
 
+    /**
+     * insert the user info into the database
+     * @param userName
+     * @param userEmail
+     * @param userPass
+     * @return user name if true
+     */
     public static String getInsertSql(String userName,String userEmail,StringBuffer userPass) {
         return  "INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS) " +
                 "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\')";
@@ -77,10 +77,10 @@ class db {
         String flag = "ERR";
         connectToDB();
         System.out.println("[Success] User data collected: "+ collectUserData());
-        for(int i = 0; i<USER_NAME.size(); i++){
-            if(USER_EMAIL.get(i).equals(email)){
-                if(USER_PASS.get(i).equals(password.toString())){
-                    flag = USER_NAME.get(i);
+        for(int i = 0; i<usr.USER_NAME.size(); i++){
+            if(usr.USER_EMAIL.get(i).equals(email)){
+                if(usr.USER_PASS.get(i).equals(password.toString())){
+                    flag = usr.USER_NAME.get(i);
                 }
                 else{
                     flag = "ERR";
@@ -90,20 +90,24 @@ class db {
         return flag;
     }
 
+    /**
+     * collect all user data
+     * @return user name size if true
+     */
     public static int collectUserData(){
         String sql = "SELECT USER_NAME, USER_EMAIL, USER_PASS FROM USER";
         Statement stmt = null;
-        USER_NAME.clear();
-        USER_EMAIL.clear();
-        USER_PASS.clear();
+        usr.USER_NAME.clear();
+        usr.USER_EMAIL.clear();
+        usr.USER_PASS.clear();
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             // loop through the result set
             while (rs.next()) {
-                USER_NAME.add(rs.getString("USER_NAME"));
-                USER_EMAIL.add(rs.getString("USER_EMAIL"));
-                USER_PASS.add(rs.getString("USER_PASS"));
+                usr.USER_NAME.add(rs.getString("USER_NAME"));
+                usr.USER_EMAIL.add(rs.getString("USER_EMAIL"));
+                usr.USER_PASS.add(rs.getString("USER_PASS"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -114,15 +118,20 @@ class db {
                 return -1;
             }
         }
-        return USER_NAME.size(); // If success, return the number of user collected.
+        return usr.USER_NAME.size(); // If success, return the number of user collected.
     }
 
+    /**
+     * check if the user exists or not
+     * @param email
+     * @return true if exists
+     */
     public static boolean checkUserExist(String email){
         boolean flag = false;
         connectToDB();
         collectUserData();
-        for(int i=0; i<USER_EMAIL.size();i++){
-            if(USER_EMAIL.get(i).equals(email)){
+        for(int i=0; i<usr.USER_EMAIL.size();i++){
+            if(usr.USER_EMAIL.get(i).equals(email)){
                 flag = true;
                 break;
             }
@@ -130,6 +139,13 @@ class db {
         return flag;
     }
 
+    /**
+     * create new user method on user system
+     * @param name
+     * @param email
+     * @param password
+     * @return true is success
+     */
     public static boolean newUser(String name,String email,StringBuffer password){
         boolean flag = false;
         if(checkUserExist(email)){
@@ -191,9 +207,10 @@ class db {
     }
 
     /**
-     * Get the travel program all info
-     * @param travelCode
-     * @return all info of the selected travelCode program
+     * Special method for user search
+     * Get the travel data info under given price limit
+     * @param price_limit
+     * @return all info of the selected program under price limit
      */
     public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit, int sortType) throws SQLException {
         connectToDB();
