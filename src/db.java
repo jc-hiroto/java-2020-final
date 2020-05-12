@@ -171,48 +171,39 @@ class db {
         return flag;
     }
 
-    /**
-     * Get the travel program all info
-     * @param travelCode
-     * @return all info of the selected travelCode program
-     */
-    public static ArrayList<ProductData> getAll(String travelCode) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE travel_code = \'" + travelCode + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt  = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
+    public static void extractProductData(ResultSet rs) throws SQLException, ParseException {
+        productDataList.clear();
+        int index = -1;
+        boolean exists = false;
+        while (rs.next()) {
+            exists = false;
+            for(int i = 0; i<productDataList.size();i++){
                 if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
+                    index = i;
+                    exists = true;
+                    //System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
                     break;
                 }
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally {
-            boolean closeStats = closeConnection(stmt);
-            if (!closeStats) {
-                return null;
+            if(exists){
+                ProductData PDtmp = productDataList.get(index);
+                Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
+                ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                PDtmp.addCombination(PCtemp);
+                //System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
+            }
+            else {
+                ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
+                Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
+                ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                newPDtmp.addCombination(newPCtemp);
+                productDataList.add(newPDtmp);
+                //System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
             }
         }
-        return productDataList;
+        System.out.println("[INFO] Total data set amount: "+productDataList.size());
     }
 
     /**
@@ -221,267 +212,61 @@ class db {
      * @param price_limit
      * @return all info of the selected program under price limit
      */
-    public static ArrayList<ProductData> getPriceBelow(int price_limit) throws SQLException {
+    public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit, int sortType) throws SQLException {
         connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE price <= \'" + price_limit + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
-            boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
-                return null;
-            }
+        String sql = "SELECT * FROM trip_data WHERE";
+        if(travelCode != ""){
+            sql += " travel_code = \'" + travelCode+"\'";
         }
-        return productDataList;
-    }
-
-    /**
-     * Special method for user search
-     * Get the travel data info between given price range
-     * @param price_limit_bottom
-     * @param price_limit_top
-     * @return all info of the selected program under price limit
-     */
-    public static ArrayList<ProductData> getPriceBetween(int price_limit_bottom, int price_limit_top) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE price BETWEEN \'" + price_limit_bottom + "' and \'" + price_limit_top + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
+        if(price_limit_top != 0){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
-            boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
-                return null;
-            }
+            sql += " price BETWEEN \'" + price_limit_bottom + "\' and \'" + price_limit_top + "\'";
         }
-        return productDataList;
-    }
-
-    /**
-     * Special method for user search
-     * Get the travel data info between given start date & end date
-     * @param start_date_limit
-     * @param end_date_limit
-     * @return all info of the selected program under date limit
-     */
-    public static ArrayList<ProductData> getDateBetween(String start_date_limit, String end_date_limit) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE start_date <= \'" + start_date_limit + "\' and end_date_limit >= \'" + end_date_limit + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
+        if(start_date_limit != ""){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
-            boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
-                return null;
-            }
+            sql += " start_date >= Date('" + start_date_limit + "') and end_date <= Date('" + end_date_limit + "')";
         }
-        return productDataList;
-    }
-
-    /**
-     * Special method for user search
-     * Get the travel data info between given upper_bound and lower_bound
-     * @param upper_bound_limit
-     * @param lower_bound_limit
-     * @return all info of the selected program under people limit
-     */
-    public static ArrayList<ProductData> getPeopleBetween(int upper_bound_limit, int lower_bound_limit) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE upper_bound <= \'" + upper_bound_limit + "\' and lower_bound >= \'" + lower_bound_limit + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
+        if(upper_bound_limit != 0){
+            if(!sql.endsWith("WHERE")){
+                sql += " and";
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
-            boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
-                return null;
-            }
+            sql += " upper_bound <= '" + upper_bound_limit + "' and lower_bound >= '" + lower_bound_limit + "'";
         }
-        return productDataList;
-    }
-
-    /**
-     * Special method for user search
-     * Get the travel data info under given upper_bound limit
-     * @param upper_bound_limit
-     * @return all info of the selected program under people limit
-     */
-    public static ArrayList getPeopleBelow(int upper_bound_limit) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE upper_bound <= \'" + upper_bound_limit + "\' ORDER BY product_key DESC";
-        Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
-            boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
-                return null;
-            }
+        if(sql.endsWith("WHERE")){
+            sql = sql.substring(0, sql.length()-6);
         }
-        return productDataList;
-    }
-
-    /**
-     * Special method for user search
-     * Get the travel data info under given lower_bound limit
-     * @param lower_bound_limit
-     * @return all info of the selected program under people limit
-     */
-    public static ArrayList getPeopleAbove(int lower_bound_limit) throws SQLException {
-        connectToDB();
-        String sql = "SELECT * FROM trip_data WHERE lower_bound >= \'" + lower_bound_limit + "\' ORDER BY product_key DESC";
+        switch(sortType){
+            case 0:
+                break;
+            case 1:
+                sql += " ORDER BY price ASC";
+                break;
+            case 2:
+                sql += " ORDER BY price DESC";
+                break;
+            case 3:
+                sql += " ORDER BY start_date ASC";
+                break;
+            case 4:
+                sql += " ORDER BY start_date DESC";
+                break;
+        }
+        System.out.println(sql);
         Statement stmt = null;
-        ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
-
         try {
-            stmt = connection.createStatement();
+            stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
-            for (int i = 0; i < productDataList.size(); i++){
-                if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
-                    ProductData pdd = new ProductData(rs.getString("title"), rs.getString("product_key"), rs.getString("travel_code"));
-                    do{
-                        ProductCombination pdc = new ProductCombination(rs.getInt("price"), rs.getInt("lower_bound"), rs.getInt("high_bound"), rs.getDate("start_date"), rs.getDate("end_date"));
-                        pdd.detail.add(pdc);
-                        System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
-                    } while(rs.next());
-                    productDataList.add(pdd);
-                    System.out.println("[SUCCESS] Added New Data Set: " + pdd.getKey());
-                }else{
-                    System.out.println("[INFO] Find Existing Data Set: " + productDataList.get(i).getKey());
-                    break;
-                }
-            }
-
-        } catch (SQLException e) {
+            extractProductData(rs);
+        } catch (SQLException | ParseException e) {
             System.out.println(e.getMessage());
-            System.out.println(e.fillInStackTrace());
-            throw e;
-        }finally{
+            //return all.add(flag);
+        }finally {
             boolean closeStats = closeConnection(stmt);
-            if(!closeStats){
+            if (!closeStats) {
                 return null;
             }
         }

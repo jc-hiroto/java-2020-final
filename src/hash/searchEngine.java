@@ -46,6 +46,9 @@ public class searchEngine{
 	}
 
 	public String searchTravelCode(String searchWord){
+		if(searchWord == ""){
+			return "";
+		}
 		for(int i = 0; i < index.getTravelCode().size(); i++){
 			if(index.getTravelCodeName().get(i).contains(searchWord)){
 				System.out.println("Using word: "+searchWord+" Find result TravelCode: "+index.getTravelCode().get(i)+" for category: "+ index.getTravelCodeName().get(i));

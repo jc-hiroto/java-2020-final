@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="src.tripInfo">
+  <grid id="27dc6" binding="tripInfoPanel" layout-manager="BorderLayout" hgap="3" vgap="3">
+    <constraints>
+      <xy x="20" y="20" width="731" height="541"/>
+    </constraints>
+    <properties>
+      <background color="-15352669"/>
+      <font name="Mgen+ 1pp" size="26"/>
+    </properties>
+    <border type="empty">
+      <size top="5" left="5" bottom="5" right="5"/>
+    </border>
+    <children>
+      <grid id="7e3ab" layout-manager="BorderLayout" hgap="3" vgap="3">
+        <constraints border-constraint="North"/>
+        <properties>
+          <background color="-4984340"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="a403b" class="javax.swing.JLabel">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-1"/>
+              <font name="Mgen+ 1pp" size="24"/>
+              <foreground color="-15514805"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <text value="行程詳細資料"/>
+              <verticalAlignment value="0"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="55c85" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="28890" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="f6a48" class="javax.swing.JLabel" binding="lbTitle">
+                <constraints border-constraint="North"/>
+                <properties>
+                  <alignmentY value="0.5"/>
+                  <background color="-1"/>
+                  <font name="Taipei Sans TC Beta" size="36" style="1"/>
+                  <foreground color="-16243414"/>
+                  <text value="title"/>
+                </properties>
+              </component>
+              <component id="d27c7" class="javax.swing.JLabel" binding="lbCat">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <font name="Taipei Sans TC Beta" size="20" style="0"/>
+                  <foreground color="-7895161"/>
+                  <text value="Category"/>
+                </properties>
+              </component>
+              <component id="38426" class="javax.swing.JLabel" binding="lbKey">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <font name="Taipei Sans TC Beta" size="14" style="2"/>
+                  <foreground color="-5263441"/>
+                  <text value="Key"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="23725" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <scrollpane id="cfce6">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <background color="-4984340"/>
+                </properties>
+                <border type="empty">
+                  <title-color color="-4473925"/>
+                  <size top="3" left="3" bottom="3" right="3"/>
+                </border>
+                <children>
+                  <component id="ab377" class="javax.swing.JTable" binding="table1" custom-create="true" default-binding="true">
+                    <constraints/>
+                    <properties>
+                      <autoCreateRowSorter value="true"/>
+                      <background color="-1"/>
+                      <font name="Taipei Sans TC Beta" size="16"/>
+                      <foreground color="-16243414"/>
+                      <gridColor color="-13158601"/>
+                      <rowHeight value="32"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="812af" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
+        <properties>
+          <background color="-4984340"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="20f0b" class="javax.swing.JLabel" binding="lbIcon">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-1"/>
+              <foreground color="-16243414"/>
+              <text value=""/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="a2b93" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="South"/>
+        <properties>
+          <background color="-15352669"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="db39a" class="javax.swing.JButton" binding="btnOrder">
+            <constraints border-constraint="East"/>
+            <properties>
+              <background color="-1"/>
+              <font name="Mgen+ 1pp" size="16"/>
+              <foreground color="-15514805"/>
+              <horizontalTextPosition value="0"/>
+              <text value="下訂單"/>
+            </properties>
+          </component>
+          <component id="e975f" class="javax.swing.JLabel">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-15352669"/>
+              <font name="Mgen+ 1pp" size="20"/>
+              <foreground color="-1"/>
+              <horizontalAlignment value="0"/>
+              <text value="確定好日期與價格了嗎？  如果沒問題就爽快下訂吧！"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

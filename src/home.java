@@ -1,6 +1,8 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -15,6 +17,7 @@ import java.util.Date;
 import com.jidesoft.swing.RangeSlider;
 import com.toedter.calendar.JDateChooser;
 import src.hash.searchEngine;
+import com.jidesoft.swing.*;
 import src.db;
 
 public class home {
@@ -63,13 +66,23 @@ public class home {
     private JTable table1;
     private JDateChooser JDateChooser1;
     private JDateChooser JDateChooser2;
-    private JCheckBox onlyEmpty;
+    private JCheckBox dateSearch;
     private JPanel errorAlert;
     private JPanel searchResultPanel;
     private JPanel recommendPanel;
-    private JLabel dateChooseArrow;
+    private JCheckBox checkBoxPrice;
     private RangeSlider rangeSliderPrice;
-    private JPanel productDataPanel;
+    private JCheckBox checkBoxPeople;
+    private RangeSlider rangeSliderPeople;
+    private JLabel dateArrow;
+    private JLabel priceLowDisplay;
+    private JLabel priceHighDisplay;
+    private JLabel peopleLowDisplay;
+    private JLabel peopleHighDisplay;
+    private JComboBox comboBox1;
+    private JProgressBar progressBar1;
+    private JLabel loading;
+    private JPanel reccListHolder;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -80,6 +93,21 @@ public class home {
 
     public home() {
         dateChooserInit();
+        loading.setVisible(false);
+        rangeSliderPrice.setHighValue(100000);
+        rangeSliderPrice.setLowValue(30000);
+        rangeSliderPeople.setLowValue(25);
+        rangeSliderPeople.setHighValue(75);
+        rangeSliderPrice.setEnabled(false);
+        rangeSliderPeople.setEnabled(false);
+        priceLowDisplay.setText("$ "+rangeSliderPrice.getLowValue());
+        priceHighDisplay.setText("$ "+rangeSliderPrice.getHighValue());
+        peopleLowDisplay.setText(rangeSliderPeople.getLowValue()+" 人");
+        peopleHighDisplay.setText(rangeSliderPeople.getHighValue()+" 人");
+        priceHighDisplay.setEnabled(false);
+        priceLowDisplay.setEnabled(false);
+        peopleHighDisplay.setEnabled(false);
+        peopleLowDisplay.setEnabled(false);
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
@@ -97,20 +125,31 @@ public class home {
             // TODO: 串接搜尋 method，並跳轉到搜尋結果頁面
             public void actionPerformed(ActionEvent actionEvent) {
                 errorAlert.setVisible(false);
+                loading.setVisible(true);
                 String searchContent = getSearchField();
                 boolean isValidDate = true; // 等待傳入日期偵測
-                if(searchContent.equals("輸入國家/城市關鍵字") || (!isValidDate) || searchContent.equals("")){
+                if(!isValidDate){
                    searchContent = "";
                    errorAlert.setVisible(true);
                 }
                 else{
+                    if(searchContent.equals("輸入國家/城市關鍵字")|| searchContent.equals("")){
+                        searchContent = "";
+                    }
                     System.out.println("Search: "+searchContent);
                     System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
                     System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
-                    System.out.println("Only Empty?: "+onlyEmpty.isSelected());
+                    System.out.println("date Search?: "+dateSearch.isSelected());
                     String code = travelCodeSearchEngine.searchTravelCode(searchContent);
+                    String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
+                    String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
+                    int priceTop = checkBoxPrice.isSelected()?rangeSliderPrice.getHighValue():0;
+                    int priceBottom = checkBoxPrice.isSelected()?rangeSliderPrice.getLowValue():0;
+                    int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
+                    int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
+                    System.out.println(comboBox1.getSelectedIndex());
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getDateBetween(code,dateFormat.format(JDateChooser1.getDate()),dateFormat.format(JDateChooser2.getDate())));
+                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,comboBox1.getSelectedIndex()));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -118,13 +157,22 @@ public class home {
                     cardInit();
                     layout.show(cardHolder,"SearchResult");
                     exitFromHome();
+                    loading.setVisible(false);
                 }
             }
         });
         btnRecommand.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                initRecommendContent();
+                cardHolder.remove(recommendPanel);
+                try {
+                    reccListHolder = new JListCustomRenderer().createPanel
+                            (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
+                                    0,0,"","",0,0,0));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                cardInit();
                 layout.show(cardHolder, "Recommend");
                 exitFromHome();
             }
@@ -197,7 +245,6 @@ public class home {
         });
         // ================ 以上皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
         searchFieldListener();
-
         dateSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -211,6 +258,52 @@ public class home {
                 }
             }
         });
+        checkBoxPrice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(checkBoxPrice.isSelected()){
+                    rangeSliderPrice.setEnabled(true);
+                    priceHighDisplay.setEnabled(true);
+                    priceLowDisplay.setEnabled(true);
+
+                }
+                else {
+                    rangeSliderPrice.setEnabled(false);
+                    priceHighDisplay.setEnabled(false);
+                    priceLowDisplay.setEnabled(false);
+                }
+            }
+        });
+        checkBoxPeople.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(checkBoxPeople.isSelected()){
+                    rangeSliderPeople.setEnabled(true);
+                    peopleHighDisplay.setEnabled(true);
+                    peopleLowDisplay.setEnabled(true);
+                }
+                else {
+                    rangeSliderPeople.setEnabled(false);
+                    peopleHighDisplay.setEnabled(false);
+                    peopleLowDisplay.setEnabled(false);
+                }
+            }
+        });
+        rangeSliderPrice.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                priceLowDisplay.setText("$ "+rangeSliderPrice.getLowValue());
+                priceHighDisplay.setText("$ "+rangeSliderPrice.getHighValue());
+            }
+        });
+        rangeSliderPeople.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                peopleLowDisplay.setText(rangeSliderPeople.getLowValue()+" 人");
+                peopleHighDisplay.setText(rangeSliderPeople.getHighValue()+" 人");
+            }
+        });
+    }
 
     public void searchFieldListener(){
         searchField.addFocusListener(new FocusAdapter() {
@@ -238,12 +331,6 @@ public class home {
             }
         });
     }
-    public void initRecommendContent(){
-        String labelR_1_1 = "[春櫻紛飛遊釜慶]世界文化遺產~佛國寺、CNN評選賞櫻推薦~余佐川羅曼史橋+慶和火車站、甘川洞彩繪壁畫村、BIFF廣場+南浦洞購物樂五日<含稅>";
-        textObjR1_1.setFont(textObjR1_1.getFont().deriveFont(20f));
-        textObjR1_1.setText(labelR_1_1);
-        textObjR1_1.setText(Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
-    }
     public void dateChooserInit(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(nowDate);
@@ -256,6 +343,8 @@ public class home {
         JDateChooser1.setDate(nowDate);
         JDateChooser2.setDate(newDate);
         JDateChooser2.setMinSelectableDate(JDateChooser1.getDate());
+        JDateChooser1.setEnabled(false);
+        JDateChooser2.setEnabled(false);
     }
     public void cardInit(){
         // 初始化所有頁面
@@ -363,7 +452,7 @@ public class home {
 
     }
 
-    private void createUIComponents() {
+    private void createUIComponents() throws SQLException {
         // 自訂設定區域（有勾選 customCreate 的都要加在這裡，不然會產生 nullPointer 錯誤）
         loginPanel = new login().getPanel(); // loginPanel直接呼叫login.java的頁面
         aboutPanel = new about().getPanel(); // 同上
@@ -372,6 +461,9 @@ public class home {
         JDateChooser2 = new JDateChooser();
         recommendPanel = new JListCustomRenderer().createPanel(null);
         searchResultPanel = new JListCustomRenderer().createPanel(null);
+        reccListHolder = new JListCustomRenderer().createPanel
+                (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
+                        0,0,"","",0,0,0));
         initManageTable(); // 初始化形成管理頁面的表格
         // TODO: 讓表格 jTable 無法被編輯，研究中。
         // public boolean isCellEditable(int row, int column){return false;}
