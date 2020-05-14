@@ -13,6 +13,8 @@ import  src.TravelData;
 import  src.UserData;
 import  src.ProductData;
 import  src.ProductCombination;
+import src.Order;
+
 
 /**
  * this class is to define all logic used in database
@@ -274,5 +276,31 @@ class db {
             }
         }
         return productDataList;
+    }
+
+    public static String getLastOrderNo(){
+        connectToDB();
+        String sql="SELECT Order_number FROM order_data ORDER BY Order_orderDate DESC";
+        Statement stmt = null;
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.next();
+            return rs.getString("Order_number");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            //return all.add(flag);
+        }finally {
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public static Order setNewOrder(){
+        
+        return null;
     }
 }
