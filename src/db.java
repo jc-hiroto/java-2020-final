@@ -192,7 +192,7 @@ class db {
                 ProductData PDtmp = productDataList.get(index);
                 Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
                 Date end = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
-                ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),rs.getInt("currentOrder"),start,end);
                 PDtmp.addCombination(PCtemp);
                 //System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
             }
@@ -200,7 +200,7 @@ class db {
                 ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
                 Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
                 Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
-                ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
+                ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),rs.getInt("currentOrder"),start,end);
                 newPDtmp.addCombination(newPCtemp);
                 productDataList.add(newPDtmp);
                 //System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
