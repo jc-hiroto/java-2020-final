@@ -107,4 +107,12 @@ public class Processor {
     public static int randomTravelCodeGene(){
         return travelCode[(int)((Math.random()*100)%travelCode.length)];
     }
+
+    public static String newOrderNumberGenerator(String lastNumber){
+        String subNumber = lastNumber.substring(5);
+        int numberPart = Integer.getInteger(subNumber);
+        numberPart++;
+        String newOrderNumber = lastNumber.substring(0,5) + Integer.toString(numberPart);
+        return newOrderNumber;
+    }
 }

@@ -14,6 +14,7 @@ import  src.UserData;
 import  src.ProductData;
 import  src.ProductCombination;
 import src.Order;
+import src.Processor;
 
 
 /**
@@ -299,8 +300,13 @@ class db {
         return null;
     }
 
-    public static Order setNewOrder(){
-        
+    public static Order setNewOrder(String productKey,Date startDate,int amount){
+        connectToDB();
+        String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
+        String status = "";
+        String sql = "SELECT * FROM trip_data WHERE product_key ="+ productKey +" AND start_date = Date('" + startDate + "')";
+
+        Order newOrder = new Order(orderNumber,productKey,status,amount,startDate,new Date());
         return null;
     }
 }
