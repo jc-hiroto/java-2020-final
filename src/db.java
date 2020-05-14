@@ -3,6 +3,9 @@ package src;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ArrayList;
 
@@ -16,9 +19,9 @@ import  src.ProductCombination;
  */
 class db {
     private static Connection connection = null;
-    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app.db");
+    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
     private static UserData usr = new UserData();
-
+    private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
     public static boolean connectToDB() {
 
         try {
@@ -187,8 +190,8 @@ class db {
             }
             if(exists){
                 ProductData PDtmp = productDataList.get(index);
-                Date start = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
-                Date end = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
+                Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("start_date"));
+                Date end = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                 ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),start,end);
                 PDtmp.addCombination(PCtemp);
                 //System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
