@@ -133,16 +133,6 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="db39a" class="javax.swing.JButton" binding="btnOrder">
-            <constraints border-constraint="East"/>
-            <properties>
-              <background color="-1"/>
-              <font name="Mgen+ 1pp" size="16"/>
-              <foreground color="-15514805"/>
-              <horizontalTextPosition value="0"/>
-              <text value="下訂單"/>
-            </properties>
-          </component>
           <component id="e975f" class="javax.swing.JLabel">
             <constraints border-constraint="Center"/>
             <properties>
@@ -153,6 +143,29 @@
               <text value="確定好日期與價格了嗎？  如果沒問題就爽快下訂吧！"/>
             </properties>
           </component>
+          <grid id="bff69" binding="orderPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="East"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="db39a" class="javax.swing.JButton" binding="btnOrder">
+                <constraints border-constraint="East"/>
+                <properties>
+                  <background color="-1"/>
+                  <font name="Mgen+ 1pp" size="16"/>
+                  <foreground color="-15514805"/>
+                  <horizontalTextPosition value="0"/>
+                  <text value="下訂單"/>
+                </properties>
+              </component>
+              <component id="f2368" class="javax.swing.JSpinner" binding="orderPeople" custom-create="true">
+                <constraints border-constraint="West"/>
+                <properties>
+                  <background color="-15352669"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
     </children>

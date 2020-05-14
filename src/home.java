@@ -3,6 +3,7 @@ package src;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.SwingWorker;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -336,8 +337,6 @@ public class home {
         cal.setTime(nowDate);
         cal.add(Calendar.DATE, 5); // Date2 offset days
         Date newDate = cal.getTime();
-        JDateChooser1 = new JDateChooser();
-        JDateChooser2 = new JDateChooser();
         JDateChooser1.setFont(new Font("Mgen+ 1pp", Font.PLAIN,16));
         JDateChooser2.setFont(new Font("Mgen+ 1pp", Font.PLAIN,16));
         JDateChooser1.setDate(nowDate);
