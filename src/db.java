@@ -7,7 +7,6 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 import  src.TravelData;
 import  src.UserData;
@@ -44,6 +43,11 @@ class db {
         return true;
     }
 
+    /**
+     * close the connection with database
+     * @param stmt
+     * @return flag true if success
+     */
     public static boolean closeConnection(Statement stmt){
         boolean flag = false;
         try {
@@ -101,11 +105,12 @@ class db {
      * @return user name size if true
      */
     public static int collectUserData(){
-        String sql = "SELECT USER_NAME, USER_EMAIL, USER_PASS FROM USER";
+        String sql = "SELECT USER_NAME, USER_EMAIL, USER_PASS, USER_BALANCE FROM USER";
         Statement stmt = null;
         usr.USER_NAME.clear();
         usr.USER_EMAIL.clear();
         usr.USER_PASS.clear();
+        usr.USER_BALANCE.clear();
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -114,6 +119,7 @@ class db {
                 usr.USER_NAME.add(rs.getString("USER_NAME"));
                 usr.USER_EMAIL.add(rs.getString("USER_EMAIL"));
                 usr.USER_PASS.add(rs.getString("USER_PASS"));
+                usr.USER_BALANCE.add(rs.getString("USER_BALANCE"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -177,6 +183,12 @@ class db {
         return flag;
     }
 
+    /**
+     * get product data data from database
+     * @param rs
+     * @throws SQLException
+     * @throws ParseException
+     */
     public static void extractProductData(ResultSet rs) throws SQLException, ParseException {
         productDataList.clear();
         int index = -1;
@@ -279,6 +291,10 @@ class db {
         return productDataList;
     }
 
+    /**
+     * get the order number of the last order record
+     * @return String, order number
+     */
     public static String getLastOrderNo(){
         connectToDB();
         String sql="SELECT Order_number FROM order_data ORDER BY Order_orderDate DESC";
@@ -290,7 +306,6 @@ class db {
             return rs.getString("Order_number");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            //return all.add(flag);
         }finally {
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
@@ -300,13 +315,31 @@ class db {
         return null;
     }
 
-    public static Order setNewOrder(String productKey,Date startDate,int amount){
+    /**
+     * set new order
+     * @param productKey
+     * @param startDate
+     * @param amount
+     */
+    public static void setNewOrder(String productKey,Date startDate,int amount){
         connectToDB();
         String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         String status = "";
         String sql = "SELECT * FROM trip_data WHERE product_key ="+ productKey +" AND start_date = Date('" + startDate + "')";
 
         Order newOrder = new Order(orderNumber,productKey,status,amount,startDate,new Date());
-        return null;
+    }
+
+    public static void setNewOrder(){
+        
+    }
+    public static Boolean setOrder(){
+
+    }
+    public static removeOrder(){
+
+    }
+    public static ArrayList<Order> getOrderResult(String Order_number){
+
     }
 }
