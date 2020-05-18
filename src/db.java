@@ -8,11 +8,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import  src.TravelData;
-import  src.UserData;
-import  src.ProductData;
-import  src.ProductCombination;
+import src.TravelData;
+import src.UserData;
+import src.ProductData;
+import src.ProductCombination;
 import src.Order;
+import src.Favorite;
 import src.Processor;
 
 
@@ -25,6 +26,7 @@ class db {
     private static UserData usr = new UserData();
     private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
     public static ArrayList<Order> orderList = new ArrayList<Order>();
+    public static ArrayList<Favorite> favList = new ArrayList<Favorite>();
 
     public static boolean connectToDB() {
 
@@ -576,5 +578,44 @@ class db {
      */
     public static ArrayList<Order> getOrderList(){
         return orderList;
+    }
+
+    // Not yet finish
+    public static boolean favManage(){
+        return true;
+    }
+
+    public static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
+        try {
+            Favorite newFav = new Favorite(favProductKey, searchCount, lastSearchDate);
+            for(int i = 0; i < favList.size(); i++){
+                if(favProductKey.equals(favList.get(i).getKey)){
+                    favList.set(i, newFav);
+                }else{
+                    favList.add(newFav);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    public static void remove Favorite(String favProductKey) {
+            try {
+                for (int i = 0; i < favList.size(); i++) {
+                    if (favProductKey.equals(favList.get(i).getKey)) {
+                        favList.remove(i);
+                    } else {
+                        System.out.prinyln("[ERROR] Cannot find this favorite record.");
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            }
+    }
+
+    // Not yet finish
+    public static ArrayList<ProductData> getFavorite(){
+        return null;
     }
 }
