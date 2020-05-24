@@ -580,11 +580,20 @@ class db {
         return orderList;
     }
 
-    // Not yet finish
+    /**
+     *
+     * @return true if need to be added
+     */
     public static boolean favManage(){
         return true;
     }
 
+    /**
+     * set the favProductKey, searchCount, lastSearchDate of the Favorite data structure and add on to the favList
+     * @param favProductKey
+     * @param searchCount
+     * @param lastSearchDate
+     */
     public static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
         try {
             Favorite newFav = new Favorite(favProductKey, searchCount, lastSearchDate);
@@ -600,6 +609,9 @@ class db {
         }
     }
 
+    /**
+     * remove favorite from favList
+     */
     public static void remove Favorite(String favProductKey) {
             try {
                 for (int i = 0; i < favList.size(); i++) {
@@ -614,8 +626,11 @@ class db {
             }
     }
 
-    // Not yet finish
+    /**
+     * get favorite list
+     * @return favList
+     */
     public static ArrayList<ProductData> getFavorite(){
-        return null;
+        return favList;
     }
 }
