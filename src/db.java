@@ -431,7 +431,7 @@ class db {
                         status = "YET";
                     }
                     //Insert new order in database
-                    boolean insertFlag = insertOrder(orderNumber, productKey, status, amount, startDate, new Date());
+                    boolean insertFlag = insertOrder(orderNumber, productKey, status, Integer.toString(amount), startDate, new Date());
 
                     //Update current order number in database
                     boolean updateFlag = updateCurOrder((rs.getInt("currentOrder") + amount), productKey);
@@ -612,7 +612,7 @@ class db {
     /**
      * remove favorite from favList
      */
-    public static void remove Favorite(String favProductKey) {
+    public static void removeFavorite(String favProductKey) {
             try {
                 for (int i = 0; i < favList.size(); i++) {
                     if (favProductKey.equals(favList.get(i).getKey)) {
@@ -630,7 +630,7 @@ class db {
      * get favorite list
      * @return favList
      */
-    public static ArrayList<ProductData> getFavorite(){
+    public static ArrayList<Favorite> getFavorite(){
         return favList;
     }
 }
