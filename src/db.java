@@ -7,6 +7,8 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import src.TravelData;
 import src.UserData;
@@ -28,6 +30,10 @@ class db {
     public static ArrayList<Order> orderList = new ArrayList<Order>();
     public static ArrayList<Favorite> favList = new ArrayList<Favorite>();
 
+    /**
+     * set connection to backend database
+     * @return true if connect successfully
+     */
     public static boolean connectToDB() {
 
         try {
@@ -231,7 +237,14 @@ class db {
     /**
      * Special method for user search
      * Get the travel data info under given price limit
-     * @param price_limit
+     * @param travelCode
+     * @param price_limit_bottom
+     * @param price_limit_top
+     * @param start_date_limit
+     * @param end_date_limit
+     * @param lower_bound_limit
+     * @param upper_bound_limit
+     * @param sortType
      * @return all info of the selected program under price limit
      */
     public static ArrayList<ProductData> getResult(String travelCode,int price_limit_bottom, int price_limit_top,String start_date_limit, String end_date_limit, int lower_bound_limit,int upper_bound_limit, int sortType) throws SQLException {
@@ -306,7 +319,7 @@ class db {
      */
     private static String getInsertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date) {
         return  "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate)" +
-                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', Date(\'"+order_state_date+"\'), Date(\'"+order_order_date+"\')";
+                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', Date(\'"+order_start_date+"\'), Date(\'"+order_order_date+"\')";
     }
 
     /**
@@ -403,46 +416,59 @@ class db {
 
     /**
      * set new order
+     * @param usrName
      * @param productKey
      * @param startDate
      * @param endDate
      * @param amount
      * @return flag if success
      */
-    public static boolean setNewOrder(String productKey, Date startDate, Date endDate, int amount){
+    public static boolean setNewOrder(String usrName, String productKey, Date startDate, Date endDate, int amount){
         boolean flag = false;
         connectToDB();
         String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         String status = "";
+        Statement stmt = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
         String sql = "SELECT * FROM trip_data WHERE product_key = \'" + productKey + "\' AND start_date = Date(\'" + startDate + "\') AND end_date = Date(\'" + endDate + "\')";
+        String sql2 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
 
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
+            stmt2 = connection.createStatement();
+            ResultSet rs2 = stmt2.executeQuery(sql2);
+            rs2.next();
 
             if(rs.getInt("upper_bound") >= (rs.getInt("currentOrder") + amount)){
-                if(usr.USER_BALANCE >= rs.getInt("price") && rs.getString("product_key") != null) {
+                if(rs2.getInt("USER_BALANCE") >= rs.getInt("price") && rs.getString("product_key") != null) {
                     if(rs.getInt("lower_bound") <= (rs.getInt("currentOrder") + amount)){
                         // okay to travel
                         status = "OKAY";
                     }else{
-                        //yet to reach the minimum travel people number
+                        // yet to reach the minimum travel people number
                         status = "YET";
                     }
-                    //Insert new order in database
+                    // Insert new order in database
                     boolean insertFlag = insertOrder(orderNumber, productKey, status, Integer.toString(amount), startDate, new Date());
 
-                    //Update current order number in database
+                    // Update current order number in database
                     boolean updateFlag = updateCurOrder((rs.getInt("currentOrder") + amount), productKey);
 
                     if(insertFlag == true && updateFlag == true){
                         Order newOrder = new Order(orderNumber, productKey, status, amount, startDate, new Date());
                         orderList.add(newOrder);
-                        usr.USER_BALANCE -= rs.getInt("price");
+                        int newBalance = rs2.getInt("USER_BALANCE") - rs.getInt("price") * amount;
+                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
+                        connection.setAutoCommit(false);
+                        stmt3 = connection.createStatement();
+                        stmt3.executeUpdate(sq);
+                        connection.commit();
                         flag = true;
                     }
-                }else if(usr.USER_BALANCE < rs.getInt("price")){
+                }else if(rs2.getInt("USER_BALANCE") < rs.getInt("price")){
                     System.out.println("[ERROR] You don't have enough money.");
                 }else{
                     System.out.println("[ERROR] Check your product key.");
@@ -451,7 +477,7 @@ class db {
                 System.out.println("[ERROR] Not enough seat.");
             }
 
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             flag = false;
         }finally {
@@ -463,38 +489,72 @@ class db {
 
     /**
      * modify order
+     * @param usrName
      * @param orderNumber
      * @param amount
      * @return flag true is success
      */
-    public static boolean setOrder(String orderNumber, int amount){
+    public static boolean setOrder(String usrName, String orderNumber, int amount){
         boolean flag = false;
         connectToDB();
-        String sql = "UPDATE order_data SET Order_amount = \'" + amount + "\' WHERE Order_number = \'" + orderNumber + "\'";
-        String sql2 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
-        String sql3 = "SELECT lower_bound FROM trip_data WHERE product_key = ";
+        String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
+        String sql2 = "SELECT * FROM trip_data WHERE product_key = ";
+        String sql3 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
         Statement stmt = null;
+        Statement stmt1 = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        Statement stmt4 = null;
         try {
-            connection.setAutoCommit(false);
-            stmt = connection.createStatement();
-            stmt.executeUpdate(sql);
-            connection.commit();
             stmt1 = connection.createStatement();
-            ResultSet rs = stmt1.executeQuery(sql2);
+            ResultSet rs = stmt1.executeQuery(sql1);
             rs.next();
             stmt2 = connection.createStatement();
-            ResultSet rs2 = stmt2.executeQuery(sql3 + rs.getString("Order_ProductKey"));
+            ResultSet rs2 = stmt2.executeQuery(sql2 + rs.getString("Order_ProductKey"));
             rs2.next();
+            stmt3 = connection.createStatement();
+            ResultSet rs3 = stmt3.executeQuery(sql3);
+            rs3.next();
 
             for(int i = 0; i < orderList.size(); i++){
                 if(orderList.get(i).getKey().equals(orderNumber)){
                     if(rs.getString("Order_status").equals("OKAY") && rs2.getInt("lower_bound") > amount){
                         String status = "YET";
-                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), status, amount, rs.getString("Order_StartDate"), rs.getString("Order_orderDate"));
+                        Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
+                        Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
+                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), status, amount, start, order);
                         orderList.set(i, tempOrder);
+
+                        int newBalance = rs3.getInt("USER_BALANCE") - ((amount - rs.getInt("Order_amount")) * (rs2.getInt("price")));
+                        String sql = "UPDATE order_data SET Order_amount = \'" + amount + "\' and Order_status = \'" + status + "\' WHERE Order_number = \'" + orderNumber + "\'";
+                        connection.setAutoCommit(false);
+                        stmt = connection.createStatement();
+                        stmt.executeUpdate(sql);
+                        connection.commit();
+
+                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
+                        connection.setAutoCommit(false);
+                        stmt4 = connection.createStatement();
+                        stmt4.executeUpdate(sq);
+                        connection.commit();
                     }else{
-                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), amount, rs.getString("Order_StartDate"), rs.getString("Order_orderDate"));
+                        Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
+                        Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
+                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), amount, start, order);
                         orderList.set(i, tempOrder);
+
+                        int newBalance = rs3.getInt("USER_BALANCE") - ((amount - rs.getInt("Order_amount")) * (rs2.getInt("price")));
+                        String sql = "UPDATE order_data SET Order_amount = \'" + amount + "\' WHERE Order_number = \'" + orderNumber + "\'";
+                        connection.setAutoCommit(false);
+                        stmt = connection.createStatement();
+                        stmt.executeUpdate(sql);
+                        connection.commit();
+
+                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
+                        connection.setAutoCommit(false);
+                        stmt4 = connection.createStatement();
+                        stmt4.executeUpdate(sq);
+                        connection.commit();
                     }
                 }
             }
@@ -512,27 +572,53 @@ class db {
 
     /**
      * remove order
+     * @param usrName
      * @param orderNumber
      * @return flag true is success
      */
-    public static boolean removeOrder(String orderNumber){
+    public static boolean removeOrder(String usrName, String orderNumber){
         boolean flag = false;
         connectToDB();
-        String sql = "DELETE FROM order_data WHERE Order_number = \'" + orderNumber + "\')";
+        String sql = "DELETE FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
+        String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
+        String sql2 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
+        String sql3 = "SELECT * FROM trip_data WHERE product_key = ";
         Statement stmt = null;
+        Statement stmt1 = null;
+        Statement stmt2 = null;
+        Statement stmt3 = null;
+        Statement stmt4 = null;
         try {
-            connection.setAutoCommit(false);
-            stmt = connection.createStatement();
-            stmt.executeUpdate(sql);
-            connection.commit();
+            stmt1 = connection.createStatement();
+            ResultSet rs1 = stmt1.executeQuery(sql1);
+            rs1.next();
+            stmt2 = connection.createStatement();
+            ResultSet rs2 = stmt2.executeQuery(sql2);
+            rs2.next();
+            stmt3 = connection.createStatement();
+            ResultSet rs3 = stmt3.executeQuery(sql3 + rs1.getString("Order_ProductKey"));
+            rs3.next();
+
             for(int i = 0; i < orderList.size(); i++){
                 if(orderList.get(i).getKey().equals(orderNumber)){
                     orderList.remove(i);
+                    int newBalance = rs2.getInt("USER_BALANCE") + rs1.getInt("Order_amount") * rs3.getInt("price");
+                    connection.setAutoCommit(false);
+                    stmt = connection.createStatement();
+                    stmt.executeUpdate(sql);
+                    connection.commit();
+
+                    String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
+                    connection.setAutoCommit(false);
+                    stmt4 = connection.createStatement();
+                    stmt4.executeUpdate(sq);
+                    connection.commit();
+
+                    System.out.println("[SUCCESS] Already cancel your order.");
                 }else{
                     System.out.println("[ERROR] Order Number Not exist.");
                 }
             }
-            System.out.println("[SUCCESS] Already cancel your order.");
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -558,7 +644,9 @@ class db {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
-            Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getInt("Order_amount"), rs.getString("Order_StartDate"), rs.getString("Order_orderDate"));
+            Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
+            Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
+            Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getInt("Order_amount"), start, order);
             return tempOrder;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -569,7 +657,6 @@ class db {
                 return null;
             }
         }
-        return null;
     }
 
     /**
@@ -581,11 +668,33 @@ class db {
     }
 
     /**
-     *
-     * @return true if need to be added
+     * call this method when start running the system, update the favList every 10 mins, auto-set/ auto-remove Favorite object in favList
+     * @param productKey
+     * @param searchCount
      */
-    public static boolean favManage(){
-        return true;
+    public static void favManage(String productKey, int searchCount){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                int minSearch = favList.get(0).getCount();
+                int pos = 0;
+                for(int i = 0; i < 5; i++){
+                    if(favList.get(i).getCount() < minSearch){
+                        minSearch = favList.get(i).getCount();
+                        pos = i;
+                    }else{
+                        continue;
+                    }
+                }
+                if(searchCount > minSearch){
+                    Date date = new Date();
+                    setFavorite(productKey, searchCount, date);
+                    removeFavorite(favList.get(pos).getKey());
+                }
+            }
+        };
+        timer.schedule(task, 10 * 60 * 1000, 10 * 60 * 1000);
     }
 
     /**
@@ -594,11 +703,11 @@ class db {
      * @param searchCount
      * @param lastSearchDate
      */
-    public static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
+    private static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
         try {
             Favorite newFav = new Favorite(favProductKey, searchCount, lastSearchDate);
             for(int i = 0; i < favList.size(); i++){
-                if(favProductKey.equals(favList.get(i).getKey)){
+                if(favProductKey.equals(favList.get(i).getKey())){
                     favList.set(i, newFav);
                 }else{
                     favList.add(newFav);
@@ -612,13 +721,13 @@ class db {
     /**
      * remove favorite from favList
      */
-    public static void removeFavorite(String favProductKey) {
+    private static void removeFavorite(String favProductKey) {
             try {
                 for (int i = 0; i < favList.size(); i++) {
-                    if (favProductKey.equals(favList.get(i).getKey)) {
+                    if (favProductKey.equals(favList.get(i).getKey())) {
                         favList.remove(i);
                     } else {
-                        System.out.prinyln("[ERROR] Cannot find this favorite record.");
+                        System.out.println("[ERROR] Cannot find this favorite record.");
                     }
                 }
             } catch (Exception e) {

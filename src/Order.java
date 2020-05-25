@@ -26,4 +26,20 @@ public class Order {
         this.startDate = startDate;
         this.orderDate = orderDate;
     }
+
+    public String getOrderNum(){
+        return new String(this.orderNumber);
+    }
+
+    public String getKey(){
+        return new String(this.orderProductKey);
+    }
+
+    public String getStatus(){
+        return new String(this.orderStatus);
+    }
+
+    public int getNum(){
+        return this.num;
+    }
 }

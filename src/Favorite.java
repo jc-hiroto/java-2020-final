@@ -20,4 +20,12 @@ public class Favorite {
         this.searchCount = searchCount;
         this.lastSearchDate = lastSearchDate;
     }
+
+    public String getKey(){
+        return new String(this.favProductKey);
+    }
+
+    public int getCount(){
+        return this.searchCount;
+    }
 }
