@@ -71,7 +71,7 @@ public class tripInfo {
                 System.out.println("[INFO] Selected row End date: "+ endDate.toString());
                 System.out.println("[INFO] Order people amount: "+ orderPeople.getValue());
                 System.out.println("[INFO] Order user: "+ LoginUser.getUserName());
-                int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), (Integer) orderPeople.getValue());
+                int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), ((Double)orderPeople.getValue()).intValue());
                 System.out.println("STATUS: "+condition);
             }
         });

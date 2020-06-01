@@ -5,7 +5,7 @@ import src.db;
 
 public class Order {
 
-    private String orderNumber,orderProductKey,orderStatus;
+    private String orderNumber,orderProductKey,orderStatus,orderUser;
     private int num;
     private Date startDate,orderDate;
 
@@ -13,15 +13,17 @@ public class Order {
         orderNumber = null;
         orderProductKey = null;
         orderStatus = null;
+        orderUser = null;
         num = 0;
         startDate = null;
         orderDate = null;
     }
 
-    public Order(String orderNumber, String orderProductKey, String orderStatus, int num, Date startDate, Date orderDate) {
+    public Order(String orderNumber, String orderProductKey, String orderStatus, int num, Date startDate, Date orderDate,String orderUser) {
         this.orderNumber = orderNumber;
         this.orderProductKey = orderProductKey;
         this.orderStatus = orderStatus;
+        this.orderUser = orderUser;
         this.num = num;
         this.startDate = startDate;
         this.orderDate = orderDate;

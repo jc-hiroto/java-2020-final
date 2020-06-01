@@ -311,21 +311,6 @@ class db {
     }
 
     /**
-     * get insert sql of order record
-     * @param orderNumber
-     * @param productKey
-     * @param orderStatus
-     * @param orderAmount
-     * @param order_start_date
-     * @param order_order_date
-     * @return sql String
-     */
-    private static String getInsertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date) {
-        return  "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate)" +
-                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', \'"+sdf.format(order_start_date)+"\', \'"+sdf.format(order_order_date)+"\'";
-    }
-
-    /**
      * execute the the sql that insert new order
      * @param orderNumber
      * @param productKey
@@ -335,14 +320,16 @@ class db {
      * @param order_order_date
      * @return flag true if success
      */
-    private static boolean insertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date){
+    private static boolean insertOrder( String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date, String userName){
         boolean flag = false;
         connectToDB();
         Statement stmt = null;
+        String sql = "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate, Order_user)" +
+                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', \'"+sdf.format(order_start_date)+"\', \'"+sdf.format(order_order_date)+"\', \'" + userName + "\')";
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
-            stmt.executeUpdate(getInsertOrder(orderNumber, productKey, orderStatus, orderAmount, order_start_date, order_order_date));
+            stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[Success] Create new order.");
             flag = true;
@@ -356,32 +343,23 @@ class db {
     }
 
     /**
-     * write the sql command to update current order number
-     * @param CurOrder
-     * @param productKey
-     * @return sql String
-     */
-    private static String getUpdateCurOrder(int CurOrder, String productKey) {
-        return  "UPDATE trip_data SET currentOrder = \'" + CurOrder + "\' WHERE product_key = \'" + productKey + "\'";
-    }
-
-    /**
-     * execute the sql that update the current order number
+     * execute the sql that update the current order amount
      * @param CurOrder
      * @param productKey
      * @return flag true if success
      */
-    private static boolean updateCurOrder(int CurOrder, String productKey){
+    private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date){
         boolean flag = false;
-
         connectToDB();
         Statement stmt = null;
+        String sql = "UPDATE trip_data SET currentOrder = \'" + CurOrder + "\' WHERE product_key = \'" + productKey + "\' and start_date = Date('" + order_start_date + "') ";
+        System.out.println(sql);
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
-            stmt.executeUpdate(getUpdateCurOrder(CurOrder, productKey));
+            stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[Success] Update current order number.");
+            System.out.println("[Success] Update current order amount.");
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -389,7 +367,6 @@ class db {
         }finally{
             closeConnection(stmt);
         }
-
         return flag;
     }
 
@@ -419,69 +396,31 @@ class db {
 
     /**
      * set new order
-     * @param usrName
+     * @param userName
      * @param amount
      * @return flag if success
      */
-    public static int newOrder(String usrName, ProductData PD, ProductCombination PC, int amount){
+    public static int newOrder(String userName, ProductData PD, ProductCombination PC, int amount){
         int flag = 1;
-        connectToDB();
         String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         String status = "";
-        Statement stmt = null;
-        Statement stmt2 = null;
-        String sql = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
-        try {
-            connection.setAutoCommit(false);
-            stmt = connection.createStatement();
-            System.out.println("OK1");
-            ResultSet rs = stmt.executeQuery(sql);
-            System.out.println("OK2");
-            rs.next();
-            System.out.println("OKKKKKKK BAL:" + rs.getInt("USER_BALANCE"));
-            if(PC.getUpperBound() >= (PC.getCurrentOrder() + amount)){
-                if(rs.getInt("USER_BALANCE") >= PC.getPrice() && PD.getKey() != null) {
-                    if(PC.getLowerBound() <= (PC.getCurrentOrder() + amount)){
-                        // okay to travel
-                        status = "OKAY";
-                    }else{
-                        // yet to reach the minimum travel people number
-                        status = "YET";
-                    }
-                    // Insert new order in database
-                    boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date());
-
-                    // Update current order number in database
-                    boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey());
-
-                    if(insertFlag == true && updateFlag == true){
-                        //Order newOrder = new Order(orderNumber, productKey, status, amount, startDate, new Date());
-                        //orderList.add(newOrder);
-                        int newBalance = rs.getInt("USER_BALANCE") - PC.getPrice() * amount;
-                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
-                        connection.setAutoCommit(false);
-                        stmt2 = connection.createStatement();
-                        stmt2.executeUpdate(sq);
-                        connection.commit();
-                        flag = 0;
-                    }
-                }else if(rs.getInt("USER_BALANCE") < rs.getInt("price")){
-                    System.out.println("[ERROR] You don't have enough money.");
-                    flag = 2;
-                }else{
-                    System.out.println("[ERROR] Check your product key.");
-                    flag = 3;
-                }
-            }else{
-                System.out.println("[ERROR] Not enough seat.");
-                flag = 4;
+        if(PC.getUpperBound() >= (PC.getCurrentOrder() + amount)){
+            status = "OKAY";
+            // Insert new order in database
+            boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date(), userName);
+            // Update current order amount in database
+            boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate());
+            if(!insertFlag || !updateFlag){
+                System.out.println("[ERROR] System fatal error");
+                flag = -2;
             }
-
-        } catch (SQLException e) {
-            System.out.println("SQL ERROR: "+e.getMessage());
-            flag = -1;
-        }finally {
-            closeConnection(stmt);
+            else{
+                flag = 0;
+            }
+        }
+        else{
+            System.out.println("[ERROR] Not enough seat.");
+            flag = 1;
         }
         return flag;
     }
@@ -493,7 +432,7 @@ class db {
      * @param amount
      * @return flag true is success
      */
-    public static boolean setOrder(String usrName, String orderNumber, int amount){
+ /*   public static boolean setOrder(String usrName, String orderNumber, int amount){
         boolean flag = false;
         connectToDB();
         String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
@@ -575,7 +514,7 @@ class db {
      * @param orderNumber
      * @return flag true is success
      */
-    public static boolean removeOrder(String usrName, String orderNumber){
+ /*   public static boolean removeOrder(String usrName, String orderNumber){
         boolean flag = false;
         connectToDB();
         String sql = "DELETE FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
@@ -634,7 +573,7 @@ class db {
      * @param orderNumber
      * @return Order
      */
-    public static Order getOrderResult(String orderNumber){
+  /*  public static Order getOrderResult(String orderNumber){
         connectToDB();
         String sql = "SELECT * FROM order_data WHERE Order_number = \'"+ orderNumber + "\'";
         Statement stmt = null;
@@ -662,7 +601,7 @@ class db {
      * get orderList
      * @return orderList
      */
-    public static ArrayList<Order> getOrderList(){
+ /*   public static ArrayList<Order> getOrderList(){
         return orderList;
     }
 
@@ -671,7 +610,7 @@ class db {
      * @param productKey
      * @param searchCount
      */
-    public static void favManage(String productKey, int searchCount){
+  /*  public static void favManage(String productKey, int searchCount){
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -702,7 +641,7 @@ class db {
      * @param searchCount
      * @param lastSearchDate
      */
-    private static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
+  /*  private static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
         try {
             Favorite newFav = new Favorite(favProductKey, searchCount, lastSearchDate);
             for(int i = 0; i < favList.size(); i++){
@@ -720,7 +659,7 @@ class db {
     /**
      * remove favorite from favList
      */
-    private static void removeFavorite(String favProductKey) {
+ /*   private static void removeFavorite(String favProductKey) {
             try {
                 for (int i = 0; i < favList.size(); i++) {
                     if (favProductKey.equals(favList.get(i).getKey())) {
@@ -738,7 +677,9 @@ class db {
      * get favorite list
      * @return favList
      */
-    public static ArrayList<Favorite> getFavorite(){
+ /*   public static ArrayList<Favorite> getFavorite(){
         return favList;
     }
+
+  */
 }
