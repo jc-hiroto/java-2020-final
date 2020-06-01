@@ -32,7 +32,7 @@ public class register{
                     {
                         errorAlert.setVisible(false);
                         try {
-                            registerStats = db.newUser(getName(), getEmail(), getPassword(passwordField));
+                            registerStats = db.newUser(getName(), getEmail(), getPassword(passwordField),0);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
