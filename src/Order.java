@@ -44,4 +44,12 @@ public class Order {
     public int getNum(){
         return this.num;
     }
+
+    public Date getStartDate(){
+        return this.startDate;
+    }
+
+    public Date getOrderDate(){
+        return this.orderDate;
+    }
 }

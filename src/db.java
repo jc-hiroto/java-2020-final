@@ -19,6 +19,8 @@ import src.Order;
 import src.Favorite;
 import src.Processor;
 
+import javax.swing.plaf.nimbus.State;
+
 
 /**
  * this class is to define all logic used in database
@@ -494,6 +496,29 @@ class db {
             closeConnection(stmt);
         }
         return flag;
+    }
+    public static ArrayList<Order> getOrderByUser(String userName) throws SQLException {
+        connectToDB();
+        Statement stmt = null;
+        String sql = "SELECT * FROM order_data";
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                Date startDate = (Date) sdf.parse(rs.getString("Order_StartDate"));
+                Date orderDate = (Date) sdf.parse(rs.getString("Order_orderDate"));
+                Order orderTmp = new Order(rs.getString("Order_number"),rs.getString("Order_ProductKey"),rs.getString("Order_status"),rs.getInt("Order_amount"),startDate,orderDate,userName);
+                orderList.add(orderTmp);
+            }
+        } catch (SQLException | ParseException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
+        return orderList;
     }
 
     /**

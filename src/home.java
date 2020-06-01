@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import com.jidesoft.swing.RangeSlider;
@@ -88,6 +89,7 @@ public class home {
     private JButton 不知道要去哪Button;
     private JButton 找便宜Button;
     private JButton 找近期Button;
+    private JPanel tableHolder;
     private JButton btnEdit;
     private JButton btnCancel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,8 +117,6 @@ public class home {
         priceLowDisplay.setEnabled(false);
         peopleHighDisplay.setEnabled(false);
         peopleLowDisplay.setEnabled(false);
-        btnEdit.setEnabled(false);
-        btnCancel.setEnabled(false);
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
@@ -193,9 +193,22 @@ public class home {
         btnManage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                initManageTable();
-                layout.show(cardHolder, "Manage");
-                exitFromHome();
+                if(LoginUser.getUserName() != null){
+                    cardHolder.remove(managePanel);
+
+                    try {
+                        createUIComponents();
+                        tableHolder = new manage().getPanel();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    cardHolder.add(managePanel,"Manage");
+                    layout.show(cardHolder, "Manage");
+                    tableHolder.setVisible(false);
+                    tableHolder.setVisible(true);
+                    exitFromHome();
+                }
+
             }
         });
 
@@ -414,17 +427,23 @@ public class home {
             btnLogout.setText("");
         }
     }
-    public void initManageTable(){
-        // 初始化形成管理頁面的表格
-        // TODO: 寫字串處理method，然後把DB串起來。
-        // ================= 以下是資料運用範例 =================
-        Object[][] data={
-                {"A20200401001","馬達加斯加 猴麵包樹 夢幻生態天堂10天", "2020-04-23","2020-05-02","158900","訂單成立"},
-                {"A20200401002","【波蘭、波羅的海三小國、俄羅斯】精彩12日","2020-07-16","2020-07-27","79900","訂單成立"},
-                {"A20200401003","【國航假期】東歐純情三國+波蘭8日", "2020-04-26","2020-05-03","47300","訂單處理中"},
-                {"A20200401004","《日本嚴選》四國鐵道千年物語•夢幻天空之鏡•高知食彩5日", "2020-07-11","2020-07-15","58900","訂單處理中"}};
-        String[] columns={"訂單序號","名稱","出發日期","結束日期","價格", "訂單狀態"};
-        table1 = new JTable(data,columns);
+    public void initManageTable() throws SQLException {
+        System.out.println("TABLE INIT!");
+        ArrayList<Order> userOrderList = new ArrayList<Order>();
+        if(LoginUser.getUserName() != null){
+            System.out.println("GET ORDERS FROM USER: "+LoginUser.getUserName());
+            userOrderList = db.getOrderByUser(LoginUser.getUserName());
+        }
+        String[][] displayOrderArray = new String[userOrderList.size()][7];
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (int i = 0; i < userOrderList.size(); i++) {
+            Order orderObj = userOrderList.get(i);
+            System.out.println("PARSE ORDER DATA: "+ orderObj.getOrderNum());
+            String[] row = {orderObj.getOrderNum(),orderObj.getKey(),"TITLE",sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),sdf.format(orderObj.getOrderDate()),orderObj.getStatus()};
+            displayOrderArray[i] = row;
+        }
+        String[] columns={"訂單序號","產品序號","產品名稱","出發日期","人數","下訂日期", "訂單狀態"};
+        table1 = new JTable(displayOrderArray,columns);
     }
 
     public String getSearchField(){
@@ -472,6 +491,7 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
+        tableHolder = new manage().getPanel();
         searchResultPanel = new JListCustomRenderer().createPanel(null);
         reccListHolder = new JListCustomRenderer().createPanel
                 (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
