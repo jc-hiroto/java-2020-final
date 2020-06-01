@@ -9,7 +9,7 @@ import javax.swing.event.TableModelListener;
 import src.ProductData;
 import src.ProductCombination;
 import src.hash.searchEngine;
-
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -43,6 +43,7 @@ public class tripInfo {
         lbTitle.setText(""+PD.getTitle());
         lbKey.setText("產品編號："+PD.getKey());
         lbCat.setText("分類："+ new searchEngine().reverseSearch(PD.getCode()));
+        JDialog.setDefaultLookAndFeelDecorated(true);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         ListSelectionModel selectionModel = table1.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {
@@ -50,6 +51,9 @@ public class tripInfo {
                 if(LoginUser.getUserName() != null){
                     btnOrder.setEnabled(true);
                     orderPeople.setEnabled(true);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"請登入後再下訂！","您尚未登入！",JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -66,13 +70,31 @@ public class tripInfo {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                System.out.println("[INFO] Selected trip product key: "+ PDHold.getKey());
-                System.out.println("[INFO] Selected row Starting date: "+ startDate.toString());
-                System.out.println("[INFO] Selected row End date: "+ endDate.toString());
-                System.out.println("[INFO] Order people amount: "+ orderPeople.getValue());
-                System.out.println("[INFO] Order user: "+ LoginUser.getUserName());
-                int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), ((Double)orderPeople.getValue()).intValue());
-                System.out.println("STATUS: "+condition);
+                int check = JOptionPane.showConfirmDialog(null,"您確定要下訂了嗎？","下訂確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                if(check == 0){
+                    System.out.println("[INFO] Selected trip product key: "+ PDHold.getKey());
+                    System.out.println("[INFO] Selected row Starting date: "+ startDate.toString());
+                    System.out.println("[INFO] Selected row End date: "+ endDate.toString());
+                    System.out.println("[INFO] Order people amount: "+ orderPeople.getValue());
+                    System.out.println("[INFO] Order user: "+ LoginUser.getUserName());
+                    int people = (int) orderPeople.getValue();
+                    int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), people);
+                    switch (condition){
+                        case 0:
+                            JOptionPane.showMessageDialog(null,"下訂成功，祝您有個美好的旅程！","下訂成功",JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case -1:
+                            JOptionPane.showMessageDialog(null,"空位不足","下訂失敗",JOptionPane.ERROR_MESSAGE);
+                            break;
+                        case -2:
+                            JOptionPane.showMessageDialog(null,"系統錯誤","下訂失敗",JOptionPane.ERROR_MESSAGE);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null,"未知錯誤","下訂失敗",JOptionPane.ERROR_MESSAGE);
+                            break;
+                    }
+                    System.out.println("STATUS: "+condition);
+                }
             }
         });
     }
@@ -94,7 +116,7 @@ public class tripInfo {
 
     private void createUIComponents() {
         initTable();
-        orderPeople = new JSpinner(new SpinnerNumberModel(1.0, 1.0, 12.0, 1.0));
+        orderPeople = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
     }
 }
 

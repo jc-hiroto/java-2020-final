@@ -348,18 +348,19 @@ class db {
      * @param productKey
      * @return flag true if success
      */
-    private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date){
+    private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date,ProductCombination PC){
         boolean flag = false;
         connectToDB();
         Statement stmt = null;
-        String sql = "UPDATE trip_data SET currentOrder = \'" + CurOrder + "\' WHERE product_key = \'" + productKey + "\' and start_date = Date('" + order_start_date + "') ";
+        String sql = "UPDATE trip_data SET currentOrder = " + CurOrder + " WHERE product_key = \'" + productKey + "\' and start_date = \'" + sdf.format(order_start_date) + "\'";
         System.out.println(sql);
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[Success] Update current order amount.");
+            PC.setCurrentOrder(CurOrder);
+            System.out.println("[Success] Update current order amount to: "+CurOrder);
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -409,7 +410,7 @@ class db {
             // Insert new order in database
             boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date(), userName);
             // Update current order amount in database
-            boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate());
+            boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate(),PC);
             if(!insertFlag || !updateFlag){
                 System.out.println("[ERROR] System fatal error");
                 flag = -2;
@@ -420,7 +421,7 @@ class db {
         }
         else{
             System.out.println("[ERROR] Not enough seat.");
-            flag = 1;
+            flag = -1;
         }
         return flag;
     }
