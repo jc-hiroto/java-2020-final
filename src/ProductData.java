@@ -42,13 +42,13 @@ public class ProductData {
         return new String(title);
     }
     public String getTitle(){
-        return new String(this.title);
+        return this.title;
     }
     public String getKey(){
-        return new String(this.key);
+        return this.key;
     }
     public String getCode(){
-        return new String(this.code);
+        return this.code;
     }
     public int getCombinationSize(){
         return detail.size();

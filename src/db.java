@@ -90,7 +90,7 @@ class db {
      */
     public static String getInsertSql(String userName,String userEmail,StringBuffer userPass, int userBalance) {
         return  "INSERT INTO USER(USER_NAME,USER_EMAIL,USER_PASS,USER_BALANCE) " +
-                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\', int(\'"+userBalance+"\'))";
+                "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\',\'"+userBalance+"\')";
     }
 
     public static String userAuth(String email, StringBuffer password){
@@ -100,6 +100,7 @@ class db {
         for(int i = 0; i<usr.USER_NAME.size(); i++){
             if(usr.USER_EMAIL.get(i).equals(email)){
                 if(usr.USER_PASS.get(i).equals(password.toString())){
+                    System.out.println("LOGIN OK, DBPASS: "+usr.USER_PASS.get(i)+" ENTER PASS: "+password.toString());
                     flag = usr.USER_NAME.get(i);
                 }
                 else{

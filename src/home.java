@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.SwingWorker;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -63,7 +65,6 @@ public class home {
     private JButton 看更多Button;
     private JPanel managePanel;
     private JTextArea textObjR1_1;
-    private JTabbedPane tabbedPane1;
     private JTable table1;
     private JDateChooser JDateChooser1;
     private JDateChooser JDateChooser2;
@@ -84,6 +85,11 @@ public class home {
     private JProgressBar progressBar1;
     private JLabel loading;
     private JPanel reccListHolder;
+    private JButton 不知道要去哪Button;
+    private JButton 找便宜Button;
+    private JButton 找近期Button;
+    private JButton btnEdit;
+    private JButton btnCancel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private ZoneId zoneId = ZoneId.systemDefault();
     private LocalDate localDate = LocalDate.now();
@@ -109,6 +115,8 @@ public class home {
         priceLowDisplay.setEnabled(false);
         peopleHighDisplay.setEnabled(false);
         peopleLowDisplay.setEnabled(false);
+        btnEdit.setEnabled(false);
+        btnCancel.setEnabled(false);
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
@@ -167,9 +175,7 @@ public class home {
             public void actionPerformed(ActionEvent actionEvent) {
                 cardHolder.remove(recommendPanel);
                 try {
-                    reccListHolder = new JListCustomRenderer().createPanel
-                            (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
-                                    0,0,"","",0,0,0));
+                    reccListHolder = new JListCustomRenderer().createPanel(db.getResult(Integer.toString(Processor.randomTravelCodeGene()), 0,0,"","",0,0,0));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -331,6 +337,14 @@ public class home {
                 }
             }
         });
+        table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ListSelectionModel selectionModel = table1.getSelectionModel();
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                btnEdit.setEnabled(true);
+                btnCancel.setEnabled(true);
+            }
+        });
     }
     public void dateChooserInit(){
         Calendar cal = Calendar.getInstance();
@@ -458,7 +472,6 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
-        recommendPanel = new JListCustomRenderer().createPanel(null);
         searchResultPanel = new JListCustomRenderer().createPanel(null);
         reccListHolder = new JListCustomRenderer().createPanel
                 (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),

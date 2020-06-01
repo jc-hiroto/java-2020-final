@@ -33,7 +33,8 @@ public class tripInfo {
     public tripInfo(ProductData PD){
         PDHold = PD;
         PCArrayL = PD.getCombination();
-        orderPanel.setVisible(false);
+        btnOrder.setEnabled(false);
+        orderPeople.setEnabled(false);
         orderPeople.setValue(1);
         String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+PD.getCode()+"-1x.png";
         lbIcon.setIcon(new ImageIcon(imgFilepath));
@@ -44,7 +45,8 @@ public class tripInfo {
         ListSelectionModel selectionModel = table1.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                orderPanel.setVisible(true);
+                btnOrder.setEnabled(true);
+                orderPeople.setEnabled(true);
             }
         });
         btnOrder.addActionListener(new ActionListener() {
@@ -67,10 +69,10 @@ public class tripInfo {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < PCArrayL.size(); i++) {
             ProductCombination PCObj = PCArrayL.get(i);
-            String[] row = {sdf.format(PCObj.getStartDate()),sdf.format(PCObj.getEndDate()),""+PCObj.getLowerBound(),""+PCObj.getUpperBound(),""+PCObj.getPrice(),"OK"};
+            String[] row = {sdf.format(PCObj.getStartDate()),sdf.format(PCObj.getEndDate()),""+PCObj.getLowerBound(),""+PCObj.getUpperBound(),""+PCObj.getPrice()," "+(PCObj.getUpperBound()-PCObj.getCurrentOrder())};
             displayPCArray[i] = row;
         }
-        String[] columns={"出團日期","返回日期","最低出團人數","最高出團人數","價格", "產品狀態"};
+        String[] columns={"出團日期","返回日期","最低出團人數","最高出團人數","價格", "剩餘可報人數"};
         table1 = new JTable(displayPCArray,columns);
     }
 

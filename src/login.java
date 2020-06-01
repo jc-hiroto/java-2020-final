@@ -144,6 +144,7 @@ public class login<loginStatus> {
     }
     public StringBuffer getPassword() throws Exception {
         String passStr = new String(passwordField.getPassword());
+        System.out.println("ORIPASS: "+passStr);
         StringBuffer rawPass = new StringBuffer();
         rawPass.append(passStr);
         StringBuffer encryptPass = passwordHash.encrypt(rawPass);

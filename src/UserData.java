@@ -9,10 +9,10 @@ public class UserData {
     public static ArrayList <Integer> USER_BALANCE = new ArrayList<Integer>();
 
     public UserData(){
-        USER_NAME = null;
-        USER_EMAIL = null;
-        USER_PASS = null;
-        USER_BALANCE = null;
+        USER_NAME = new ArrayList<String>();
+        USER_EMAIL = new ArrayList<String>();
+        USER_PASS = new ArrayList<String>();
+        USER_BALANCE = new ArrayList<Integer>();
     }
 
 }
