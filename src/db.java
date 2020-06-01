@@ -3,6 +3,7 @@ package src;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
+import java.text.DateFormat;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ class db {
     private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
     public static ArrayList<Order> orderList = new ArrayList<Order>();
     public static ArrayList<Favorite> favList = new ArrayList<Favorite>();
+    public static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * set connection to backend database
@@ -320,7 +322,7 @@ class db {
      */
     private static String getInsertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date) {
         return  "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate)" +
-                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', Date(\'"+order_start_date+"\'), Date(\'"+order_order_date+"\')";
+                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', \'"+sdf.format(order_start_date)+"\', \'"+sdf.format(order_order_date)+"\'";
     }
 
     /**
@@ -418,34 +420,28 @@ class db {
     /**
      * set new order
      * @param usrName
-     * @param productKey
-     * @param startDate
-     * @param endDate
      * @param amount
      * @return flag if success
      */
-    public static boolean setNewOrder(String usrName, String productKey, Date startDate, Date endDate, int amount){
-        boolean flag = false;
+    public static int newOrder(String usrName, ProductData PD, ProductCombination PC, int amount){
+        int flag = 1;
         connectToDB();
         String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         String status = "";
         Statement stmt = null;
         Statement stmt2 = null;
-        Statement stmt3 = null;
-        String sql = "SELECT * FROM trip_data WHERE product_key = \'" + productKey + "\' AND start_date = Date(\'" + startDate + "\') AND end_date = Date(\'" + endDate + "\')";
-        String sql2 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
-
+        String sql = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
         try {
+            connection.setAutoCommit(false);
             stmt = connection.createStatement();
+            System.out.println("OK1");
             ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("OK2");
             rs.next();
-            stmt2 = connection.createStatement();
-            ResultSet rs2 = stmt2.executeQuery(sql2);
-            rs2.next();
-
-            if(rs.getInt("upper_bound") >= (rs.getInt("currentOrder") + amount)){
-                if(rs2.getInt("USER_BALANCE") >= rs.getInt("price") && rs.getString("product_key") != null) {
-                    if(rs.getInt("lower_bound") <= (rs.getInt("currentOrder") + amount)){
+            System.out.println("OKKKKKKK BAL:" + rs.getInt("USER_BALANCE"));
+            if(PC.getUpperBound() >= (PC.getCurrentOrder() + amount)){
+                if(rs.getInt("USER_BALANCE") >= PC.getPrice() && PD.getKey() != null) {
+                    if(PC.getLowerBound() <= (PC.getCurrentOrder() + amount)){
                         // okay to travel
                         status = "OKAY";
                     }else{
@@ -453,38 +449,40 @@ class db {
                         status = "YET";
                     }
                     // Insert new order in database
-                    boolean insertFlag = insertOrder(orderNumber, productKey, status, Integer.toString(amount), startDate, new Date());
+                    boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date());
 
                     // Update current order number in database
-                    boolean updateFlag = updateCurOrder((rs.getInt("currentOrder") + amount), productKey);
+                    boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey());
 
                     if(insertFlag == true && updateFlag == true){
-                        Order newOrder = new Order(orderNumber, productKey, status, amount, startDate, new Date());
-                        orderList.add(newOrder);
-                        int newBalance = rs2.getInt("USER_BALANCE") - rs.getInt("price") * amount;
+                        //Order newOrder = new Order(orderNumber, productKey, status, amount, startDate, new Date());
+                        //orderList.add(newOrder);
+                        int newBalance = rs.getInt("USER_BALANCE") - PC.getPrice() * amount;
                         String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
                         connection.setAutoCommit(false);
-                        stmt3 = connection.createStatement();
-                        stmt3.executeUpdate(sq);
+                        stmt2 = connection.createStatement();
+                        stmt2.executeUpdate(sq);
                         connection.commit();
-                        flag = true;
+                        flag = 0;
                     }
-                }else if(rs2.getInt("USER_BALANCE") < rs.getInt("price")){
+                }else if(rs.getInt("USER_BALANCE") < rs.getInt("price")){
                     System.out.println("[ERROR] You don't have enough money.");
+                    flag = 2;
                 }else{
                     System.out.println("[ERROR] Check your product key.");
+                    flag = 3;
                 }
             }else{
                 System.out.println("[ERROR] Not enough seat.");
+                flag = 4;
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            flag = false;
+            System.out.println("SQL ERROR: "+e.getMessage());
+            flag = -1;
         }finally {
             closeConnection(stmt);
         }
-
         return flag;
     }
 

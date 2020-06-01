@@ -109,10 +109,13 @@ public class Processor {
     }
 
     public static String newOrderNumberGenerator(String lastNumber){
-        String subNumber = lastNumber.substring(5);
-        int numberPart = Integer.getInteger(subNumber);
+        String subNumber = lastNumber.replaceAll("[^0-9]", "");
+        System.out.println("LAST: "+lastNumber);
+        System.out.println("SUB: "+subNumber);
+        int numberPart = Integer.parseInt(subNumber);
         numberPart++;
-        String newOrderNumber = lastNumber.substring(0,5) + Integer.toString(numberPart);
+        String newOrderNumber = lastNumber.substring(0,3) + Integer.toString(numberPart);
+        System.out.println("NEW: "+newOrderNumber);
         return newOrderNumber;
     }
 }

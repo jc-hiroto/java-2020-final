@@ -81,6 +81,8 @@ public class login<loginStatus> {
                             userNameDisplay.setText(userName);
                             layout.show(loginCardHolder, "Success");
                             System.out.println("Login success, username: "+userName);
+                            LoginUser.setUserName(userName);
+                            System.out.println("Login success, username: "+LoginUser.getUserName());
                             setLoginStatus(true);
                         }
                         else{
@@ -107,6 +109,7 @@ public class login<loginStatus> {
                 btnLogin.setVisible(true);
                 loadingBar.setVisible(false);
                 System.out.println("[Operation] User logout.");
+                LoginUser.setUserName(null);
             }
         });
         btnBackLogin.addActionListener(new ActionListener() {

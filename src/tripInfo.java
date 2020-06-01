@@ -12,8 +12,10 @@ import src.hash.searchEngine;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static src.Processor.textCutter;
 
@@ -45,18 +47,32 @@ public class tripInfo {
         ListSelectionModel selectionModel = table1.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                btnOrder.setEnabled(true);
-                orderPeople.setEnabled(true);
+                if(LoginUser.getUserName() != null){
+                    btnOrder.setEnabled(true);
+                    orderPeople.setEnabled(true);
+                }
             }
         });
         btnOrder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 int sRow = table1.getSelectedRow();
-                //System.out.println("[INFO] Selected row: "+ sRow);
+                Date startDate = new Date();
+                Date endDate = new Date();
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    startDate = sdf.parse((String) table1.getValueAt(sRow,0));
+                    endDate = sdf.parse((String) table1.getValueAt(sRow,1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 System.out.println("[INFO] Selected trip product key: "+ PDHold.getKey());
-                System.out.println("[INFO] Selected row Starting date: "+ table1.getValueAt(sRow,0));
+                System.out.println("[INFO] Selected row Starting date: "+ startDate.toString());
+                System.out.println("[INFO] Selected row End date: "+ endDate.toString());
                 System.out.println("[INFO] Order people amount: "+ orderPeople.getValue());
+                System.out.println("[INFO] Order user: "+ LoginUser.getUserName());
+                int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), (Integer) orderPeople.getValue());
+                System.out.println("STATUS: "+condition);
             }
         });
     }

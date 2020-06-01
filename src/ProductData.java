@@ -56,6 +56,14 @@ public class ProductData {
     public ArrayList<ProductCombination> getCombination(){
         return detail;
     }
+    public ProductCombination getCombByStartDate(Date startDate){
+        for(int i=0; i<detail.size();i++){
+            if(detail.get(i).getStartDate().equals(startDate)){
+                return detail.get(i);
+            }
+        }
+        return null;
+    }
     public int getCheapestPrice(){
         int min = detail.get(0).getPrice();
         for(int i=0; i<detail.size(); i++){
