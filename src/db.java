@@ -353,7 +353,6 @@ class db {
         connectToDB();
         Statement stmt = null;
         String sql = "UPDATE trip_data SET currentOrder = " + CurOrder + " WHERE product_key = \'" + productKey + "\' and start_date = \'" + sdf.format(order_start_date) + "\'";
-        System.out.println(sql);
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
@@ -433,70 +432,17 @@ class db {
      * @param amount
      * @return flag true is success
      */
- /*   public static boolean setOrder(String usrName, String orderNumber, int amount){
+    public static boolean updateOrder(String userName, String orderNumber, int amount){
         boolean flag = false;
         connectToDB();
-        String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
-        String sql2 = "SELECT * FROM trip_data WHERE product_key = ";
-        String sql3 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
         Statement stmt = null;
-        Statement stmt1 = null;
-        Statement stmt2 = null;
-        Statement stmt3 = null;
-        Statement stmt4 = null;
+        String sql = "UPDATE order_data SET Order_amount = " + amount + " WHERE Order_user = \'" + userName + "\' and Order_number = \'" + orderNumber + "\'";
         try {
-            stmt1 = connection.createStatement();
-            ResultSet rs = stmt1.executeQuery(sql1);
-            rs.next();
-            stmt2 = connection.createStatement();
-            ResultSet rs2 = stmt2.executeQuery(sql2 + rs.getString("Order_ProductKey"));
-            rs2.next();
-            stmt3 = connection.createStatement();
-            ResultSet rs3 = stmt3.executeQuery(sql3);
-            rs3.next();
 
-            for(int i = 0; i < orderList.size(); i++){
-                if(orderList.get(i).getKey().equals(orderNumber)){
-                    if(rs.getString("Order_status").equals("OKAY") && rs2.getInt("lower_bound") > amount){
-                        String status = "YET";
-                        Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
-                        Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
-                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), status, amount, start, order);
-                        orderList.set(i, tempOrder);
-
-                        int newBalance = rs3.getInt("USER_BALANCE") - ((amount - rs.getInt("Order_amount")) * (rs2.getInt("price")));
-                        String sql = "UPDATE order_data SET Order_amount = \'" + amount + "\' and Order_status = \'" + status + "\' WHERE Order_number = \'" + orderNumber + "\'";
-                        connection.setAutoCommit(false);
-                        stmt = connection.createStatement();
-                        stmt.executeUpdate(sql);
-                        connection.commit();
-
-                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
-                        connection.setAutoCommit(false);
-                        stmt4 = connection.createStatement();
-                        stmt4.executeUpdate(sq);
-                        connection.commit();
-                    }else{
-                        Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
-                        Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
-                        Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), amount, start, order);
-                        orderList.set(i, tempOrder);
-
-                        int newBalance = rs3.getInt("USER_BALANCE") - ((amount - rs.getInt("Order_amount")) * (rs2.getInt("price")));
-                        String sql = "UPDATE order_data SET Order_amount = \'" + amount + "\' WHERE Order_number = \'" + orderNumber + "\'";
-                        connection.setAutoCommit(false);
-                        stmt = connection.createStatement();
-                        stmt.executeUpdate(sql);
-                        connection.commit();
-
-                        String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
-                        connection.setAutoCommit(false);
-                        stmt4 = connection.createStatement();
-                        stmt4.executeUpdate(sq);
-                        connection.commit();
-                    }
-                }
-            }
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+            connection.commit();
             System.out.println("[SUCCESS] Already set your amount to" + amount);
             flag = true;
         } catch (Exception e) {
@@ -515,49 +461,31 @@ class db {
      * @param orderNumber
      * @return flag true is success
      */
- /*   public static boolean removeOrder(String usrName, String orderNumber){
+    public static boolean deleteOrder(String usrName, String orderNumber){
         boolean flag = false;
         connectToDB();
-        String sql = "DELETE FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
+        String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + orderNumber + "\'";
         String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
-        String sql2 = "SELECT USER_BALANCE FROM USER WHERE USER_NAME = \'" + usrName + "\'";
-        String sql3 = "SELECT * FROM trip_data WHERE product_key = ";
+        String sql3 = "SELECT * FROM trip_data WHERE product_key = \'";
         Statement stmt = null;
         Statement stmt1 = null;
-        Statement stmt2 = null;
         Statement stmt3 = null;
-        Statement stmt4 = null;
         try {
             stmt1 = connection.createStatement();
             ResultSet rs1 = stmt1.executeQuery(sql1);
             rs1.next();
-            stmt2 = connection.createStatement();
-            ResultSet rs2 = stmt2.executeQuery(sql2);
-            rs2.next();
             stmt3 = connection.createStatement();
-            ResultSet rs3 = stmt3.executeQuery(sql3 + rs1.getString("Order_ProductKey"));
+            System.out.println(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
+            ResultSet rs3 = stmt3.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+sdf.format(rs1.getString("Order_Startdate"))+"\'");
+
             rs3.next();
-
-            for(int i = 0; i < orderList.size(); i++){
-                if(orderList.get(i).getKey().equals(orderNumber)){
-                    orderList.remove(i);
-                    int newBalance = rs2.getInt("USER_BALANCE") + rs1.getInt("Order_amount") * rs3.getInt("price");
-                    connection.setAutoCommit(false);
-                    stmt = connection.createStatement();
-                    stmt.executeUpdate(sql);
-                    connection.commit();
-
-                    String sq = "UPDATE USER SET USER_BALANCE = \'" + newBalance + "\' WHERE USER_NAME = \'" + usrName + "\'";
-                    connection.setAutoCommit(false);
-                    stmt4 = connection.createStatement();
-                    stmt4.executeUpdate(sq);
-                    connection.commit();
-
-                    System.out.println("[SUCCESS] Already cancel your order.");
-                }else{
-                    System.out.println("[ERROR] Order Number Not exist.");
-                }
-            }
+            System.out.println(rs3.getInt("currentOrder"));
+            stmt3.executeQuery("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = "+ rs1.getString("Order_ProductKey") + "AND start_date = "+rs1.getString("Order_Startdate"));
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+            connection.commit();
+            System.out.println("[SUCCESS] Already cancel your order.");
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -565,7 +493,6 @@ class db {
         }finally{
             closeConnection(stmt);
         }
-
         return flag;
     }
 

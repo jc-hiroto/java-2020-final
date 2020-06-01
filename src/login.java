@@ -80,9 +80,9 @@ public class login<loginStatus> {
                         if(userName != "ERR"){
                             userNameDisplay.setText(userName);
                             layout.show(loginCardHolder, "Success");
-                            System.out.println("Login success, username: "+userName);
                             LoginUser.setUserName(userName);
                             System.out.println("Login success, username: "+LoginUser.getUserName());
+                            db.deleteOrder("test","ORD4");
                             setLoginStatus(true);
                         }
                         else{
