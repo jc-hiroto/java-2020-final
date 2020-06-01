@@ -498,6 +498,7 @@ class db {
         return flag;
     }
     public static ArrayList<Order> getOrderByUser(String userName) throws SQLException {
+        orderList.clear();
         connectToDB();
         Statement stmt = null;
         String sql = "SELECT * FROM order_data";

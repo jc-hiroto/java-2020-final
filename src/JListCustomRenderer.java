@@ -33,7 +33,7 @@ public class JListCustomRenderer extends JFrame{
         JPanel frame = new JPanel(new BorderLayout());
         JPanel cardHolder = new JPanel(new CardLayout());
         JPanel panel = new JPanel(new BorderLayout());
-        JButton btnBack = new JButton("回搜尋結果");
+        JButton btnBack = new JButton("回列表");
         btnBack.setBackground(Color.WHITE);
         btnBack.setForeground(new Color(21, 188, 163));
         btnBack.setFont(new Font(Font.DIALOG,Font.BOLD,18));

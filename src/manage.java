@@ -1,6 +1,8 @@
 package src;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,8 +17,16 @@ public class manage {
     private JButton btnCancel;
 
     public manage() throws SQLException {
-        System.out.println("GET ORDERS FROM USER: "+LoginUser.getUserName());
-        userOrderList = db.getOrderByUser(LoginUser.getUserName());
+        btnCancel.setEnabled(false);
+        btnEdit.setEnabled(false);
+        table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ListSelectionModel selectionModel = table1.getSelectionModel();
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                btnEdit.setEnabled(true);
+                btnCancel.setEnabled(true);
+            }
+        });
     }
 
     public void initManageTable() throws SQLException {
@@ -35,7 +45,6 @@ public class manage {
         table1 = new JTable(displayOrderArray,columns);
     }
     public JPanel getPanel() throws SQLException {
-        createUIComponents();
         initManageTable();
         return panel;
     }

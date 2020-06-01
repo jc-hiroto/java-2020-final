@@ -6,6 +6,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -89,7 +90,7 @@ public class home {
     private JButton 不知道要去哪Button;
     private JButton 找便宜Button;
     private JButton 找近期Button;
-    private JPanel tableHolder;
+    private JScrollPane tableHolder;
     private JButton btnEdit;
     private JButton btnCancel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,6 +121,7 @@ public class home {
         cardInit(); // 初始化各頁面
         btnHome.setVisible(false); // 隱藏回首頁按鈕
         loginButtonInit(); // 根據登入狀況設定帳戶按鈕
+        JDialog.setDefaultLookAndFeelDecorated(true);
         // ================ 以下皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
         btnExit.addActionListener(new ActionListener() {
             @Override
@@ -175,11 +177,11 @@ public class home {
             public void actionPerformed(ActionEvent actionEvent) {
                 cardHolder.remove(recommendPanel);
                 try {
-                    reccListHolder = new JListCustomRenderer().createPanel(db.getResult(Integer.toString(Processor.randomTravelCodeGene()), 0,0,"","",0,0,0));
+                    recommendPanel = new JListCustomRenderer().createPanel(db.getResult(Integer.toString(Processor.randomTravelCodeGene()), 0,0,"","",0,0,0));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                cardInit();
+                cardHolder.add(recommendPanel,"Recommend");
                 layout.show(cardHolder, "Recommend");
                 exitFromHome();
             }
@@ -197,16 +199,22 @@ public class home {
                     cardHolder.remove(managePanel);
 
                     try {
-                        createUIComponents();
-                        tableHolder = new manage().getPanel();
+                        managePanel = new manage().getPanel();
+                        initManageTable();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
                     cardHolder.add(managePanel,"Manage");
                     layout.show(cardHolder, "Manage");
+                    table1.repaint();
+                    AbstractTableModel m = (AbstractTableModel)table1.getModel();
+                    m.fireTableDataChanged();
                     tableHolder.setVisible(false);
                     tableHolder.setVisible(true);
                     exitFromHome();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"請登入後再查看訂單","您尚未登入！",JOptionPane.WARNING_MESSAGE);
                 }
 
             }
@@ -491,12 +499,10 @@ public class home {
         settingsPanel = new settings().getPanel(); // 同上
         JDateChooser1 = new JDateChooser();
         JDateChooser2 = new JDateChooser();
-        tableHolder = new manage().getPanel();
         searchResultPanel = new JListCustomRenderer().createPanel(null);
         reccListHolder = new JListCustomRenderer().createPanel
                 (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
                         0,0,"","",0,0,0));
-        initManageTable(); // 初始化形成管理頁面的表格
         // TODO: 讓表格 jTable 無法被編輯，研究中。
         // public boolean isCellEditable(int row, int column){return false;}
     }
