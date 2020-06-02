@@ -3,6 +3,8 @@ package src;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class manage {
     private JButton btnEdit;
     private JButton btnCancel;
 
+
     public manage() throws SQLException {
         btnCancel.setEnabled(false);
         btnEdit.setEnabled(false);
@@ -25,6 +28,19 @@ public class manage {
             public void valueChanged(ListSelectionEvent e) {
                 btnEdit.setEnabled(true);
                 btnCancel.setEnabled(true);
+            }
+        });
+
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int sRow = table1.getSelectedRow();
+                int check = JOptionPane.showConfirmDialog(null,"您確定要刪除嗎？","刪除確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                if(check == 0){
+                    System.out.println("Current selected row : "+ sRow);
+                    System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
+                    db.deleteOrder(table1.getValueAt(sRow,0));
+                }
             }
         });
     }

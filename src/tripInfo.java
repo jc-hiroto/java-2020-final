@@ -72,6 +72,7 @@ public class tripInfo {
                 }
                 int check = JOptionPane.showConfirmDialog(null,"您確定要下訂了嗎？","下訂確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
+                    System.out.println(sRow);
                     System.out.println("[INFO] Selected trip product key: "+ PDHold.getKey());
                     System.out.println("[INFO] Selected row Starting date: "+ startDate.toString());
                     System.out.println("[INFO] Selected row End date: "+ endDate.toString());

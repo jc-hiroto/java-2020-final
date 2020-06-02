@@ -463,28 +463,21 @@ class db {
      * @param orderNumber
      * @return flag true is success
      */
-    public static boolean deleteOrder(String usrName, String orderNumber){
+    public static boolean deleteOrder(String orderNumber){
         boolean flag = false;
         connectToDB();
         String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + orderNumber + "\'";
         String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
         String sql3 = "SELECT * FROM trip_data WHERE product_key = \'";
         Statement stmt = null;
-        Statement stmt1 = null;
-        Statement stmt3 = null;
         try {
-            stmt1 = connection.createStatement();
-            ResultSet rs1 = stmt1.executeQuery(sql1);
-            rs1.next();
-            stmt3 = connection.createStatement();
-            System.out.println(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
-            ResultSet rs3 = stmt3.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+sdf.format(rs1.getString("Order_Startdate"))+"\'");
-
-            rs3.next();
-            System.out.println(rs3.getInt("currentOrder"));
-            stmt3.executeQuery("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = "+ rs1.getString("Order_ProductKey") + "AND start_date = "+rs1.getString("Order_Startdate"));
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
+            ResultSet rs1 = stmt.executeQuery(sql1);
+            rs1.next();
+            ResultSet rs3 = stmt.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
+            rs3.next();
+            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = \'"+ rs1.getString("Order_ProductKey") + "\'AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] Already cancel your order.");
@@ -497,6 +490,7 @@ class db {
         }
         return flag;
     }
+
     public static ArrayList<Order> getOrderByUser(String userName) throws SQLException {
         orderList.clear();
         connectToDB();

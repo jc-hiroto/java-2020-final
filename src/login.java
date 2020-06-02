@@ -82,7 +82,6 @@ public class login<loginStatus> {
                             layout.show(loginCardHolder, "Success");
                             LoginUser.setUserName(userName);
                             System.out.println("Login success, username: "+LoginUser.getUserName());
-                            db.deleteOrder("test","ORD4");
                             setLoginStatus(true);
                         }
                         else{
