@@ -40,7 +40,7 @@ public class tripInfo {
         orderPeople.setValue(1);
         String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+PD.getCode()+"-1x.png";
         lbIcon.setIcon(new ImageIcon(imgFilepath));
-        lbTitle.setText(""+PD.getTitle());
+        lbTitle.setText(textCutter(""+PD.getTitle(),750,lbTitle.getFontMetrics(lbTitle.getFont())));
         lbKey.setText("產品編號："+PD.getKey());
         lbCat.setText("分類："+ new searchEngine().reverseSearch(PD.getCode()));
         JDialog.setDefaultLookAndFeelDecorated(true);
