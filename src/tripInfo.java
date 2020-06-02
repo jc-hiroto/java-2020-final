@@ -53,6 +53,10 @@ public class tripInfo {
                     btnOrder.setEnabled(true);
                     orderPeople.setEnabled(true);
                 }
+                else if(Integer.valueOf((String)table1.getValueAt(table1.getSelectedRow(),5))==0){
+                    btnOrder.setEnabled(false);
+                    orderPeople.setEnabled(false);
+                }
                 else {
                     JOptionPane.showMessageDialog(null,"請登入後再下訂！","您尚未登入！",JOptionPane.WARNING_MESSAGE);
                 }
@@ -84,6 +88,7 @@ public class tripInfo {
                     switch (condition){
                         case 0:
                             JOptionPane.showMessageDialog(null,"下訂成功，祝您有個美好的旅程！","下訂成功",JOptionPane.INFORMATION_MESSAGE);
+                            table1.setValueAt(PDHold.getCombByStartDate(startDate).getCurrentOrder()-people,sRow,5);
                             break;
                         case -1:
                             JOptionPane.showMessageDialog(null,"空位不足","下訂失敗",JOptionPane.ERROR_MESSAGE);
@@ -109,7 +114,7 @@ public class tripInfo {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < PCArrayL.size(); i++) {
             ProductCombination PCObj = PCArrayL.get(i);
-            String[] row = {sdf.format(PCObj.getStartDate()),sdf.format(PCObj.getEndDate()),""+PCObj.getLowerBound(),""+PCObj.getUpperBound(),""+PCObj.getPrice()," "+(PCObj.getUpperBound()-PCObj.getCurrentOrder())};
+            String[] row = {sdf.format(PCObj.getStartDate()),sdf.format(PCObj.getEndDate()),""+PCObj.getLowerBound(),""+PCObj.getUpperBound(),""+PCObj.getPrice(),""+(PCObj.getUpperBound()-PCObj.getCurrentOrder())};
             displayPCArray[i] = row;
         }
         String[] columns={"出團日期","返回日期","最低出團人數","最高出團人數","價格", "剩餘可報人數"};

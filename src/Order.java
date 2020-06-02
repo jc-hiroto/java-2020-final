@@ -4,16 +4,19 @@ import java.util.Date;
 
 public class Order {
 
-    private String orderNumber,orderProductKey,orderStatus,orderUser;
+    private String orderNumber,orderProductKey,orderStatus,orderUser,orderTitle;
     private int num;
     private Date startDate,orderDate;
+    private ProductCombination PC;
 
     public Order(){
         orderNumber = null;
+        orderTitle = null;
         orderProductKey = null;
         orderStatus = null;
         orderUser = null;
         num = 0;
+        PC = null;
         startDate = null;
         orderDate = null;
     }
@@ -55,4 +58,5 @@ public class Order {
     public Date getOrderDate(){
         return this.orderDate;
     }
+
 }

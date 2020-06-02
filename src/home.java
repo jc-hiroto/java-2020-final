@@ -194,7 +194,6 @@ public class home {
 
                     try {
                         managePanel = new manage().getPanel();
-                        initManageTable();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -428,24 +427,6 @@ public class home {
             btnLogout.setVisible(false);
             btnLogout.setText("");
         }
-    }
-    public void initManageTable() throws SQLException {
-        System.out.println("TABLE INIT!");
-        ArrayList<Order> userOrderList = new ArrayList<Order>();
-        if(LoginUser.getUserName() != null){
-            System.out.println("GET ORDERS FROM USER: "+LoginUser.getUserName());
-            userOrderList = db.getOrderByUser(LoginUser.getUserName());
-        }
-        String[][] displayOrderArray = new String[userOrderList.size()][7];
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for (int i = 0; i < userOrderList.size(); i++) {
-            Order orderObj = userOrderList.get(i);
-            System.out.println("PARSE ORDER DATA: "+ orderObj.getOrderNum());
-            String[] row = {orderObj.getOrderNum(),orderObj.getKey(),"TITLE",sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),sdf.format(orderObj.getOrderDate()),orderObj.getStatus()};
-            displayOrderArray[i] = row;
-        }
-        String[] columns={"訂單序號","產品序號","產品名稱","出發日期","人數","下訂日期", "訂單狀態"};
-        table1 = new JTable(displayOrderArray,columns);
     }
 
     public String getSearchField(){

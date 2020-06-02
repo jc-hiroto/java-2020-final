@@ -361,6 +361,27 @@ class db {
         return flag;
     }
 
+    private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date){
+        boolean flag = false;
+        connectToDB();
+        Statement stmt = null;
+        String sql = "UPDATE trip_data SET currentOrder = " + CurOrder + " WHERE product_key = \'" + productKey + "\' and start_date = \'" + sdf.format(order_start_date) + "\'";
+        try {
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+            connection.commit();
+            System.out.println("[Success] Update current order amount to: "+CurOrder);
+            flag = true;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            flag = false;
+        }finally{
+            closeConnection(stmt);
+        }
+        return flag;
+    }
+
     /**
      * get the order number of the last order record
      * @return String, order number
@@ -420,13 +441,16 @@ class db {
 
     /**
      * modify order
-     * @param userName
-     * @param orderNumber
+     * @param
+     * @param
      * @param amount
      * @return flag true is success
      */
-    public static boolean updateOrder(Order ord, int amount){
-        boolean flag = false;
+    public static int updateOrder(Order ord, int amount){
+        int flag = 1;
+        boolean delFlag = false;
+        boolean newFlag = false;
+        boolean updateFlag = false;
         String newOrderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         connectToDB();
         Statement stmt = null;
@@ -436,27 +460,33 @@ class db {
             ResultSet rs1 = stmt.executeQuery(sql);
             rs1.next();
             if(rs1.getInt("currentOrder") + amount - ord.getNum() <= rs1.getInt("upper_bound")){
-                deleteOrder(ord);
-                insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr());
+                delFlag = deleteOrder(ord);
+                newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr());
+                updateFlag = updateCurOrder((rs1.getInt("currentOrder") + amount), ord.getKey(),ord.getStartDate());
                 System.out.println("[SUCCESS] Already set your amount to" + amount);
-                flag = true;
+                flag = 0;
             }
             else{
-                flag = false;
+                flag = -1; // order is full
             }
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            flag = false;
+            flag = -2; //system Failed
         }finally{
             closeConnection(stmt);
         }
-
+        if(!updateFlag)
+            flag = -3;
+        if(!newFlag)
+            flag = -4;
+        if(!delFlag)
+            flag = -5;
         return flag;
     }
 
     /**
      * remove order
-     * @param orderNumber
+     * @param
      * @return flag true is success
      */
     public static boolean deleteOrder(Order ord ){
@@ -468,11 +498,12 @@ class db {
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
-            System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
+            //System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             ResultSet rs3 = stmt.executeQuery(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             rs3.next();
-            System.out.println("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+ord.getStartDate()+"\'");
-            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+ord.getStartDate()+"\'");
+            int PCCurrentOrder = rs3.getInt("currentOrder");
+            System.out.println("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
+            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] Already cancel your order.");
