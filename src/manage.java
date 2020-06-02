@@ -21,6 +21,7 @@ public class manage {
 
 
     public manage() throws SQLException {
+        userOrderList = db.getOrderByUser(LoginUser.getUserName());
         btnCancel.setEnabled(false);
         btnEdit.setEnabled(false);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -41,8 +42,8 @@ public class manage {
                 if(check == 0){
                     String orderNum = (String) table1.getValueAt(sRow,0);
                     System.out.println("Current selected row : "+ sRow);
-                    System.out.println("Current selected order number : "+orderNum);
-                    db.deleteOrder(orderNum);
+                    System.out.println("Current selected order number : "+userOrderList.get(sRow).getOrderNum());
+                    db.deleteOrder(userOrderList.get(sRow));
                 }
             }
         });
@@ -54,7 +55,7 @@ public class manage {
                     System.out.println("Current selected row : "+ sRow);
                     System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
                     System.out.println("Current selected people number : "+table1.getValueAt(sRow,4));
-                //    db.updateOrder(LoginUser.getUserName(),table1.getValueAt(sRow,0),);
+                //    db.updateOrder(userOrderList.get(sRow),);
                 }
             }
         });

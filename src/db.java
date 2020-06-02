@@ -425,19 +425,19 @@ class db {
      * @param amount
      * @return flag true is success
      */
-    public static boolean updateOrder(String userName, String orderNumber, int amount, String productKey, Date orderStartDate, int currentOrderAmount){
+    public static boolean updateOrder(Order ord, int amount){
         boolean flag = false;
         String newOrderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         connectToDB();
         Statement stmt = null;
         String sql = "";
         try {
-            sql = "SELECT * from trip_data WHERE product_key = \'" + productKey + "\' AND start_date = \'"+ orderStartDate+"\'";
+            sql = "SELECT * from trip_data WHERE product_key = \'" + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'";
             ResultSet rs1 = stmt.executeQuery(sql);
             rs1.next();
-            if(rs1.getInt("currentOrder") + amount - currentOrderAmount <= rs1.getInt("upper_bound")){
-                deleteOrder(orderNumber);
-                insertOrder(newOrderNumber, productKey, "OKAY",Integer.toString(amount), orderStartDate, new Date(), userName);
+            if(rs1.getInt("currentOrder") + amount - ord.getNum() <= rs1.getInt("upper_bound")){
+                deleteOrder(ord);
+                insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr());
                 System.out.println("[SUCCESS] Already set your amount to" + amount);
                 flag = true;
             }
@@ -459,21 +459,20 @@ class db {
      * @param orderNumber
      * @return flag true is success
      */
-    public static boolean deleteOrder(String orderNumber){
+    public static boolean deleteOrder(Order ord ){
         boolean flag = false;
         connectToDB();
-        String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + orderNumber + "\'";
-        String sql1 = "SELECT * FROM order_data WHERE Order_number = \'" + orderNumber + "\'";
+        String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + ord.getOrderNum() + "\'";
         String sql3 = "SELECT * FROM trip_data WHERE product_key = \'";
         Statement stmt = null;
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
-            ResultSet rs1 = stmt.executeQuery(sql1);
-            rs1.next();
-            ResultSet rs3 = stmt.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_StartDate")+"\'");
+            System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
+            ResultSet rs3 = stmt.executeQuery(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             rs3.next();
-            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = \'"+ rs1.getString("Order_ProductKey") + "\'AND start_date = \'"+rs1.getString("Order_StartDate")+"\'");
+            System.out.println("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+ord.getStartDate()+"\'");
+            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+ord.getStartDate()+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] Already cancel your order.");
