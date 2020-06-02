@@ -4,22 +4,10 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
 import java.text.DateFormat;
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import src.TravelData;
-import src.UserData;
-import src.ProductData;
-import src.ProductCombination;
-import src.Order;
-import src.Favorite;
-import src.Processor;
-
-import javax.swing.plaf.nimbus.State;
+import java.util.Date;
 
 
 /**
@@ -348,6 +336,8 @@ class db {
      * execute the sql that update the current order amount
      * @param CurOrder
      * @param productKey
+     * @param order_start_date
+     * @param PC
      * @return flag true if success
      */
     private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date,ProductCombination PC){
@@ -399,6 +389,8 @@ class db {
     /**
      * set new order
      * @param userName
+     * @param PD
+     * @param PC
      * @param amount
      * @return flag if success
      */
@@ -429,7 +421,7 @@ class db {
 
     /**
      * modify order
-     * @param usrName
+     * @param userName
      * @param orderNumber
      * @param amount
      * @return flag true is success
@@ -465,7 +457,6 @@ class db {
 
     /**
      * remove order
-     * @param usrName
      * @param orderNumber
      * @return flag true is success
      */
@@ -481,9 +472,9 @@ class db {
             stmt = connection.createStatement();
             ResultSet rs1 = stmt.executeQuery(sql1);
             rs1.next();
-            ResultSet rs3 = stmt.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
+            ResultSet rs3 = stmt.executeQuery(sql3 + rs1.getString("Order_ProductKey") + "\' AND start_date = \'"+rs1.getString("Order_StartDate")+"\'");
             rs3.next();
-            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = \'"+ rs1.getString("Order_ProductKey") + "\'AND start_date = \'"+rs1.getString("Order_Startdate")+"\'");
+            stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - rs1.getInt("Order_amount")) + "\' WHERE product_key = \'"+ rs1.getString("Order_ProductKey") + "\'AND start_date = \'"+rs1.getString("Order_StartDate")+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] Already cancel your order.");

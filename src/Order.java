@@ -1,7 +1,6 @@
 package src;
 
 import java.util.Date;
-import src.db;
 
 public class Order {
 
@@ -39,6 +38,10 @@ public class Order {
 
     public String getStatus(){
         return new String(this.orderStatus);
+    }
+
+    public String getUsr(){
+        return this.orderUser;
     }
 
     public int getNum(){
