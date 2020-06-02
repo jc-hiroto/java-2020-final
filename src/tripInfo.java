@@ -44,6 +44,7 @@ public class tripInfo {
         lbKey.setText("產品編號："+PD.getKey());
         lbCat.setText("分類："+ new searchEngine().reverseSearch(PD.getCode()));
         JDialog.setDefaultLookAndFeelDecorated(true);
+
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         ListSelectionModel selectionModel = table1.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {

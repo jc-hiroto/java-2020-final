@@ -434,19 +434,25 @@ class db {
      * @param amount
      * @return flag true is success
      */
-    public static boolean updateOrder(String userName, String orderNumber, int amount){
+    public static boolean updateOrder(String userName, String orderNumber, int amount, String productKey, Date orderStartDate, int currentOrderAmount){
         boolean flag = false;
+        String newOrderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         connectToDB();
         Statement stmt = null;
-        String sql = "UPDATE order_data SET Order_amount = " + amount + " WHERE Order_user = \'" + userName + "\' and Order_number = \'" + orderNumber + "\'";
+        String sql = "";
         try {
-
-            connection.setAutoCommit(false);
-            stmt = connection.createStatement();
-            stmt.executeUpdate(sql);
-            connection.commit();
-            System.out.println("[SUCCESS] Already set your amount to" + amount);
-            flag = true;
+            sql = "SELECT * from trip_data WHERE product_key = \'" + productKey + "\' AND start_date = \'"+ orderStartDate+"\'";
+            ResultSet rs1 = stmt.executeQuery(sql);
+            rs1.next();
+            if(rs1.getInt("currentOrder") + amount - currentOrderAmount <= rs1.getInt("upper_bound")){
+                deleteOrder(orderNumber);
+                insertOrder(newOrderNumber, productKey, "OKAY",Integer.toString(amount), orderStartDate, new Date(), userName);
+                System.out.println("[SUCCESS] Already set your amount to" + amount);
+                flag = true;
+            }
+            else{
+                flag = false;
+            }
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             flag = false;

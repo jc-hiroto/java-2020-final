@@ -39,7 +39,19 @@ public class manage {
                 if(check == 0){
                     System.out.println("Current selected row : "+ sRow);
                     System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
-                    db.deleteOrder(table1.getValueAt(sRow,0));
+                    db.deleteOrder((String)table1.getValueAt(sRow,0));
+                }
+            }
+        });
+        btnEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int sRow = table1.getSelectedRow();
+                int check = JOptionPane.showConfirmDialog(null,"您確定要刪除嗎？","刪除確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                if(check == 0){
+                    System.out.println("Current selected row : "+ sRow);
+                    System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
+                //    db.updateOrder(LoginUser.getUserName(),table1.getValueAt(sRow,0),);
                 }
             }
         });
