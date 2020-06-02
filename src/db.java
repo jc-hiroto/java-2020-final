@@ -368,7 +368,7 @@ class db {
      */
     public static String getLastOrderNo(){
         connectToDB();
-        String sql="SELECT Order_number FROM order_data ORDER BY Order_orderDate DESC";
+        String sql="SELECT Order_number FROM order_data ORDER BY Order_number DESC";
         Statement stmt = null;
         try {
             stmt  = connection.createStatement();

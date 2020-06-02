@@ -10,40 +10,6 @@ public class Processor {
             401,404,405,406,407,408,409,410,411,412,413,414,415,416,417,426,427,428,430,431,432,433,435,436,439,440,441,442};
 
     /**
-     *  ***ALL PARAMETER expect numberOFReverse should be enter automatically by system , not user.
-     * @param id 
-     * @param leavingDate
-     * @param arrivalDate
-     * @param numberOfReverse
-     * @param productKey
-     * @return : string ((Success or fail) + info)
-     */
-    public static String reserveTrip(String id , String leavingDate , String arrivalDate , int numberOfReverse , int productKey ){
-        return null;
-    }
-
-    /**
-     * 
-     * @param id
-     * @param orderId
-     * @param editNum : if want to remove the order , enter 0
-     * @return
-     */
-    public static String editOrder(String id , int orderId , int editNum){
-        return null;
-    }
-
-    /**
-     * 
-     * @param id
-     * @param orderId
-     * @return
-     */
-    public static String searchOrder(String id , int orderId){
-        return null;
-    }
-
-    /**
      * Check if email address is valid . (Call in login and register.java)
      * @param mailAddress
      * @return
@@ -114,7 +80,7 @@ public class Processor {
         System.out.println("SUB: "+subNumber);
         int numberPart = Integer.parseInt(subNumber);
         numberPart++;
-        String newOrderNumber = lastNumber.substring(0,3) + Integer.toString(numberPart);
+        String newOrderNumber = lastNumber.substring(0,3) + String.format("%06d",numberPart);
         System.out.println("NEW: "+newOrderNumber);
         return newOrderNumber;
     }
