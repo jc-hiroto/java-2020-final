@@ -17,6 +17,7 @@ public class manage {
     private JPanel panel;
     private JButton btnEdit;
     private JButton btnCancel;
+    private int sRow = 0;
 
 
     public manage() throws SQLException {
@@ -26,6 +27,8 @@ public class manage {
         ListSelectionModel selectionModel = table1.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
+                sRow = table1.getSelectedRow();
+                System.out.println("SELECTED: "+sRow);
                 btnEdit.setEnabled(true);
                 btnCancel.setEnabled(true);
             }
@@ -34,23 +37,23 @@ public class manage {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int sRow = table1.getSelectedRow();
                 int check = JOptionPane.showConfirmDialog(null,"您確定要刪除嗎？","刪除確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
+                    String orderNum = (String) table1.getValueAt(sRow,0);
                     System.out.println("Current selected row : "+ sRow);
-                    System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
-                    db.deleteOrder((String)table1.getValueAt(sRow,0));
+                    System.out.println("Current selected order number : "+orderNum);
+                    db.deleteOrder(orderNum);
                 }
             }
         });
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int sRow = table1.getSelectedRow();
-                int check = JOptionPane.showConfirmDialog(null,"您確定要刪除嗎？","刪除確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                int check = JOptionPane.showConfirmDialog(null,"更改人數將會取消目前訂單，並重新訂購。您確定要更改人數嗎？","更改確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
                     System.out.println("Current selected row : "+ sRow);
                     System.out.println("Current selected order number : "+table1.getValueAt(sRow,0));
+                    System.out.println("Current selected people number : "+table1.getValueAt(sRow,4));
                 //    db.updateOrder(LoginUser.getUserName(),table1.getValueAt(sRow,0),);
                 }
             }
@@ -73,7 +76,7 @@ public class manage {
         table1 = new JTable(displayOrderArray,columns);
     }
     public JPanel getPanel() throws SQLException {
-        initManageTable();
+        //initManageTable();
         return panel;
     }
     private void createUIComponents() throws SQLException {

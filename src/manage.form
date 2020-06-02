@@ -52,7 +52,7 @@
                   <background color="-1"/>
                   <font name="Mgen+ 1pp" size="16"/>
                   <foreground color="-16243414"/>
-                  <text value="編輯人數"/>
+                  <text value="更改人數"/>
                 </properties>
               </component>
               <component id="a8265" class="javax.swing.JButton" binding="btnCancel">

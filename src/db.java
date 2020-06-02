@@ -92,7 +92,6 @@ class db {
         for(int i = 0; i<usr.USER_NAME.size(); i++){
             if(usr.USER_EMAIL.get(i).equals(email)){
                 if(usr.USER_PASS.get(i).equals(password.toString())){
-                    System.out.println("LOGIN OK, DBPASS: "+usr.USER_PASS.get(i)+" ENTER PASS: "+password.toString());
                     flag = usr.USER_NAME.get(i);
                 }
                 else{
@@ -174,7 +173,7 @@ class db {
                 stmt = connection.createStatement();
                 stmt.executeUpdate(getInsertSql(name, email, password, balance));
                 connection.commit();
-                System.out.println("[Success] Create new user.");
+                System.out.println("[Success] Created new user.");
                 flag = true;
             } catch (Exception e) {
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -224,7 +223,7 @@ class db {
                 //System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
             }
         }
-        System.out.println("[INFO] Total data set amount: "+productDataList.size());
+        System.out.println("[SUCCESS] Total data set dumped: "+productDataList.size());
     }
 
     /**
@@ -283,7 +282,7 @@ class db {
                 sql += " ORDER BY start_date DESC";
                 break;
         }
-        System.out.println(sql);
+        System.out.println("[SQL INFO] "+sql);
         Statement stmt = null;
         try {
             stmt  = connection.createStatement();
@@ -492,7 +491,7 @@ class db {
         orderList.clear();
         connectToDB();
         Statement stmt = null;
-        String sql = "SELECT * FROM order_data";
+        String sql = "SELECT * FROM order_data WHERE Order_user = \'"+userName+"\'";
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
