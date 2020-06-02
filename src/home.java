@@ -186,12 +186,6 @@ public class home {
                 exitFromHome();
             }
         });
-        btnStar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-            }
-        });
         btnManage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
