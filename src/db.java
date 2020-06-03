@@ -440,9 +440,13 @@ class db {
         int flag = 1;
         String orderNumber = Processor.newOrderNumberGenerator(getLastOrderNo());
         String status = "";
+        int oldOrderAmount = PC.getCurrentOrder();
         if(PC.getUpperBound() >= (PC.getCurrentOrder() + amount)){
             status = "OKAY";
             // Insert new order in database
+            if(PC.getLowerBound() > PC.getCurrentOrder()+amount){
+                status = "YET";
+            }
             boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date(), userName);
             // Update current order amount in database
             boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate(),PC);
@@ -457,6 +461,10 @@ class db {
         else{
             System.out.println("[ERROR] Not enough seat.");
             flag = -1;
+        }
+        if(PC.getLowerBound() > oldOrderAmount && PC.getLowerBound() <= PC.getCurrentOrder()){
+            System.out.println("[INFO] update order status.");
+            updateStateOfOrder(PD.getKey(),PC.getStartDate(),true);
         }
         return flag;
     }
@@ -520,20 +528,22 @@ class db {
      * @param
      * @return flag true is success
      */
-    public static boolean deleteOrder(Order ord ){
+    public static boolean deleteOrder(Order ord){
         boolean flag = false;
         connectToDB();
         String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + ord.getOrderNum() + "\'";
         String sql3 = "SELECT * FROM trip_data WHERE product_key = \'";
         Statement stmt = null;
+        int newamount = 0;
+        int lower_bound = 0;
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
             //System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             ResultSet rs3 = stmt.executeQuery(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             rs3.next();
-            int PCCurrentOrder = rs3.getInt("currentOrder");
-            System.out.println("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
+            newamount = rs3.getInt("currentOrder") - ord.getNum();
+            lower_bound = rs3.getInt("lower_bound");
             stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
@@ -544,6 +554,9 @@ class db {
             flag = false;
         }finally{
             closeConnection(stmt);
+        }
+        if(newamount < lower_bound){
+            updateStateOfOrder(ord.getKey(),ord.getStartDate(),false);
         }
         return flag;
     }
@@ -573,25 +586,33 @@ class db {
         return orderList;
     }
 
-    public static String getTitleByKey(String ProductKey){
+    /**
+     *
+     * @param productKey
+     * @param startDate
+     * @param newState false if the trip is now too less people to go
+     */
+    public static void updateStateOfOrder(String productKey,Date startDate,boolean newState){
         connectToDB();
         Statement stmt = null;
-        String title = "";
-        String sql = "SELECT * FROM trip_data WHERE product_key = \'"+ProductKey+"\'";
+        String sql = null;
+        if(newState){
+            sql = "UPDATE order_data SET Order_status = \'OKAY\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+        }
+        else{
+            sql = "UPDATE order_data SET Order_status = \'YET\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+        }
+        System.out.println(sql);
         try {
             stmt  = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            title = rs.getString("title");
-            System.out.println("[INFO] GET TITLE:"+title);
+            stmt.executeUpdate(sql);
+            connection.commit();
+            System.out.println("[SUCCESS] update orders status");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }finally {
-            boolean closeStats = closeConnection(stmt);
-            if (!closeStats) {
-                return null;
-            }
+            closeConnection(stmt);
         }
-        return title;
     }
 
     /**
