@@ -1,5 +1,6 @@
 package src;
 
+import com.sun.source.tree.BreakTree;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
@@ -540,6 +541,27 @@ class db {
             }
         }
         return orderList;
+    }
+
+    public static String getTitleByKey(String ProductKey){
+        connectToDB();
+        Statement stmt = null;
+        String title = "";
+        String sql = "SELECT * FROM trip_data WHERE product_key = \'"+ProductKey+"\'";
+        try {
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            title = rs.getString("title");
+            System.out.println("[INFO] GET TITLE:"+title);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
+        return title;
     }
 
     /**

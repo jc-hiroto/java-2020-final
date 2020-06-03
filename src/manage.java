@@ -138,10 +138,10 @@ public class manage {
                     break;
             }
             System.out.println("[INFO] PARSE ORDER DATA: "+ orderObj.getOrderNum());
-            String[] row = {orderObj.getOrderNum(),orderObj.getKey(),"TITLE",sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),sdf.format(orderObj.getOrderDate()),displayStats};
+            String[] row = {orderObj.getOrderNum(),sdf.format(orderObj.getOrderDate()),orderObj.getKey(),db.getTitleByKey(orderObj.getKey()),sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),displayStats};
             displayOrderArray[i] = row;
         }
-        String[] columns={"訂單序號","產品序號","產品名稱","出發日期","人數","下訂日期", "訂單狀態"};
+        String[] columns={"訂單序號","下訂日期","產品序號","產品名稱","出發日期","人數", "訂單狀態"};
         table1 = new JTable(displayOrderArray,columns);
     }
     public JPanel getPanel() throws SQLException {
