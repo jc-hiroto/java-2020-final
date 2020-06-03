@@ -53,12 +53,12 @@ public class tripInfo {
                     btnOrder.setEnabled(true);
                     orderPeople.setEnabled(true);
                 }
-                else if(Integer.valueOf((String)table1.getValueAt(table1.getSelectedRow(),5))==0){
-                    btnOrder.setEnabled(false);
-                    orderPeople.setEnabled(false);
-                }
                 else {
                     JOptionPane.showMessageDialog(null,"請登入後再下訂！","您尚未登入！",JOptionPane.WARNING_MESSAGE);
+                }
+                if(Integer.valueOf((String)table1.getValueAt(table1.getSelectedRow(),5))==0){
+                    btnOrder.setEnabled(false);
+                    orderPeople.setEnabled(false);
                 }
             }
         });
@@ -88,7 +88,7 @@ public class tripInfo {
                     switch (condition){
                         case 0:
                             JOptionPane.showMessageDialog(null,"下訂成功，祝您有個美好的旅程！","下訂成功",JOptionPane.INFORMATION_MESSAGE);
-                            table1.setValueAt(PDHold.getCombByStartDate(startDate).getCurrentOrder()-people,sRow,5);
+                            table1.setValueAt(Integer.toString(Integer.valueOf(table1.getValueAt(sRow,5).toString()) - people) , sRow,5);
                             break;
                         case -1:
                             JOptionPane.showMessageDialog(null,"空位不足","下訂失敗",JOptionPane.ERROR_MESSAGE);

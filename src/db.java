@@ -480,7 +480,6 @@ class db {
         try {
             stmt = connection.createStatement();
             sql = "SELECT * from trip_data WHERE product_key = \'" + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'";
-            System.out.println(sql);
             ResultSet rs1 = stmt.executeQuery(sql);
             rs1.next();
             currentOrder = rs1.getInt("currentOrder");
