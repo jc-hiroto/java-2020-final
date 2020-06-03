@@ -4,24 +4,21 @@ import java.util.Date;
 
 public class Order {
 
-    private String orderNumber,orderProductKey,orderStatus,orderUser,orderTitle;
+    private String orderNumber,orderProductKey,orderStatus,orderUser;
     private int num;
     private Date startDate,orderDate;
-    private ProductCombination PC;
 
     public Order(){
         orderNumber = null;
-        orderTitle = null;
         orderProductKey = null;
         orderStatus = null;
         orderUser = null;
         num = 0;
-        PC = null;
         startDate = null;
         orderDate = null;
     }
 
-    public Order(String orderNumber, String orderProductKey, String orderStatus, int num, Date startDate, Date orderDate,String orderUser) {
+    public Order(String orderNumber, String orderProductKey, String orderStatus, String orderUser, int num, Date startDate, Date orderDate) {
         this.orderNumber = orderNumber;
         this.orderProductKey = orderProductKey;
         this.orderStatus = orderStatus;

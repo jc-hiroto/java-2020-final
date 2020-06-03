@@ -1,6 +1,5 @@
 package src;
 
-import com.sun.source.tree.BreakTree;
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
@@ -9,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -86,6 +87,12 @@ class db {
                 "VALUES(\'"+userName+"\',\'"+userEmail+"\',\'"+userPass.toString()+"\',\'"+userBalance+"\')";
     }
 
+    /**
+     * authorize user email, password
+     * @param email
+     * @param password
+     * @return status
+     */
     public static String userAuth(String email, StringBuffer password){
         String flag = "ERR";
         connectToDB();
@@ -161,7 +168,7 @@ class db {
      * @param password
      * @return true is success
      */
-    public static boolean newUser(String name,String email,StringBuffer password, int balance){
+    public static boolean newUser(String name, String email, StringBuffer password, int balance){
         boolean flag = false;
         if(checkUserExist(email)){
             flag = false;
@@ -227,6 +234,11 @@ class db {
         System.out.println("[SUCCESS] Total data set dumped: "+productDataList.size());
     }
 
+    /**
+     * get the trip program title by product key
+     * @param productKey
+     * @return title String
+     */
     public static String getTitleByKey(String productKey){
         connectToDB();
         String sql = "SELECT title FROM trip_data WHERE product_key = \'"+productKey+"\'";
@@ -237,6 +249,7 @@ class db {
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
             productName = rs.getString("title");
+            System.out.println("[INFO] GET TITLE:"+ productName);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }finally {
@@ -331,7 +344,7 @@ class db {
      * @param order_order_date
      * @return flag true if success
      */
-    private static boolean insertOrder( String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date, String userName){
+    private static boolean insertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date, String userName){
         boolean flag = false;
         connectToDB();
         Statement stmt = null;
@@ -383,6 +396,13 @@ class db {
         return flag;
     }
 
+    /**
+     * update current order number of program
+     * @param CurOrder
+     * @param productKey
+     * @param order_start_date
+     * @return
+     */
     private static boolean updateCurOrder(int CurOrder, String productKey, Date order_start_date){
         boolean flag = false;
         connectToDB();
@@ -520,7 +540,7 @@ class db {
      * @param
      * @return flag true is success
      */
-    public static boolean deleteOrder(Order ord ){
+    public static boolean deleteOrder(Order ord){
         boolean flag = false;
         connectToDB();
         String sql = "Update order_data SET Order_status = \'CANCELED\' WHERE Order_number = \'" + ord.getOrderNum() + "\'";
@@ -532,7 +552,7 @@ class db {
             //System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             ResultSet rs3 = stmt.executeQuery(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             rs3.next();
-            int PCCurrentOrder = rs3.getInt("currentOrder");
+
             System.out.println("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
             stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
             stmt.executeUpdate(sql);
@@ -548,6 +568,12 @@ class db {
         return flag;
     }
 
+    /**
+     * get the order number by user
+     * @param userName
+     * @return orderList
+     * @throws SQLException
+     */
     public static ArrayList<Order> getOrderByUser(String userName) throws SQLException {
         orderList.clear();
         connectToDB();
@@ -559,7 +585,7 @@ class db {
             while(rs.next()){
                 Date startDate = (Date) sdf.parse(rs.getString("Order_StartDate"));
                 Date orderDate = (Date) sdf.parse(rs.getString("Order_orderDate"));
-                Order orderTmp = new Order(rs.getString("Order_number"),rs.getString("Order_ProductKey"),rs.getString("Order_status"),rs.getInt("Order_amount"),startDate,orderDate,userName);
+                Order orderTmp = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), startDate, orderDate);
                 orderList.add(orderTmp);
             }
         } catch (SQLException | ParseException e) {
@@ -573,33 +599,12 @@ class db {
         return orderList;
     }
 
-    public static String getTitleByKey(String ProductKey){
-        connectToDB();
-        Statement stmt = null;
-        String title = "";
-        String sql = "SELECT * FROM trip_data WHERE product_key = \'"+ProductKey+"\'";
-        try {
-            stmt  = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            title = rs.getString("title");
-            System.out.println("[INFO] GET TITLE:"+title);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }finally {
-            boolean closeStats = closeConnection(stmt);
-            if (!closeStats) {
-                return null;
-            }
-        }
-        return title;
-    }
-
     /**
      * get order record by orderNumber
      * @param orderNumber
      * @return Order
      */
-  /*  public static Order getOrderResult(String orderNumber){
+    public static Order getOrderByOrderNum(String orderNumber){
         connectToDB();
         String sql = "SELECT * FROM order_data WHERE Order_number = \'"+ orderNumber + "\'";
         Statement stmt = null;
@@ -610,7 +615,7 @@ class db {
             rs.next();
             Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
             Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
-            Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getInt("Order_amount"), start, order);
+            Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), start, order);
             return tempOrder;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -624,41 +629,49 @@ class db {
     }
 
     /**
-     * get orderList
-     * @return orderList
-     */
- /*   public static ArrayList<Order> getOrderList(){
-        return orderList;
-    }
-
-    /**
      * call this method when start running the system, update the favList every 10 mins, auto-set/ auto-remove Favorite object in favList
      * @param productKey
      * @param searchCount
      */
-  /*  public static void favManage(String productKey, int searchCount){
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                int minSearch = favList.get(0).getCount();
-                int pos = 0;
-                for(int i = 0; i < 5; i++){
-                    if(favList.get(i).getCount() < minSearch){
-                        minSearch = favList.get(i).getCount();
-                        pos = i;
-                    }else{
-                        continue;
+    public static void favManage(String userName, String productKey, int searchCount){
+        connectToDB();
+        String sql = "SELECT * FROM favorite_data WHERE fav_userName = \'"+ userName + "\'";
+        Statement stmt = null;
+        try {
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.next();
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    int minSearch = rs.getInt("fav_search_count");
+                    int pos = 0;
+                    for(int i = 0; i < 5; i++){
+                        if(favList.get(i).getCount() < minSearch){
+                            minSearch = favList.get(i).getCount();
+                            pos = i;
+                        }else{
+                            continue;
+                        }
+                    }
+                    if(searchCount > minSearch){
+                        Date date = new Date();
+                        setFavorite(userName, productKey, searchCount, date);
+                        removeFavorite(favList.get(pos).getKey());
                     }
                 }
-                if(searchCount > minSearch){
-                    Date date = new Date();
-                    setFavorite(productKey, searchCount, date);
-                    removeFavorite(favList.get(pos).getKey());
-                }
+            };
+            timer.schedule(task, 10 * 60 * 1000, 10 * 60 * 1000);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        } finally{
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                System.out.println("[ERROR] Fail to close connection to DB.");
             }
-        };
-        timer.schedule(task, 10 * 60 * 1000, 10 * 60 * 1000);
+        }
     }
 
     /**
@@ -667,9 +680,9 @@ class db {
      * @param searchCount
      * @param lastSearchDate
      */
-  /*  private static void setFavorite(String favProductKey, int searchCount, Date lastSearchDate){
+    private static void setFavorite(String userName, String favProductKey, int searchCount, Date lastSearchDate){
         try {
-            Favorite newFav = new Favorite(favProductKey, searchCount, lastSearchDate);
+            Favorite newFav = new Favorite(userName, favProductKey, searchCount, lastSearchDate);
             for(int i = 0; i < favList.size(); i++){
                 if(favProductKey.equals(favList.get(i).getKey())){
                     favList.set(i, newFav);
@@ -685,7 +698,7 @@ class db {
     /**
      * remove favorite from favList
      */
- /*   private static void removeFavorite(String favProductKey) {
+    private static void removeFavorite(String favProductKey) {
             try {
                 for (int i = 0; i < favList.size(); i++) {
                     if (favProductKey.equals(favList.get(i).getKey())) {
@@ -703,9 +716,8 @@ class db {
      * get favorite list
      * @return favList
      */
- /*   public static ArrayList<Favorite> getFavorite(){
+    public static ArrayList<Favorite> getFavorite(){
         return favList;
     }
 
-  */
 }

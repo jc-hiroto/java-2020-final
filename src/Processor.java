@@ -1,9 +1,8 @@
 package src;
 import org.apache.commons.validator.routines.EmailValidator;
-import java.lang.Math;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.desktop.SystemEventListener;
 
 public class Processor {
     private static final int []travelCode= {40,41,43,44,100,101,342,343,368,384,391,392,393,394,395,396,397,398,399,
