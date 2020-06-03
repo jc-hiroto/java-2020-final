@@ -226,7 +226,7 @@ class db {
         System.out.println("[SUCCESS] Total data set dumped: "+productDataList.size());
     }
 
-    public static String getProductNameByKey(String productKey){
+    public static String getTitleByKey(String productKey){
         connectToDB();
         String sql = "SELECT title FROM trip_data WHERE product_key = \'"+productKey+"\'";
         Statement stmt = null;
@@ -476,14 +476,26 @@ class db {
         connectToDB();
         Statement stmt = null;
         String sql = "";
+        int currentOrder = 0,upper_bound = 0;
         try {
+            stmt = connection.createStatement();
             sql = "SELECT * from trip_data WHERE product_key = \'" + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'";
+            System.out.println(sql);
             ResultSet rs1 = stmt.executeQuery(sql);
             rs1.next();
-            if(rs1.getInt("currentOrder") + amount - ord.getNum() <= rs1.getInt("upper_bound")){
+            currentOrder = rs1.getInt("currentOrder");
+            upper_bound = rs1.getInt("upper_bound");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            flag = -2; //system Failed
+        }finally{
+            closeConnection(stmt);
+        }
+        try {
+            if(currentOrder + amount - ord.getNum() <= upper_bound){
                 delFlag = deleteOrder(ord);
                 newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr());
-                updateFlag = updateCurOrder((rs1.getInt("currentOrder") + amount), ord.getKey(),ord.getStartDate());
+                updateFlag = updateCurOrder((currentOrder + amount - ord.getNum()), ord.getKey(),ord.getStartDate());
                 System.out.println("[SUCCESS] Already set your amount to" + amount);
                 flag = 0;
             }
@@ -493,8 +505,6 @@ class db {
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             flag = -2; //system Failed
-        }finally{
-            closeConnection(stmt);
         }
         if(!updateFlag)
             flag = -3;

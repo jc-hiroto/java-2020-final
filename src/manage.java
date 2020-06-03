@@ -83,7 +83,7 @@ public class manage {
             public void actionPerformed(ActionEvent actionEvent) {
                 int newPeople = (int) editPeople.getValue();
                 int check = JOptionPane.showConfirmDialog(null,"確定更改人數成: "+newPeople+" 人嗎？","更改確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
-                if(check == 0){
+                if(check == 0 ){
                     int updateStats = db.updateOrder(userOrderList.get(sRow),newPeople);
                     switch (updateStats) {
                         case 0:
@@ -138,7 +138,7 @@ public class manage {
                     break;
             }
             System.out.println("[INFO] PARSE ORDER DATA: "+ orderObj.getOrderNum());
-            String[] row = {orderObj.getOrderNum(),orderObj.getKey(), db.getProductNameByKey(orderObj.getKey()),sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),sdf.format(orderObj.getOrderDate()),displayStats};
+            String[] row = {orderObj.getOrderNum(),orderObj.getKey(), db.getTitleByKey(orderObj.getKey()),sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),sdf.format(orderObj.getOrderDate()),displayStats};
             displayOrderArray[i] = row;
         }
         String[] columns={"訂單序號","產品序號","產品名稱","出發日期","人數","下訂日期", "訂單狀態"};
