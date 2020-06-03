@@ -654,11 +654,14 @@ class db {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            rs.next();
-            Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
-            Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
-            Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), start, order);
-            return tempOrder;
+            if(rs.next()){
+                Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
+                Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
+                Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), start, order);
+                return tempOrder;
+            }else{
+                return null;
+            }
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return null;
@@ -675,7 +678,7 @@ class db {
      * @param productKey
      * @param searchCount
      */
-    public static void favManage(String userName, String productKey, int searchCount){
+    public static void favManage(String userName, String productKey, int searchCount) throws SQLException{
         connectToDB();
         String sql = "SELECT * FROM favorite_data WHERE fav_userName = \'"+ userName + "\'";
         Statement stmt = null;
@@ -690,23 +693,29 @@ class db {
                 public void run() {
                     int minSearch = 0;
                     try {
-                        minSearch = rs.getInt("fav_search_count");
+                        int[] count = new int[5];
+                        String[] key = new String[5];
+                        for(int i = 0; i < 5; i++){
+                            count[i] = rs.getInt("fav_search_count");
+                            key[i] = rs.getString("fav_product_key");
+                        }
+                        minSearch = count[0];
+                        int pos = 0;
+                        for(int i = 0; i < 5; i++){
+                            if(count[i] < minSearch){
+                                minSearch = count[i];
+                                pos = i;
+                            }else{
+                                continue;
+                            }
+                        }
+                        if(searchCount > minSearch){
+                            Date date = new Date();
+                            setFavorite(userName, productKey, searchCount, date);
+                            removeFavorite(key[pos]);
+                        }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
-                    }
-                    int pos = 0;
-                    for(int i = 0; i < 5; i++){
-                        if(favList.get(i).getCount() < minSearch){
-                            minSearch = favList.get(i).getCount();
-                            pos = i;
-                        }else{
-                            continue;
-                        }
-                    }
-                    if(searchCount > minSearch){
-                        Date date = new Date();
-                        setFavorite(userName, productKey, searchCount, date);
-                        removeFavorite(favList.get(pos).getKey());
                     }
                 }
             };
@@ -763,7 +772,28 @@ class db {
      * get favorite list
      * @return favList
      */
-    public static ArrayList<Favorite> getFavorite(){
+    public static ArrayList<Favorite> getFavoriteByUser(String userName){
+        connectToDB();
+        String sql = "SELECT * FROM favorite_data WHERE fav_userName = \'"+ userName + "\'";
+        Statement stmt = null;
+        try {
+            connection.setAutoCommit(false);
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                Date lastSearch = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("last_search_date"));
+                Favorite tempFav = new Favorite(rs.getString("fav_userName"), rs.getString("fav_product_key"), rs.getInt("fav_search_count"), lastSearch);
+                favList.add(tempFav);
+            }
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return null;
+        }finally{
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
         return favList;
     }
 
