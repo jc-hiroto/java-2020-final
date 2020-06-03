@@ -226,6 +226,27 @@ class db {
         System.out.println("[SUCCESS] Total data set dumped: "+productDataList.size());
     }
 
+    public static String getProductNameByKey(String productKey){
+        connectToDB();
+        String sql = "SELECT title FROM trip_data WHERE product_key = \'"+productKey+"\'";
+        Statement stmt = null;
+        String productName = null;
+        try{
+            stmt  = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.next();
+            productName = rs.getString("title");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally {
+            boolean closeStats = closeConnection(stmt);
+            if (!closeStats) {
+                return null;
+            }
+        }
+        return productName;
+    }
+
     /**
      * Special method for user search
      * Get the travel data info under given price limit
