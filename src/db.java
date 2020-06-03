@@ -688,7 +688,12 @@ class db {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    int minSearch = rs.getInt("fav_search_count");
+                    int minSearch = 0;
+                    try {
+                        minSearch = rs.getInt("fav_search_count");
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                     int pos = 0;
                     for(int i = 0; i < 5; i++){
                         if(favList.get(i).getCount() < minSearch){
