@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Order {
 
-    private String orderNumber,orderProductKey,orderStatus,orderUser;
+    private String orderNumber,orderProductKey,orderStatus,orderUser,orderTitle;
     private int num;
     private Date startDate,orderDate;
 
@@ -16,9 +16,10 @@ public class Order {
         num = 0;
         startDate = null;
         orderDate = null;
+        orderTitle = null;
     }
 
-    public Order(String orderNumber, String orderProductKey, String orderStatus, String orderUser, int num, Date startDate, Date orderDate) {
+    public Order(String orderNumber, String orderProductKey, String orderStatus, String orderUser, int num, Date startDate, Date orderDate, String orderTitle) {
         this.orderNumber = orderNumber;
         this.orderProductKey = orderProductKey;
         this.orderStatus = orderStatus;
@@ -26,6 +27,7 @@ public class Order {
         this.num = num;
         this.startDate = startDate;
         this.orderDate = orderDate;
+        this.orderTitle = orderTitle;
     }
 
     public String getOrderNum(){
@@ -55,5 +57,7 @@ public class Order {
     public Date getOrderDate(){
         return this.orderDate;
     }
+
+    public String getOrderTitle(){return this.orderTitle;}
 
 }

@@ -344,12 +344,12 @@ class db {
      * @param order_order_date
      * @return flag true if success
      */
-    private static boolean insertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date, String userName){
+    private static boolean insertOrder(String orderNumber, String productKey, String orderStatus, String orderAmount, Date order_start_date, Date order_order_date, String userName,String orderTitle){
         boolean flag = false;
         connectToDB();
         Statement stmt = null;
-        String sql = "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate, Order_user)" +
-                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', \'"+sdf.format(order_start_date)+"\', \'"+sdf.format(order_order_date)+"\', \'" + userName + "\')";
+        String sql = "INSERT INTO order_data(Order_number, Order_ProductKey, Order_status, Order_amount, Order_StartDate, Order_orderDate, Order_user, Order_title)" +
+                "VALUES(\'"+orderNumber+"\',\'"+productKey+"\',\'"+orderStatus+"\', \'"+orderAmount+"\', \'"+sdf.format(order_start_date)+"\', \'"+sdf.format(order_order_date)+"\', \'" + userName +"\', \'"+ orderTitle + "\')";
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
@@ -467,7 +467,7 @@ class db {
             if(PC.getLowerBound() > PC.getCurrentOrder()+amount){
                 status = "YET";
             }
-            boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date(), userName);
+            boolean insertFlag = insertOrder(orderNumber, PD.getKey(), status, Integer.toString(amount), PC.getStartDate(), new Date(), userName, PD.getTitle());
             // Update current order amount in database
             boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate(),PC);
             if(!insertFlag || !updateFlag){
@@ -484,7 +484,7 @@ class db {
         }
         if(PC.getLowerBound() > oldOrderAmount && PC.getLowerBound() <= PC.getCurrentOrder()){
             System.out.println("[INFO] update order status.");
-            updateStateOfOrder(PD.getKey(),PC.getStartDate(),true);
+            updateStateOfOrder(PD.getKey(),PC.getStartDate());
         }
         return flag;
     }
@@ -522,9 +522,10 @@ class db {
         try {
             if(currentOrder + amount - ord.getNum() <= upper_bound){
                 delFlag = deleteOrder(ord);
-                newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr());
+                newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr(), ord.getOrderTitle());
                 updateFlag = updateCurOrder((currentOrder + amount - ord.getNum()), ord.getKey(),ord.getStartDate());
                 System.out.println("[SUCCESS] Already set your amount to" + amount);
+                updateStateOfOrder(ord.getKey(),ord.getStartDate());
                 flag = 0;
             }
             else{
@@ -576,7 +577,7 @@ class db {
             closeConnection(stmt);
         }
         if(newamount < lower_bound){
-            updateStateOfOrder(ord.getKey(),ord.getStartDate(),false);
+            updateStateOfOrder(ord.getKey(),ord.getStartDate());
         }
         return flag;
     }
@@ -598,7 +599,7 @@ class db {
             while(rs.next()){
                 Date startDate = (Date) sdf.parse(rs.getString("Order_StartDate"));
                 Date orderDate = (Date) sdf.parse(rs.getString("Order_orderDate"));
-                Order orderTmp = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), startDate, orderDate);
+                Order orderTmp = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), startDate, orderDate, rs.getString("Order_title"));
                 orderList.add(orderTmp);
             }
         } catch (SQLException | ParseException e) {
@@ -618,19 +619,21 @@ class db {
      * @param startDate
      * @param newState false if the trip is now too less people to go
      */
-    public static void updateStateOfOrder(String productKey,Date startDate,boolean newState){
+    public static void updateStateOfOrder(String productKey,Date startDate){
         connectToDB();
         Statement stmt = null;
         String sql = null;
-        if(newState){
-            sql = "UPDATE order_data SET Order_status = \'OKAY\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
-        }
-        else{
-            sql = "UPDATE order_data SET Order_status = \'YET\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
-        }
-        System.out.println(sql);
         try {
             stmt  = connection.createStatement();
+            sql = "SELECT * from trip_data WHERE product_key = \'" + productKey + "\' AND start_date = \'"+ sdf.format(startDate) +"\'";
+            ResultSet rs1 = stmt.executeQuery(sql);
+            rs1.next();
+            if(rs1.getInt("currentOrder") > rs1.getInt("lower_bound")){
+                sql = "UPDATE order_data SET Order_status = \'OKAY\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+            }
+            else{
+                sql = "UPDATE order_data SET Order_status = \'YET\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+            }
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] update orders status");
@@ -657,7 +660,7 @@ class db {
             if(rs.next()){
                 Date start = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_StartDate"));
                 Date order = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("Order_orderDate"));
-                Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), start, order);
+                Order tempOrder = new Order(rs.getString("Order_number"), rs.getString("Order_ProductKey"), rs.getString("Order_status"), rs.getString("Order_user"), rs.getInt("Order_amount"), start, order, rs.getString("Order_title"));
                 return tempOrder;
             }else{
                 return null;
