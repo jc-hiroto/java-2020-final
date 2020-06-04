@@ -235,33 +235,6 @@ class db {
     }
 
     /**
-     * get the trip program title by product key
-     * @param productKey
-     * @return title String
-     */
-    public static String getTitleByKey(String productKey){
-        connectToDB();
-        String sql = "SELECT title FROM trip_data WHERE product_key = \'"+productKey+"\'";
-        Statement stmt = null;
-        String productName = null;
-        try{
-            stmt  = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.next();
-            productName = rs.getString("title");
-            System.out.println("[INFO] GET TITLE:"+ productName);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }finally {
-            boolean closeStats = closeConnection(stmt);
-            if (!closeStats) {
-                return null;
-            }
-        }
-        return productName;
-    }
-
-    /**
      * Special method for user search
      * Get the travel data info under given price limit
      * @param travelCode
