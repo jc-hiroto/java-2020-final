@@ -47,6 +47,7 @@ public class manage {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                editPanel.setVisible(false);
                 int check = JOptionPane.showConfirmDialog(null,"您確定要取消該筆訂單嗎？","取消確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
                     String orderNum = (String) table1.getValueAt(sRow,0);

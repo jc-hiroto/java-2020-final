@@ -457,7 +457,7 @@ class db {
         }
         if(PC.getLowerBound() > oldOrderAmount && PC.getLowerBound() <= PC.getCurrentOrder()){
             System.out.println("[INFO] update order status.");
-            updateStateOfOrder(PD.getKey(),PC.getStartDate());
+            updateStateOfOrder(PD.getKey(),PC.getStartDate(),"N/A");
         }
         return flag;
     }
@@ -480,6 +480,7 @@ class db {
         String sql = "";
         int currentOrder = 0,upper_bound = 0;
         try {
+            connection.setAutoCommit(false);
             stmt = connection.createStatement();
             sql = "SELECT * from trip_data WHERE product_key = \'" + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'";
             ResultSet rs1 = stmt.executeQuery(sql);
@@ -497,8 +498,8 @@ class db {
                 delFlag = deleteOrder(ord);
                 newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr(), ord.getOrderTitle());
                 updateFlag = updateCurOrder((currentOrder + amount - ord.getNum()), ord.getKey(),ord.getStartDate());
-                System.out.println("[SUCCESS] Already set your amount to" + amount);
-                updateStateOfOrder(ord.getKey(),ord.getStartDate());
+                System.out.println("[SUCCESS] Already set amount to" + (currentOrder + amount - ord.getNum()));
+                updateStateOfOrder(ord.getKey(),ord.getStartDate(),ord.getOrderNum());
                 flag = 0;
             }
             else{
@@ -508,11 +509,11 @@ class db {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             flag = -2; //system Failed
         }
-        if(!updateFlag)
+        if(!updateFlag && flag != -1)
             flag = -3;
-        if(!newFlag)
+        if(!newFlag && flag != -1)
             flag = -4;
-        if(!delFlag)
+        if(!delFlag && flag != -1)
             flag = -5;
         return flag;
     }
@@ -550,7 +551,7 @@ class db {
             closeConnection(stmt);
         }
         if(newamount < lower_bound){
-            updateStateOfOrder(ord.getKey(),ord.getStartDate());
+            System.out.println("[INFO] Need to update status, result: "+updateStateOfOrder(ord.getKey(),ord.getStartDate(),ord.getOrderNum()));
         }
         return flag;
     }
@@ -592,29 +593,34 @@ class db {
      * @param startDate
      * @param newState false if the trip is now too less people to go
      */
-    public static void updateStateOfOrder(String productKey,Date startDate){
+    public static int updateStateOfOrder(String productKey,Date startDate, String exceptOrderID){
         connectToDB();
         Statement stmt = null;
         String sql = null;
+        int flag = 1;
         try {
+            connection.setAutoCommit(false);
             stmt  = connection.createStatement();
             sql = "SELECT * from trip_data WHERE product_key = \'" + productKey + "\' AND start_date = \'"+ sdf.format(startDate) +"\'";
             ResultSet rs1 = stmt.executeQuery(sql);
             rs1.next();
-            if(rs1.getInt("currentOrder") > rs1.getInt("lower_bound")){
-                sql = "UPDATE order_data SET Order_status = \'OKAY\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+            if(rs1.getInt("currentOrder") >= rs1.getInt("lower_bound")){
+                sql = "UPDATE order_data SET Order_status = \'OKAY\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\' AND Order_number != \'"+exceptOrderID+"\' AND Order_status != \'CANCELED\'";
             }
             else{
-                sql = "UPDATE order_data SET Order_status = \'YET\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\'";
+                sql = "UPDATE order_data SET Order_status = \'YET\' WHERE Order_ProductKey = \'"+productKey+"\' AND Order_StartDate =\'"+sdf.format(startDate)+"\' AND Order_number != \'"+exceptOrderID+"\'  AND Order_status != \'CANCELED\'";
             }
             stmt.executeUpdate(sql);
             connection.commit();
             System.out.println("[SUCCESS] update orders status");
+            flag = 0;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            flag = -1;
         }finally {
             closeConnection(stmt);
         }
+        return flag;
     }
 
     /**

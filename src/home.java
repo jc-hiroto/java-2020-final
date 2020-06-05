@@ -478,7 +478,5 @@ public class home {
         reccListHolder = new JListCustomRenderer().createPanel
                 (db.getResult(Integer.toString(Processor.randomTravelCodeGene()),
                         0,0,"","",0,0,0));
-        // TODO: 讓表格 jTable 無法被編輯，研究中。
-        // public boolean isCellEditable(int row, int column){return false;}
     }
 }
