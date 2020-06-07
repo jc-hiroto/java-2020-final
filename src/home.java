@@ -102,6 +102,7 @@ public class home {
     private searchEngine travelCodeSearchEngine = new searchEngine();
 
     public home() {
+        Debugger.setDebugMode(false);
         dateChooserInit();
         loading.setVisible(false);
         rangeSliderPrice.setHighValue(100000);
@@ -127,6 +128,12 @@ public class home {
             @Override
             // 離開按鈕
             public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("  ________                __ __  __           \n" +
+                        " /_  __/ /_  ____ _____  / /_\\ \\/ /___  __  __\n" +
+                        "  / / / __ \\/ __ `/ __ \\/ //_/\\  / __ \\/ / / /\n" +
+                        " / / / / / / /_/ / / / / ,<   / / /_/ / /_/ / \n" +
+                        "/_/ /_/ /_/\\__,_/_/ /_/_/|_| /_/\\____/\\__,_/  \n");
+                System.out.println("Group 5 - Made by 張博皓、蕭博瀚、高睿、許哲維、安彥百");
                 System.exit(0);
             }
         });
@@ -147,10 +154,10 @@ public class home {
                     if(searchContent.equals("輸入國家/城市關鍵字")|| searchContent.equals("")){
                         searchContent = "";
                     }
-                    System.out.println("Search: "+searchContent);
-                    System.out.println("Start Date: "+dateFormat.format(JDateChooser1.getDate()));
-                    System.out.println("End Date: "+ dateFormat.format(JDateChooser2.getDate()));
-                    System.out.println("date Search?: "+dateSearch.isSelected());
+                    Debugger.showDebugMessage("[INFO] Home - Search: "+searchContent);
+                    Debugger.showDebugMessage("[INFO] Home - Start Date: "+dateFormat.format(JDateChooser1.getDate()));
+                    Debugger.showDebugMessage("[INFO] Home - End Date: "+ dateFormat.format(JDateChooser2.getDate()));
+                    Debugger.showDebugMessage("[INFO] Home - Date Search enabled?: "+dateSearch.isSelected());
                     String code = travelCodeSearchEngine.searchTravelCode(searchContent);
                     String startDate = dateSearch.isSelected()?dateFormat.format(JDateChooser1.getDate()):"";
                     String endDate = dateSearch.isSelected()?dateFormat.format(JDateChooser2.getDate()):"";
@@ -158,7 +165,7 @@ public class home {
                     int priceBottom = checkBoxPrice.isSelected()?rangeSliderPrice.getLowValue():0;
                     int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
                     int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
-                    System.out.println(comboBox1.getSelectedIndex());
+                    Debugger.showDebugMessage("[INFO] Home - Sort mode: "+comboBox1.getSelectedIndex());
                     try {
                         searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,comboBox1.getSelectedIndex()));
                     } catch (SQLException e) {

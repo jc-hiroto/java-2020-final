@@ -75,12 +75,12 @@ public class Processor {
 
     public static String newOrderNumberGenerator(String lastNumber){
         String subNumber = lastNumber.replaceAll("[^0-9]", "");
-        System.out.println("LAST: "+lastNumber);
-        System.out.println("SUB: "+subNumber);
+        Debugger.showDebugMessage("[INFO] Processor - Last order number: "+lastNumber);
+        Debugger.showDebugMessage("[SUCCESS] Processor - Parsed number part: "+subNumber);
         int numberPart = Integer.parseInt(subNumber);
         numberPart++;
         String newOrderNumber = lastNumber.substring(0,3) + String.format("%06d",numberPart);
-        System.out.println("NEW: "+newOrderNumber);
+        Debugger.showDebugMessage("[INFO] Processor - New order number: "+newOrderNumber);
         return newOrderNumber;
     }
 }

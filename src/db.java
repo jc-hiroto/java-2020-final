@@ -17,7 +17,8 @@ import java.util.TimerTask;
  */
 class db {
     private static Connection connection = null;
-    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
+    //private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
+    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite::resource:src/DB/trip_app_optimized.db");
     private static UserData usr = new UserData();
     private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
     public static ArrayList<Order> orderList = new ArrayList<Order>();
@@ -33,13 +34,13 @@ class db {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            System.out.println(e);
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
         }
         try {
             connection = DriverManager.getConnection(url);
-            System.out.println("[Success] Connection to SQLite has been established.");
+            Debugger.showDebugMessage("[Success] Database - Connection to SQLite has been established.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
         }
         if (connection == null) {
             return false;
@@ -96,7 +97,7 @@ class db {
     public static String userAuth(String email, StringBuffer password){
         String flag = "ERR";
         connectToDB();
-        System.out.println("[Success] User data collected: "+ collectUserData());
+        Debugger.showDebugMessage("[Success] Database - User data collected: "+ collectUserData());
         for(int i = 0; i<usr.USER_NAME.size(); i++){
             if(usr.USER_EMAIL.get(i).equals(email)){
                 if(usr.USER_PASS.get(i).equals(password.toString())){
@@ -132,7 +133,7 @@ class db {
                 usr.USER_BALANCE.add(rs.getInt("USER_BALANCE"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
             return -1; // If there is a exception, return -1 for instead.
         }finally{
             boolean closeStats = closeConnection(stmt);
@@ -181,7 +182,7 @@ class db {
                 stmt = connection.createStatement();
                 stmt.executeUpdate(getInsertSql(name, email, password, balance));
                 connection.commit();
-                System.out.println("[Success] Created new user.");
+                Debugger.showDebugMessage("[Success] Database - Created new user.");
                 flag = true;
             } catch (Exception e) {
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -209,7 +210,7 @@ class db {
                 if(productDataList.get(i).getKey().equals(rs.getString("product_key"))){
                     index = i;
                     exists = true;
-                    //System.out.println("[INFO] Find Existing Data Set: "+productDataList.get(i).getKey());
+                    Debugger.showDebugMessage("[INFO] Database - Find Existing Data Set: "+productDataList.get(i).getKey());
                     break;
                 }
             }
@@ -219,7 +220,7 @@ class db {
                 Date end = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("end_date"));
                 ProductCombination PCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),rs.getInt("currentOrder"),start,end);
                 PDtmp.addCombination(PCtemp);
-                //System.out.println("[SUCCESS] Write New Combination into Existing Data Set!");
+                Debugger.showDebugMessage("[SUCCESS] Database - Write New Combination into Existing Data Set!");
             }
             else {
                 ProductData newPDtmp = new ProductData(rs.getString("title"),rs.getString("product_key"),rs.getString("travel_code"));
@@ -228,10 +229,10 @@ class db {
                 ProductCombination newPCtemp = new ProductCombination(rs.getInt("price"),rs.getInt("upper_bound"),rs.getInt("lower_bound"),rs.getInt("currentOrder"),start,end);
                 newPDtmp.addCombination(newPCtemp);
                 productDataList.add(newPDtmp);
-                //System.out.println("[SUCCESS] Added New Data Set: "+newPDtmp.getKey());
+                Debugger.showDebugMessage("[SUCCESS] Database - Added New Data Set: "+newPDtmp.getKey());
             }
         }
-        System.out.println("[SUCCESS] Total data set dumped: "+productDataList.size());
+        Debugger.showDebugMessage("[SUCCESS] Database - Total data set dumped: "+productDataList.size());
     }
 
     /**
@@ -290,14 +291,14 @@ class db {
                 sql += " ORDER BY start_date DESC";
                 break;
         }
-        System.out.println("[SQL INFO] "+sql);
+        Debugger.showDebugMessage("[INFO] Database - SQL info: "+sql);
         Statement stmt = null;
         try {
             stmt  = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             extractProductData(rs);
         } catch (SQLException | ParseException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
         }finally {
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
@@ -328,7 +329,7 @@ class db {
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[Success] Create new order.");
+            Debugger.showDebugMessage("[Success] Database - Create new order.");
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -358,7 +359,7 @@ class db {
             stmt.executeUpdate(sql);
             connection.commit();
             PC.setCurrentOrder(CurOrder);
-            System.out.println("[Success] Update current order amount to: "+CurOrder);
+            Debugger.showDebugMessage("[Success] Database - Update current order amount to: "+CurOrder);
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -386,7 +387,7 @@ class db {
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[Success] Update current order amount to: "+CurOrder);
+            Debugger.showDebugMessage("[Success] Database - Update current order amount to: "+CurOrder);
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -411,7 +412,7 @@ class db {
             rs.next();
             return rs.getString("Order_number");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
         }finally {
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
@@ -444,7 +445,7 @@ class db {
             // Update current order amount in database
             boolean updateFlag = updateCurOrder((PC.getCurrentOrder() + amount), PD.getKey(),PC.getStartDate(),PC);
             if(!insertFlag || !updateFlag){
-                System.out.println("[ERROR] System fatal error");
+                Debugger.showDebugMessage("[ERROR] Database - Insert or Update operation failed.");
                 flag = -2;
             }
             else{
@@ -452,11 +453,11 @@ class db {
             }
         }
         else{
-            System.out.println("[ERROR] Not enough seat.");
+            Debugger.showDebugMessage("[ERROR] Database - Not enough seat.");
             flag = -1;
         }
         if(PC.getLowerBound() > oldOrderAmount && PC.getLowerBound() <= PC.getCurrentOrder()){
-            System.out.println("[INFO] update order status.");
+            Debugger.showDebugMessage("[INFO] Database - update order status.");
             updateStateOfOrder(PD.getKey(),PC.getStartDate(),"N/A");
         }
         return flag;
@@ -498,7 +499,7 @@ class db {
                 delFlag = deleteOrder(ord);
                 newFlag = insertOrder(newOrderNumber, ord.getKey(), "OKAY",Integer.toString(amount), ord.getStartDate(), new Date(), ord.getUsr(), ord.getOrderTitle());
                 updateFlag = updateCurOrder((currentOrder + amount - ord.getNum()), ord.getKey(),ord.getStartDate());
-                System.out.println("[SUCCESS] Already set amount to" + (currentOrder + amount - ord.getNum()));
+                Debugger.showDebugMessage("[SUCCESS] Database - Already set amount to" + (currentOrder + amount - ord.getNum()));
                 updateStateOfOrder(ord.getKey(),ord.getStartDate(),ord.getOrderNum());
                 flag = 0;
             }
@@ -534,7 +535,6 @@ class db {
         try {
             connection.setAutoCommit(false);
             stmt = connection.createStatement();
-            //System.out.println(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             ResultSet rs3 = stmt.executeQuery(sql3 + ord.getKey() + "\' AND start_date = \'"+ sdf.format(ord.getStartDate()) +"\'");
             rs3.next();
             newamount = rs3.getInt("currentOrder") - ord.getNum();
@@ -542,7 +542,7 @@ class db {
             stmt.executeUpdate("Update trip_data SET currentOrder = \'"+ (rs3.getInt("currentOrder") - ord.getNum()) + "\' WHERE product_key = \'"+  ord.getKey() + "\'AND start_date = \'"+sdf.format(ord.getStartDate())+"\'");
             stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[SUCCESS] Already cancel your order.");
+            Debugger.showDebugMessage("[SUCCESS] Database - Already cancel the order.");
             flag = true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -551,7 +551,7 @@ class db {
             closeConnection(stmt);
         }
         if(newamount < lower_bound){
-            System.out.println("[INFO] Need to update status, result: "+updateStateOfOrder(ord.getKey(),ord.getStartDate(),ord.getOrderNum()));
+            Debugger.showDebugMessage("[INFO] Database - Need to update status, result: "+updateStateOfOrder(ord.getKey(),ord.getStartDate(),ord.getOrderNum()));
         }
         return flag;
     }
@@ -577,7 +577,7 @@ class db {
                 orderList.add(orderTmp);
             }
         } catch (SQLException | ParseException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
         }finally {
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
@@ -612,10 +612,10 @@ class db {
             }
             stmt.executeUpdate(sql);
             connection.commit();
-            System.out.println("[SUCCESS] update orders status");
+            Debugger.showDebugMessage("[SUCCESS] Database - Update orders status");
             flag = 0;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Debugger.showDebugMessage("[EXCEPTION] Database - "+e.getMessage());
             flag = -1;
         }finally {
             closeConnection(stmt);
@@ -707,7 +707,7 @@ class db {
         } finally{
             boolean closeStats = closeConnection(stmt);
             if (!closeStats) {
-                System.out.println("[ERROR] Fail to close connection to DB.");
+                Debugger.showDebugMessage("[ERROR] Database - Failed to close connection to SQLite Database.");
             }
         }
     }
@@ -742,7 +742,7 @@ class db {
                     if (favProductKey.equals(favList.get(i).getKey())) {
                         favList.remove(i);
                     } else {
-                        System.out.println("[ERROR] Cannot find this favorite record.");
+                        Debugger.showDebugMessage("[ERROR] Database - Cannot find this favorite record.");
                     }
                 }
             } catch (Exception e) {

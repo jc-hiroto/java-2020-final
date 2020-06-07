@@ -2,6 +2,7 @@ package src.hash;
 
 import java.util.ArrayList;
 import java.lang.String;
+import src.Debugger;
 
 public class travelSearchIndex {
     private ArrayList<String> travelCode;
@@ -13,7 +14,7 @@ public class travelSearchIndex {
     public void addIndex(String tCode, String tCodeName){
         travelCode.add(tCode);
         travelCodeName.add(tCodeName);
-        //System.out.println("Data: "+tCode+" - "+tCodeName+" ADDED! "+travelCode.size()+" Data added.");
+        Debugger.showDebugMessage("[SUCCESS] SearchIndex - Data: "+tCode+" - "+tCodeName+" ADDED! "+travelCode.size()+" Data added.");
     }
     public ArrayList<String> getTravelCode(){
         return travelCode;

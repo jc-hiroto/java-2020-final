@@ -1,8 +1,12 @@
 package src;
 import java.awt.*;
 import java.awt.Font.*;
+import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -43,8 +47,13 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
     }
     @Override
     public Component getListCellRendererComponent(JList<? extends ProductData> list, ProductData productData, int index, boolean isSelected, boolean cellHasFocus) {
-        String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+productData.getCode()+"-1x.png";
-        lbIcon.setIcon(new ImageIcon(imgFilepath));
+
+
+        //String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+productData.getCode()+"-1x.png";
+        URL url = this.getClass().getResource(
+                "/img/trip/"+productData.getCode()+"-1x.png");
+        ImageIcon icon = new ImageIcon(url);
+        lbIcon.setIcon(icon);
         lbIcon.setVerticalAlignment(JTextField.TOP);
         lbTitle.setFont(new Font(Font.DIALOG,Font.BOLD,20));
         lbTitle.setText(textCutter(productData.getTitle(),620,lbTitle.getFontMetrics(lbTitle.getFont())));

@@ -12,6 +12,7 @@ import src.hash.searchEngine;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,8 +39,10 @@ public class tripInfo {
         btnOrder.setEnabled(false);
         orderPeople.setEnabled(false);
         orderPeople.setValue(1);
-        String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+PD.getCode()+"-1x.png";
-        lbIcon.setIcon(new ImageIcon(imgFilepath));
+        URL url = this.getClass().getResource(
+                "/img/trip/"+PD.getCode()+"-1x.png");
+        ImageIcon icon = new ImageIcon(url);
+        lbIcon.setIcon(icon);
         lbTitle.setText(textCutter(""+PD.getTitle(),750,lbTitle.getFontMetrics(lbTitle.getFont())));
         lbKey.setText("產品編號："+PD.getKey());
         lbCat.setText("分類："+ new searchEngine().reverseSearch(PD.getCode()));
@@ -77,12 +80,12 @@ public class tripInfo {
                 }
                 int check = JOptionPane.showConfirmDialog(null,"您確定要下訂了嗎？","下訂確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
-                    System.out.println(sRow);
-                    System.out.println("[INFO] Selected trip product key: "+ PDHold.getKey());
-                    System.out.println("[INFO] Selected row Starting date: "+ startDate.toString());
-                    System.out.println("[INFO] Selected row End date: "+ endDate.toString());
-                    System.out.println("[INFO] Order people amount: "+ orderPeople.getValue());
-                    System.out.println("[INFO] Order user: "+ LoginUser.getUserName());
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Selected row"+sRow);
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Selected trip product key: "+ PDHold.getKey());
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Selected row Starting date: "+ startDate.toString());
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Selected row End date: "+ endDate.toString());
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Order people amount: "+ orderPeople.getValue());
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - Order user: "+ LoginUser.getUserName());
                     int people = (int) orderPeople.getValue();
                     int condition = db.newOrder(LoginUser.getUserName(),PDHold,PDHold.getCombByStartDate(startDate), people);
                     switch (condition){
@@ -100,7 +103,7 @@ public class tripInfo {
                             JOptionPane.showMessageDialog(null,"未知錯誤","下訂失敗",JOptionPane.ERROR_MESSAGE);
                             break;
                     }
-                    System.out.println("STATUS: "+condition);
+                    Debugger.showDebugMessage("[INFO] TripInfoPanel - New order status: "+condition);
                 }
             }
         });

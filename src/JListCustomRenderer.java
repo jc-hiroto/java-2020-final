@@ -13,18 +13,6 @@ public class JListCustomRenderer extends JFrame{
     private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
     public JListCustomRenderer(){
 
-        /*
-        ProductData prd1 = new ProductData("關西山陰米其林６天～海上沙漠．白鷺姬路城．足立美術館．天橋立","VDR0598182453","401");
-        prd1.addCombination(new ProductCombination());
-        ProductData prd2 = new ProductData("幸福北歐~極光玻璃屋帝王蟹 10天(縱遊 瑞典、 挪威、 芬蘭、愛沙尼亞)","VDR0000001732","40");
-        prd2.addCombination(new ProductCombination());
-        ProductData prd3 = new ProductData("馬達加斯加 猴麵包樹 夢幻生態天堂10天","VDR0000007686","100");
-        prd3.addCombination(new ProductCombination());
-        displayData.add(prd1);
-        displayData.add(prd2);
-        displayData.add(prd3);
-        //add(createPanel());
-         */
     }
     public JPanel createPanel(ArrayList<ProductData> PD){
         if(PD != null){
@@ -49,7 +37,7 @@ public class JListCustomRenderer extends JFrame{
                     int index = theList.locationToIndex(mouseEvent.getPoint());
                     if (index >= 0) {
                         Object o = theList.getModel().getElementAt(index);
-                        System.out.println("Double-clicked on: " + o);
+                        Debugger.showDebugMessage("Double-clicked on: " + o);
                         ProductData target = new ProductData();
                         for(int i=0; i<displayData.size(); i++){
                             if(displayData.get(i).getTitle().equals(o.toString())){

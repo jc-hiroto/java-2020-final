@@ -81,7 +81,7 @@ public class login<loginStatus> {
                             userNameDisplay.setText(userName);
                             layout.show(loginCardHolder, "Success");
                             LoginUser.setUserName(userName);
-                            System.out.println("Login success, username: "+LoginUser.getUserName());
+                            Debugger.showDebugMessage("[SUCCESS] LoginPanel - Login username: "+LoginUser.getUserName());
                             setLoginStatus(true);
                         }
                         else{
@@ -107,7 +107,7 @@ public class login<loginStatus> {
                 btnRegister.setVisible(true);
                 btnLogin.setVisible(true);
                 loadingBar.setVisible(false);
-                System.out.println("[Operation] User logout.");
+                Debugger.showDebugMessage("[SUCCESS] LoginPanel -  User logout.");
                 LoginUser.setUserName(null);
             }
         });
@@ -146,7 +146,6 @@ public class login<loginStatus> {
     }
     public StringBuffer getPassword() throws Exception {
         String passStr = new String(passwordField.getPassword());
-        System.out.println("ORIPASS: "+passStr);
         StringBuffer rawPass = new StringBuffer();
         rawPass.append(passStr);
         StringBuffer encryptPass = passwordHash.encrypt(rawPass);

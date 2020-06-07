@@ -51,8 +51,8 @@ public class manage {
                 int check = JOptionPane.showConfirmDialog(null,"您確定要取消該筆訂單嗎？","取消確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
                     String orderNum = (String) table1.getValueAt(sRow,0);
-                    System.out.println("[INFO] Current selected row : "+ sRow);
-                    System.out.println("[INFO] Current selected order number : "+userOrderList.get(sRow).getOrderNum());
+                    Debugger.showDebugMessage("[INFO] TripManager - Current selected row : "+ sRow);
+                    Debugger.showDebugMessage("[INFO] TripManager - Current selected order number : "+userOrderList.get(sRow).getOrderNum());
                     boolean stats = db.deleteOrder(userOrderList.get(sRow));
                     if(stats){
                         btnEdit.setEnabled(false);
@@ -72,9 +72,9 @@ public class manage {
             public void actionPerformed(ActionEvent e) {
                 int check = JOptionPane.showConfirmDialog(null,"更改人數將會取消目前訂單，並重新訂購。您確定要更改人數嗎？","更改確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
-                    System.out.println("[INFO] Current selected row : "+ sRow);
-                    System.out.println("[INFO] Current selected order number : "+table1.getValueAt(sRow,0));
-                    System.out.println("[INFO] Current selected people number : "+table1.getValueAt(sRow,4));
+                    Debugger.showDebugMessage("[INFO] TripManager - Current selected row : "+ sRow);
+                    Debugger.showDebugMessage("[INFO] TripManager - Current selected order number : "+table1.getValueAt(sRow,0));
+                    Debugger.showDebugMessage("[INFO] TripManager - Current selected people number : "+table1.getValueAt(sRow,4));
                     editPanel.setVisible(true);
                 }
             }
@@ -116,8 +116,8 @@ public class manage {
     }
 
     public void initManageTable() throws SQLException {
-        System.out.println("[SUCCESS] TABLE INITIATED!");
-        System.out.println("[INFO] GET ORDERS FROM USER: "+LoginUser.getUserName());
+        Debugger.showDebugMessage("[SUCCESS] TripManager - TABLE INITIATED!");
+        Debugger.showDebugMessage("[INFO] TripManager - GET ORDERS FROM USER: "+LoginUser.getUserName());
         userOrderList = db.getOrderByUser(LoginUser.getUserName());
         String[][] displayOrderArray = new String[userOrderList.size()][7];
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,7 +138,7 @@ public class manage {
                     displayStats = orderObj.getStatus();
                     break;
             }
-            System.out.println("[INFO] PARSE ORDER DATA: "+ orderObj.getOrderNum());
+            Debugger.showDebugMessage("[INFO] TripManager - PARSE ORDER DATA: "+ orderObj.getOrderNum());
             String[] row = {orderObj.getOrderNum(),sdf.format(orderObj.getOrderDate()),orderObj.getKey(),orderObj.getOrderTitle(),sdf.format(orderObj.getStartDate()),""+orderObj.getNum(),displayStats};
             displayOrderArray[i] = row;
         }
