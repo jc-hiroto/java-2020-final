@@ -48,7 +48,6 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
     @Override
     public Component getListCellRendererComponent(JList<? extends ProductData> list, ProductData productData, int index, boolean isSelected, boolean cellHasFocus) {
 
-
         //String imgFilepath=System.getProperty("user.dir")+ "/img/trip/"+productData.getCode()+"-1x.png";
         URL url = this.getClass().getResource(
                 "/img/trip/"+productData.getCode()+"-1x.png");

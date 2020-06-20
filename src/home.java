@@ -52,19 +52,6 @@ public class home {
     private JPanel settingsPanel;
     private JButton btnLogout;
     private JPanel old_recommendPanel;
-    private JPanel recommendHolder;
-    private JButton prevButton;
-    private JButton nextButton;
-    private JPanel RecommendListHolder;
-    private JPanel RecommendList1;
-    private JPanel RecommendList2;
-    private JPanel RListObj2_1;
-    private JPanel RListObj2_2;
-    private JPanel RListObj2_3;
-    private JPanel RListObj2_4;
-    private JPanel RListObj2_5;
-    private JPanel RListObj1_1;
-    private JButton 看更多Button;
     private JPanel managePanel;
     private JTextArea textObjR1_1;
     private JTable table1;
@@ -91,6 +78,7 @@ public class home {
     private JButton 找便宜Button;
     private JButton 找近期Button;
     private JScrollPane tableHolder;
+    private JPanel notFoundPanel;
     private JButton btnEdit;
     private JButton btnCancel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -140,7 +128,6 @@ public class home {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             // 搜尋按鈕
-            // TODO: 串接搜尋 method，並跳轉到搜尋結果頁面
             public void actionPerformed(ActionEvent actionEvent) {
                 errorAlert.setVisible(false);
                 loading.setVisible(true);
@@ -166,14 +153,23 @@ public class home {
                     int peopleTop = checkBoxPeople.isSelected()?rangeSliderPeople.getHighValue():0;
                     int peopleBottom = checkBoxPeople.isSelected()?rangeSliderPeople.getLowValue():0;
                     Debugger.showDebugMessage("[INFO] Home - Sort mode: "+comboBox1.getSelectedIndex());
+                    ArrayList<ProductData> resultList = new ArrayList<ProductData>();
                     try {
-                        searchResultPanel = new JListCustomRenderer().createPanel(db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,comboBox1.getSelectedIndex()));
+                        resultList = db.getResult(code,priceBottom,priceTop,startDate,endDate,peopleBottom,peopleTop,comboBox1.getSelectedIndex());
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    cardHolder.remove(searchResultPanel);
-                    cardInit();
-                    layout.show(cardHolder,"SearchResult");
+                    if(resultList.size() == 0 || resultList == null){
+                        layout.show(cardHolder,"NotFound");
+                    }
+                    else{
+                        searchResultPanel = new JListCustomRenderer().createPanel(resultList);
+                        cardHolder.remove(searchResultPanel);
+                        cardInit();
+                        layout.show(cardHolder,"SearchResult");
+                    }
+
                     exitFromHome();
                     loading.setVisible(false);
                 }
@@ -266,11 +262,6 @@ public class home {
                         }
                     }
                 });
-        window.addComponentListener(new ComponentAdapter( ) {
-            public void componentResized(ComponentEvent ev) {
-                textObjR1_1.setText(Processor.textLineShifter(textObjR1_1,textObjR1_1.getText(),window.getWidth(),10,200));
-            }
-        });
         // ================ 以上皆為按鈕動作監聽函數，用來管理按鈕動作 ================ //
         searchFieldListener();
         dateSearch.addActionListener(new ActionListener() {
@@ -390,7 +381,7 @@ public class home {
         cardHolder.add(recommendPanel, "Recommend");
         cardHolder.add(managePanel, "Manage");
         cardHolder.add(searchResultPanel,"SearchResult");
-        cardHolder.add(old_recommendPanel,"old_recc");
+        cardHolder.add(notFoundPanel,"NotFound");
         layout = (CardLayout)cardHolder.getLayout();
     }
 
@@ -445,11 +436,9 @@ public class home {
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 Dimension size = frame.getSize();
-                if (size.getWidth() < width) {
-                    frame.setSize((int) width, (int) size.getHeight());
-                }
-                if (size.getHeight() < height) {
-                    frame.setSize((int) size.getWidth(), (int) height);
+                if (size.getWidth() < width || size.getHeight() < height-200) {
+                    frame.setSize((int) width + 100, (int) height + 50);
+                    JOptionPane.showMessageDialog(null,"過小的視窗大小會影響使用體驗! \n 建議視窗大小：1024*768","視窗大小警告",JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -464,11 +453,11 @@ public class home {
             e.printStackTrace();
         }
         JFrame frame = new JFrame("Find a Place"); // 設定視窗標題
-        windowSizeLimiter(frame, 800,800);
         frame.setContentPane(new home().window);
         frame.pack();
         frame.getContentPane().requestFocusInWindow();
-        frame.setSize(1000,800); // 設定初始視窗大小
+        frame.setSize(1024,768); // 設定初始視窗大小
+        windowSizeLimiter(frame, 1024,768);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
