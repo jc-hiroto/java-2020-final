@@ -14,10 +14,13 @@ import java.util.TimerTask;
 
 /**
  * this class is to define all logic used in database
+ * we implement all the method related to DB connection, sql quary to database, user data method, travel product data method, order data method, favorite data method
+ * the data base is built on SQL, using SQLite as JDBC
+ * the db initialize one user with a ArrayList of ProductData, Order, Favorite
+ * the time is in the format of yyyy-MM-dd
  */
 class db {
     private static Connection connection = null;
-    //private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
     private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite::resource:src/DB/trip_app_optimized.db");
     private static UserData usr = new UserData();
     private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
