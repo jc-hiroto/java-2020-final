@@ -1,12 +1,12 @@
 package src.hash;
 
-import java.io.*;
-
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import src.Debugger;
+
+import java.io.*;
 
 // Include a JSON read-in method, a JSON to String method, a get travel code name by travel code method
 public class searchEngine{
@@ -45,7 +45,7 @@ public class searchEngine{
 			index.addIndex((String) travelCodeObj.get("travel_code"), (String) travelCodeObj.get("travel_code_name"));
 		}
 	}
-
+	// search the travel code using debugger
 	public String searchTravelCode(String searchWord){
 		if(searchWord == ""){
 			return "";
@@ -59,7 +59,7 @@ public class searchEngine{
 		Debugger.showDebugMessage("[WARNING] SearchEngine - Using word: "+searchWord+". Result not found!");
 		return "ERR";
 	}
-
+	// search the travel code name using travel code
 	public String reverseSearch(String code){
 		for(int i = 0; i < index.getTravelCode().size(); i++){
 			if(index.getTravelCode().get(i).equals(code)){

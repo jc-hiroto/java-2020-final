@@ -1,9 +1,11 @@
 package src;
 
+import com.jidesoft.swing.RangeSlider;
+import com.toedter.calendar.JDateChooser;
+import src.hash.searchEngine;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -19,12 +21,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import com.jidesoft.swing.RangeSlider;
-import com.toedter.calendar.JDateChooser;
-import src.hash.searchEngine;
-import com.jidesoft.swing.*;
-import src.db;
 
+/**
+ * Data structure of home page UI
+ */
 public class home {
     private JPanel panel1;
     private JButton btnSearch;
@@ -89,6 +89,9 @@ public class home {
     private String searchTemp = "";
     private searchEngine travelCodeSearchEngine = new searchEngine();
 
+    /**
+     * default constructor of home page UI
+     */
     public home() {
         Debugger.setDebugMode(false);
         dateChooserInit();
@@ -177,6 +180,7 @@ public class home {
         });
         btnRecommand.addActionListener(new ActionListener() {
             @Override
+            // 建議按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 cardHolder.remove(recommendPanel);
                 try {
@@ -191,6 +195,7 @@ public class home {
         });
         btnManage.addActionListener(new ActionListener() {
             @Override
+            // 管理按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 if(LoginUser.getUserName() != null){
                     cardHolder.remove(managePanel);
@@ -215,9 +220,9 @@ public class home {
 
             }
         });
-
         btnLogin.addActionListener(new ActionListener() {
             @Override
+            // 登入按鈕
             public void actionPerformed(ActionEvent actionEvent){
                 refreshLoginPanel();
                 layout.show(cardHolder, "Login");
@@ -226,12 +231,14 @@ public class home {
         });
         btnHome.addActionListener(new ActionListener() {
             @Override
+            // 主頁按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 backToHome();
             }
         });
         btnAbout.addActionListener(new ActionListener() {
             @Override
+            // 關於按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(cardHolder,"About");
                 exitFromHome();
@@ -239,6 +246,7 @@ public class home {
         });
         btnSettings.addActionListener(new ActionListener() {
             @Override
+            // 設定按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(cardHolder,"Settings");
                 exitFromHome();
@@ -246,6 +254,7 @@ public class home {
         });
         btnLogout.addActionListener(new ActionListener() {
             @Override
+            // 登出按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 loginButtonInit();
                 layout.show(cardHolder,"Login");
@@ -256,6 +265,7 @@ public class home {
                 // if date1 changed, reset date2 limit.
                 new PropertyChangeListener() {
                     @Override
+                    // 重新選擇旅行時間區間按鈕
                     public void propertyChange(PropertyChangeEvent e) {
                         if ("date".equals(e.getPropertyName())) {
                             JDateChooser2.setMinSelectableDate(JDateChooser1.getDate());
@@ -266,6 +276,7 @@ public class home {
         searchFieldListener();
         dateSearch.addActionListener(new ActionListener() {
             @Override
+            // 搜尋輸入
             public void actionPerformed(ActionEvent e) {
                 if(dateSearch.isSelected()){
                     JDateChooser1.setEnabled(true);
@@ -279,6 +290,7 @@ public class home {
         });
         checkBoxPrice.addActionListener(new ActionListener() {
             @Override
+            // 價格勾選
             public void actionPerformed(ActionEvent actionEvent) {
                 if(checkBoxPrice.isSelected()){
                     rangeSliderPrice.setEnabled(true);
@@ -295,6 +307,7 @@ public class home {
         });
         checkBoxPeople.addActionListener(new ActionListener() {
             @Override
+            // 人數勾選
             public void actionPerformed(ActionEvent actionEvent) {
                 if(checkBoxPeople.isSelected()){
                     rangeSliderPeople.setEnabled(true);
@@ -310,6 +323,7 @@ public class home {
         });
         rangeSliderPrice.addChangeListener(new ChangeListener() {
             @Override
+            // 價格區間選擇
             public void stateChanged(ChangeEvent changeEvent) {
                 priceLowDisplay.setText("$ "+rangeSliderPrice.getLowValue());
                 priceHighDisplay.setText("$ "+rangeSliderPrice.getHighValue());
@@ -317,6 +331,7 @@ public class home {
         });
         rangeSliderPeople.addChangeListener(new ChangeListener() {
             @Override
+            // 人數區間選擇
             public void stateChanged(ChangeEvent changeEvent) {
                 peopleLowDisplay.setText(rangeSliderPeople.getLowValue()+" 人");
                 peopleHighDisplay.setText(rangeSliderPeople.getHighValue()+" 人");
@@ -324,6 +339,9 @@ public class home {
         });
     }
 
+    /**
+     * set search field appearance
+     */
     public void searchFieldListener(){
         searchField.addFocusListener(new FocusAdapter() {
             @Override
@@ -358,6 +376,10 @@ public class home {
             }
         });
     }
+
+    /**
+     * set dateChooser appearance
+     */
     public void dateChooserInit(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(nowDate);
@@ -371,6 +393,11 @@ public class home {
         JDateChooser1.setEnabled(false);
         JDateChooser2.setEnabled(false);
     }
+
+    /**
+     * Initialize all windows: home, login, register, about, setting, recommend, manage, searchResult, notFound
+     * layout all cards
+     */
     public void cardInit(){
         // 初始化所有頁面
         cardHolder.add(homePanel, "Home");
@@ -385,6 +412,10 @@ public class home {
         layout = (CardLayout)cardHolder.getLayout();
     }
 
+    /**
+     * return back to home page
+     * including switch and button visible setting
+     */
     public void backToHome(){
         // 返回主畫面的動作（包含切換及按鈕可見度設定）
         layout.show(cardHolder, "Home");
@@ -394,6 +425,10 @@ public class home {
         loginButtonInit();
     }
 
+    /**
+     * return back to home page
+     * including only button visible setting
+     */
     public void exitFromHome(){
         // 返回主畫面的動作（僅按鈕可見度設定）
         btnHome.setVisible(true);
@@ -403,6 +438,11 @@ public class home {
         btnAbout.setVisible(false);
 
     }
+
+    /**
+     * refresh login page
+     * show the login success page
+     */
     public void refreshLoginPanel(){
         boolean loginTemp = login.getLoginStatus();
         String userNameTemp = login.getUserName();
@@ -413,6 +453,12 @@ public class home {
         cardHolder.add(loginPanel,"Login");
         cardInit();
     }
+
+    /**
+     * show log in button based on the login status
+     * login visible: logout true
+     * logout visible: login true
+     */
     public void loginButtonInit(){
         // 根據登入情況決定會員按鈕顯示（登入／登出）
         if(login.getLoginStatus()){
@@ -427,11 +473,23 @@ public class home {
         }
     }
 
+    /**
+     * get the input text content in the search field
+     * @return
+     */
     public String getSearchField(){
         // 拿搜尋欄字串資料
         return searchField.getText();
     }
 
+    /**
+     * limit the window size in the certain range
+     * bottom limit: frame size
+     * top limit: height - 200
+     * @param frame
+     * @param width
+     * @param height
+     */
     public static void windowSizeLimiter(JFrame frame, int width, int height){
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
@@ -444,8 +502,10 @@ public class home {
         });
     }
 
-
-
+    /**
+     * main class to start the system, trigger point
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(home.metalUI); // 使用Metal UI 模式啟動
@@ -463,6 +523,11 @@ public class home {
 
     }
 
+    /**
+     * create UI components for all pages
+     * add all that applied here if the user select customCreate
+     * @throws SQLException
+     */
     private void createUIComponents() throws SQLException {
         // 自訂設定區域（有勾選 customCreate 的都要加在這裡，不然會產生 nullPointer 錯誤）
         loginPanel = new login().getPanel(); // loginPanel直接呼叫login.java的頁面

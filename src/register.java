@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * manage the register page UI info
+ */
 public class register{
     private JLabel loginLabel;
     private JTextField emailField;
@@ -19,6 +22,9 @@ public class register{
     private JPanel regErrorAlert;
     private static boolean registerStats = false;
 
+    /**
+     * default constructor of register
+     */
     public register() {
         clearField();
         regSuccessAlert.setVisible(false);
@@ -26,6 +32,7 @@ public class register{
         errorAlert.setVisible(false);
         btnRegister.addActionListener(new ActionListener() {
             @Override
+            // 註冊按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     if(checkFieldData())
@@ -56,6 +63,11 @@ public class register{
         });
     }
 
+    /**
+     * check the field data
+     * @return true if valid
+     * @throws Exception
+     */
     public boolean checkFieldData() throws Exception {
             boolean result = true;
             if(Processor.mailAddressValidChecker(getEmail())){
@@ -75,14 +87,28 @@ public class register{
             return result;
     }
 
+    /**
+     * get input name in the name field
+     * @return
+     */
     public String getName(){
         return nameField.getText();
     }
 
+    /**
+     * get input email in the email field
+     * @return
+     */
     public String getEmail(){
         return emailField.getText();
     }
 
+    /**
+     * get input password in the password field
+     * @param field
+     * @return StringBuffer encryptPass
+     * @throws Exception
+     */
     public StringBuffer getPassword(JPasswordField field) throws Exception {
         String passStr = new String(field.getPassword());
         StringBuffer rawPass = new StringBuffer();
@@ -91,6 +117,12 @@ public class register{
         return encryptPass;
     }
 
+    /**
+     * check the password is valid
+     * @param pass1
+     * @param pass2
+     * @return true if valid
+     */
     public boolean passwordValid(StringBuffer pass1, StringBuffer pass2){
         boolean result = false;
         if(pass1.toString().equals("ERR") || pass2.toString().equals("ERR")){
@@ -107,6 +139,9 @@ public class register{
         return result;
     }
 
+    /**
+     * clear all field including name, email, password, passwordCheck
+     */
     public void clearField(){
         nameField.setText("");
         emailField.setText("");
@@ -114,8 +149,10 @@ public class register{
         passwordCheckField.setText("");
     }
 
-
-
+    /**
+     * get the register table page
+     * @return JPanel contentHolder
+     */
     public JPanel getPanel(){
         return contentHolder;
     }

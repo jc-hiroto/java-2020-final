@@ -5,10 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+/**
+ * hyperlink setting to open GitHub source code
+ */
 public class about {
     private JPanel contentHolder;
     private JButton visitGitHubPageButton;
 
+    /**
+     * default constructor of GitHub Link button
+     */
     public about() {
         visitGitHubPageButton.addActionListener(new ActionListener() {
             @Override
@@ -24,6 +30,11 @@ public class about {
         });
     }
 
+    /**
+     * get relevant showing window
+     * abstract class
+     * @return contentHolder
+     */
     public JPanel getPanel(){
         return contentHolder;
     }

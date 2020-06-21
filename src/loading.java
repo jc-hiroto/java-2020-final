@@ -1,17 +1,25 @@
 package src;
 
 import javax.swing.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
+/**
+ * data structure of loading
+ */
 public class loading {
     private JProgressBar progressBar1;
     private JPanel contentHolder;
 
+    /**
+     * default constructor of loading
+     */
     public loading() {
 
     }
 
+    /**
+     * get Java panel result
+     * @return JPanel contentHolder
+     */
     public JPanel getPanel(){
         return contentHolder;
     }

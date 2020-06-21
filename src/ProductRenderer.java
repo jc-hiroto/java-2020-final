@@ -1,23 +1,16 @@
 package src;
-import java.awt.*;
-import java.awt.Font.*;
-import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
-import src.Processor;
-import src.ProductData;
-import src.ProductCombination;
 import src.hash.searchEngine;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.net.URL;
 
 import static src.Processor.textCutter;
 
+/**
+ * Define basic UI settings of Java Panel, Java Button, Java List
+ */
 public class ProductRenderer extends JPanel implements ListCellRenderer<ProductData> {
     private JLabel lbTitle = new JLabel();
     private JLabel lbIcon = new JLabel();
@@ -30,6 +23,10 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
     private Color CYAN = new Color(21, 188, 163);
     private Color LIGHT_CYAN = new Color(179, 241, 236);
     private Color LIGHT_GRAY = new Color(237, 237, 237);
+
+    /**
+     * default constructor of ProductRenderer
+     */
     public ProductRenderer(){
         setBackground(LIGHT_CYAN);
         setLayout(new BorderLayout(0,0));
@@ -45,6 +42,16 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
         add(panelLeft, BorderLayout.CENTER);
         add(lbIcon, BorderLayout.WEST);
     }
+
+    /**
+     * override all settings in Java List ProductData
+     * @param list
+     * @param productData
+     * @param index
+     * @param isSelected
+     * @param cellHasFocus
+     * @return Component getListCellRendererComponent
+     */
     @Override
     public Component getListCellRendererComponent(JList<? extends ProductData> list, ProductData productData, int index, boolean isSelected, boolean cellHasFocus) {
 
