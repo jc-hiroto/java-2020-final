@@ -63,7 +63,7 @@ public class searchEngine{
 	public String reverseSearch(String code){
 		for(int i = 0; i < index.getTravelCode().size(); i++){
 			if(index.getTravelCode().get(i).equals(code)){
-				return index.getTravelCodeName().get(i);
+				return new String(index.getTravelCodeName().get(i));
 			}
 		}
 		Debugger.showDebugMessage("[WARNING] SearchEngine - Using code: "+code+". Result not found!");

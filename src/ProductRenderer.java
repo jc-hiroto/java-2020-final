@@ -63,7 +63,8 @@ public class ProductRenderer extends JPanel implements ListCellRenderer<ProductD
         lbIcon.setVerticalAlignment(JTextField.TOP);
         lbTitle.setFont(new Font(Font.DIALOG,Font.BOLD,20));
         lbTitle.setText(textCutter(productData.getTitle(),620,lbTitle.getFontMetrics(lbTitle.getFont())));
-        lbCat.setText("  分類:  "+ sEngine.reverseSearch(productData.getCode()));
+        String cat = sEngine.reverseSearch(productData.getCode());
+        lbCat.setText("  分類:  "+ cat);
         lbCat.setForeground(Color.GRAY);
         lbCat.setFont(new Font(Font.DIALOG,Font.BOLD,15));
         lbProductKey.setForeground(Color.GRAY);
