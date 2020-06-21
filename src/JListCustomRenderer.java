@@ -1,19 +1,28 @@
 package src;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import src.ProductData;
-import src.ProductCombination;
-
+/**
+ * Define custom Java List Object
+ */
 public class JListCustomRenderer extends JFrame{
     private ArrayList<ProductData> displayData = new ArrayList<ProductData>();
+
+    /**
+     * default constructor of Java List
+     */
     public JListCustomRenderer(){
 
     }
+
+    /**
+     * constructor of Java Panel
+     * @param PD
+     * @return JPanel panel
+     */
     public JPanel createPanel(ArrayList<ProductData> PD){
         if(PD != null){
             displayData = PD;
@@ -69,6 +78,11 @@ public class JListCustomRenderer extends JFrame{
         frame.add(btnBack, BorderLayout.SOUTH);
         return frame;
     }
+
+    /**
+     * create Java List
+     * @return JList list
+     */
     public JList<ProductData> createList(){
         DefaultListModel<ProductData> model = new DefaultListModel<ProductData>();
         for(ProductData val : displayData)

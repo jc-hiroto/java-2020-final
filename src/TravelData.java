@@ -2,9 +2,15 @@ package src;
 
 import java.util.ArrayList;
 
+/**
+ * Data structure of TravelData
+ */
 public class TravelData {
     ArrayList<String> passingData ;
 
+    /**
+     * overloading constructor of TravelData
+     */
     public TravelData(){
         passingData = null;
     }

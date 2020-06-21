@@ -1,14 +1,17 @@
 package src;
-import src.ProductCombination;
-
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Data structure of ProductData
+ */
 public class ProductData {
     private String title,key,code;
     public ArrayList<ProductCombination> detail;
 
+    /**
+     * default constructor of ProductData
+     */
     public ProductData(){
         title = null;
         key = null;
@@ -16,6 +19,12 @@ public class ProductData {
         detail = new ArrayList<ProductCombination>();
     }
 
+    /**
+     * constructor of ProductData
+     * @param title
+     * @param key
+     * @param code
+     */
     public ProductData(String title,String key,String code){
         this.title = title;
         this.key = key;
@@ -23,10 +32,17 @@ public class ProductData {
         detail = new ArrayList<ProductCombination>();
     }
 
+    /**
+     * add combination to ProductCombination
+     * @param comb
+     */
     public void addCombination(ProductCombination comb){
         detail.add(comb);
     }
 
+    /**
+     * set methods of all elements
+     */
     public void setTitle(String title){
         this.title = title;
     }
@@ -37,6 +53,9 @@ public class ProductData {
         this.code = code;
     }
 
+    /**
+     * get methods of all elements
+     */
     @Override
     public String toString(){
         return new String(title);

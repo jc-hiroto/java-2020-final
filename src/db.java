@@ -465,8 +465,7 @@ class db {
 
     /**
      * modify order
-     * @param
-     * @param
+     * @param ord
      * @param amount
      * @return flag true is success
      */
@@ -521,7 +520,7 @@ class db {
 
     /**
      * remove order
-     * @param
+     * @param ord
      * @return flag true is success
      */
     public static boolean deleteOrder(Order ord){
@@ -559,8 +558,8 @@ class db {
     /**
      * get the order number by user
      * @param userName
-     * @return orderList
      * @throws SQLException
+     * @return orderList
      */
     public static ArrayList<Order> getOrderByUser(String userName) throws SQLException {
         orderList.clear();
@@ -588,10 +587,10 @@ class db {
     }
 
     /**
-     *
      * @param productKey
      * @param startDate
-     * @param newState false if the trip is now too less people to go
+     * @param exceptOrderID
+     * @return integer -1 if the trip is now too less people to go
      */
     public static int updateStateOfOrder(String productKey,Date startDate, String exceptOrderID){
         connectToDB();
@@ -626,7 +625,7 @@ class db {
     /**
      * get order record by orderNumber
      * @param orderNumber
-     * @return Order
+     * @return tempOrder
      */
     public static Order getOrderByOrderNum(String orderNumber){
         connectToDB();
@@ -735,6 +734,7 @@ class db {
 
     /**
      * remove favorite from favList
+     * @param favProductKey
      */
     private static void removeFavorite(String favProductKey) {
             try {
@@ -752,6 +752,7 @@ class db {
 
     /**
      * get favorite list
+     * @param userName
      * @return favList
      */
     public static ArrayList<Favorite> getFavoriteByUser(String userName){

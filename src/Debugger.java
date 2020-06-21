@@ -1,8 +1,15 @@
 package src;
 
+/**
+ * define the debugger mode of the system
+ */
 public class Debugger {
     private static boolean debugMode;
 
+    /**
+     * set the message when debugger mode is on
+     * @param debugMode
+     */
     public static void setDebugMode(boolean debugMode) {
         Debugger.debugMode = debugMode;
         if(debugMode){
@@ -20,10 +27,19 @@ public class Debugger {
         }
     }
 
+    /**
+     * get the debugger info
+     * abstract class
+     * @return true if on
+     */
     public static boolean getDebugMode() {
         return debugMode;
     }
 
+    /**
+     * show debugger message
+     * @param msg
+     */
     public static void showDebugMessage(String msg){
         if(debugMode)
             System.out.println(msg);

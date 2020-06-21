@@ -2,12 +2,18 @@ package src;
 
 import java.util.Date;
 
+/**
+ * data structure of order
+ */
 public class Order {
 
     private String orderNumber,orderProductKey,orderStatus,orderUser,orderTitle;
     private int num;
     private Date startDate,orderDate;
 
+    /**
+     * default constructor of Order
+     */
     public Order(){
         orderNumber = null;
         orderProductKey = null;
@@ -19,6 +25,17 @@ public class Order {
         orderTitle = null;
     }
 
+    /**
+     * constructor of Order
+     * @param orderNumber
+     * @param orderProductKey
+     * @param orderStatus
+     * @param orderUser
+     * @param num
+     * @param startDate
+     * @param orderDate
+     * @param orderTitle
+     */
     public Order(String orderNumber, String orderProductKey, String orderStatus, String orderUser, int num, Date startDate, Date orderDate, String orderTitle) {
         this.orderNumber = orderNumber;
         this.orderProductKey = orderProductKey;
@@ -30,6 +47,10 @@ public class Order {
         this.orderTitle = orderTitle;
     }
 
+    /**
+     * get method of elements in Order
+     * @return elements in Order
+     */
     public String getOrderNum(){
         return new String(this.orderNumber);
     }

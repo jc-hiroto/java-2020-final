@@ -4,12 +4,23 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.lang.Math.*;
 
+/**
+ * define common method used by classes including following method
+ * connect to database
+ * define the JDBC
+ * close connection to database
+ * auto-generate key through hash
+ */
 public class dbAutoOptimize {
     private static Connection connection = null;
     private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
     private static ArrayList<String> done = new ArrayList<String>();
+
+    /**
+     * connect to database
+     * @return true if success
+     */
     public static boolean connectToDB() {
 
         try {
@@ -29,6 +40,11 @@ public class dbAutoOptimize {
         return true;
     }
 
+    /**
+     * close connection to database
+     * @param stmt
+     * @return true if success
+     */
     public static boolean closeConnection(Statement stmt){
         boolean flag = false;
         try {
@@ -51,6 +67,12 @@ public class dbAutoOptimize {
         }
         return flag;
     }
+
+    /**
+     * auto generate key using hash
+     * @param title
+     * @return String key
+     */
     public static String generateKey(String title){
         String hashed = Integer.toString(Math.abs(title.hashCode()));
         String key;
@@ -67,6 +89,11 @@ public class dbAutoOptimize {
         }
         return key;
     }
+
+    /**
+     * main class of dbAutoOptimize
+     * @param args
+     */
     public static void main(String[] args){
         connectToDB();
         String sql = "SELECT title FROM trip_data";

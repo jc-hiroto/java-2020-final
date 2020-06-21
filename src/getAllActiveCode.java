@@ -1,5 +1,9 @@
 package src;
 import src.hash.searchEngine;
+
+/**
+ * get all active travel code
+ */
 public class getAllActiveCode {
     public static void main(String[] args){
         int []travelCode= {40,41,43,44,100,101,342,343,368,384,391,392,393,394,395,396,397,398,399,

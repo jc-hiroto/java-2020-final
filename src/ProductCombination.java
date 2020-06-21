@@ -2,11 +2,17 @@ package src;
 
 import java.util.Date;
 
+/**
+ * Data structure of ProductCombination
+ */
 public class ProductCombination {
 
     private int price,upperBound,lowerBound,currentOrder;
     private Date startDate,endDate;
 
+    /**
+     * default constructor of ProductCombination
+     */
     public ProductCombination(){
         price = 0;
         upperBound = 0;
@@ -16,6 +22,15 @@ public class ProductCombination {
         endDate = null;
     }
 
+    /**
+     * constructor of ProductCombination
+     * @param pri
+     * @param up
+     * @param low
+     * @param curOrder
+     * @param start
+     * @param end
+     */
     public ProductCombination(int pri,int up,int low,int curOrder,Date start,Date end){
         price = pri;
         upperBound = up;
@@ -25,6 +40,10 @@ public class ProductCombination {
         endDate = end;
     }
 
+    /**
+     * set new ProductCombination
+     * @param old
+     */
     public ProductCombination(ProductCombination old){
         price = old.price;
         upperBound = old.upperBound;
@@ -34,6 +53,9 @@ public class ProductCombination {
         endDate = old.endDate;
     }
 
+    /**
+     * set methods of all elements
+     */
     public void setPrice(int price) {
         this.price = price;
     }
@@ -51,6 +73,9 @@ public class ProductCombination {
         this.upperBound = upperBound;
     }
 
+    /**
+     * get methods of all elements
+     */
     public int getPrice() {
         return price;
     }
