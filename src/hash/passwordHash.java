@@ -1,13 +1,18 @@
 package src.hash;
 //AES ECB PKCS7 padding mode
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Security;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
+/**
+ * hash the password and pass the password in encrypted status
+ * The hashing method uses AES standard with ECB subject to PKCS7 version international financial institution regulations
+ */
 public class passwordHash {
 
 	private final static String alg = "AES";

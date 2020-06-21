@@ -1,14 +1,15 @@
 package src;
 
+import src.hash.passwordHash;
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import src.db;
-import src.hash.*;
-import java.util.*;
 
+/**
+ * define the interface of login page UI components
+ * @param <loginStatus>
+ */
 public class login<loginStatus> {
     private JPanel contentHolder;
     private JLabel loginLabel;
@@ -32,6 +33,9 @@ public class login<loginStatus> {
     private CardLayout layout = null;
     private static String userName = "";
 
+    /**
+     * default constructor of login
+     */
     public login() {
         errorAlert.setVisible(false);
         loginCardHolder.add(loginPanel, "Login");
@@ -49,6 +53,7 @@ public class login<loginStatus> {
         }
         btnRegister.addActionListener(new ActionListener() {
             @Override
+            // 註冊按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(loginCardHolder, "Register");
                 btnBack.setVisible(true);
@@ -57,6 +62,7 @@ public class login<loginStatus> {
         });
         btnBack.addActionListener(new ActionListener() {
             @Override
+            // 返回按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 layout.show(loginCardHolder, "Login");
                 btnBack.setVisible(false);
@@ -67,6 +73,7 @@ public class login<loginStatus> {
         });
         btnLogin.addActionListener(new ActionListener() {
             @Override
+            // 登入按鈕
             public void actionPerformed(ActionEvent actionEvent) {
 
                 try {
@@ -100,6 +107,7 @@ public class login<loginStatus> {
         });
         btnLogout.addActionListener(new ActionListener() {
             @Override
+            // 登出按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 clearField();
                 setLoginStatus(false);
@@ -113,6 +121,7 @@ public class login<loginStatus> {
         });
         btnBackLogin.addActionListener(new ActionListener() {
             @Override
+            // 返回登入按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 emailField.setText("");
                 passwordField.setText("");
@@ -124,15 +133,24 @@ public class login<loginStatus> {
         });
     }
 
+    // get the login status
+    // true if logged in
     public static boolean getLoginStatus(){
         return loginstatus;
     }
+
+    // set log in status
+    // true if logged in
     public static void setLoginStatus(boolean set){
         loginstatus = set;
     }
+
+    // set user name
     public static void setUserName(String name){
         userName = name;
     }
+
+    // get user name
     public static String getUserName(){
         if(userName.equals("ERR") || !getLoginStatus()){
             return "";
@@ -141,9 +159,13 @@ public class login<loginStatus> {
             return userName;
         }
     }
+
+    // get email info from email field
     public String getEmail(){
         return emailField.getText();
     }
+
+    // get password from password field
     public StringBuffer getPassword() throws Exception {
         String passStr = new String(passwordField.getPassword());
         StringBuffer rawPass = new StringBuffer();
@@ -152,7 +174,8 @@ public class login<loginStatus> {
         return encryptPass;
     }
 
-
+    // check if the email is valid
+    // true if valid
     public boolean emailValid(String email){
         boolean result = true;
         if(email.isEmpty() || email == null){
@@ -166,10 +189,15 @@ public class login<loginStatus> {
         }
         return result;
     }
+
+    // clear the email, password field
     public void clearField(){
         emailField.setText("");
         passwordField.setText("");
     }
+
+    // check if the password is valid
+    // true if valid
     public boolean passwordValid(StringBuffer pass){
         boolean result = true;
         if(pass.toString().equals("ERR")){
@@ -181,10 +209,12 @@ public class login<loginStatus> {
         return result;
     }
 
+    // get the Java panel
     public JPanel getPanel(){
         return contentHolder;
     }
 
+    // create log in UI components
     private void createUIComponents() {
         registerPanel = new register().getPanel();
     }

@@ -1,15 +1,10 @@
 package src;
 
+import src.hash.searchEngine;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-
-import src.ProductData;
-import src.ProductCombination;
-import src.hash.searchEngine;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -20,6 +15,9 @@ import java.util.Date;
 
 import static src.Processor.textCutter;
 
+/**
+ * manage the trip info page
+ */
 public class tripInfo {
     private JPanel tripInfoPanel;
     private JLabel lbTitle;
@@ -33,6 +31,10 @@ public class tripInfo {
     private ProductData PDHold;
     private ArrayList<ProductCombination> PCArrayL;
 
+    /**
+     * constructor of the trip info
+     * @param PD
+     */
     public tripInfo(ProductData PD){
         PDHold = PD;
         PCArrayL = PD.getCombination();
@@ -67,6 +69,7 @@ public class tripInfo {
         });
         btnOrder.addActionListener(new ActionListener() {
             @Override
+            // 下訂按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 int sRow = table1.getSelectedRow();
                 Date startDate = new Date();
@@ -108,9 +111,18 @@ public class tripInfo {
             }
         });
     }
+
+    /**
+     * get the trip info page
+     * @return JPanel tripInfoPanel
+     */
     public JPanel getPanel(){
         return tripInfoPanel;
     }
+
+    /**
+     * initialize the trip info table
+     */
     public void initTable(){
         PCArrayL = PDHold.getCombination();
         String[][] displayPCArray = new String[PCArrayL.size()][6];
@@ -124,6 +136,9 @@ public class tripInfo {
         table1 = new JTable(displayPCArray,columns);
     }
 
+    /**
+     * create trip info UI components
+     */
     private void createUIComponents() {
         initTable();
         orderPeople = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));

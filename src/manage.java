@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/**
+ * manage the order list of user
+ */
 public class manage {
 
     private ArrayList<Order> userOrderList= new ArrayList<Order>();
@@ -22,7 +25,10 @@ public class manage {
     private JButton confirm;
     private int sRow = 0;
 
-
+    /**
+     * default constructor of manage
+     * @throws SQLException
+     */
     public manage() throws SQLException {
         editPanel.setVisible(false);
         userOrderList = db.getOrderByUser(LoginUser.getUserName());
@@ -44,8 +50,12 @@ public class manage {
             }
         });
 
+        /**
+         * set all reaction of every button
+         */
         btnCancel.addActionListener(new ActionListener() {
             @Override
+            // 取消按鈕
             public void actionPerformed(ActionEvent e) {
                 editPanel.setVisible(false);
                 int check = JOptionPane.showConfirmDialog(null,"您確定要取消該筆訂單嗎？","取消確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
@@ -69,6 +79,7 @@ public class manage {
         });
         btnEdit.addActionListener(new ActionListener() {
             @Override
+            // 編輯按鈕
             public void actionPerformed(ActionEvent e) {
                 int check = JOptionPane.showConfirmDialog(null,"更改人數將會取消目前訂單，並重新訂購。您確定要更改人數嗎？","更改確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
                 if(check == 0){
@@ -81,6 +92,7 @@ public class manage {
         });
         confirm.addActionListener(new ActionListener() {
             @Override
+            // 確認按鈕
             public void actionPerformed(ActionEvent actionEvent) {
                 int newPeople = (int) editPeople.getValue();
                 int check = JOptionPane.showConfirmDialog(null,"確定更改人數成: "+newPeople+" 人嗎？","更改確認",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
@@ -115,6 +127,10 @@ public class manage {
         });
     }
 
+    /**
+     * initialize the manage table
+     * @throws SQLException
+     */
     public void initManageTable() throws SQLException {
         Debugger.showDebugMessage("[SUCCESS] TripManager - TABLE INITIATED!");
         Debugger.showDebugMessage("[INFO] TripManager - GET ORDERS FROM USER: "+LoginUser.getUserName());
@@ -145,10 +161,21 @@ public class manage {
         String[] columns={"訂單序號","下訂日期","產品序號","產品名稱","出發日期","人數", "訂單狀態"};
         table1 = new JTable(displayOrderArray,columns);
     }
+
+    /**
+     * get the manage table page
+     * @return JPanel panel
+     * @throws SQLException
+     */
     public JPanel getPanel() throws SQLException {
         //initManageTable();
         return panel;
     }
+
+    /**
+     * create manage UI components
+     * @throws SQLException
+     */
     private void createUIComponents() throws SQLException {
         if(LoginUser.getUserName() != null){
             initManageTable();
