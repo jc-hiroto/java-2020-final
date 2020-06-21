@@ -14,6 +14,10 @@ import java.util.TimerTask;
 
 /**
  * this class is to define all logic used in database
+ * we implement all the method related to DB connection, sql quary to database, user data method, travel product data method, order data method, favorite data method
+ * the data base is built on SQL, using SQLite as JDBC
+ * the db initialize one user with a ArrayList of ProductData, Order, Favorite
+ * the time is in the format of yyyy-MM-dd
  */
 class db {
     private static Connection connection = null;

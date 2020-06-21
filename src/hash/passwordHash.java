@@ -12,6 +12,7 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64;
 /**
  * hash the password and pass the password in encrypted status
  * The hashing method uses AES standard with ECB subject to PKCS7 version international financial institution regulations
+ * Because the password cannot pass in plain text and store in the database, we set up hash key to set the hash the password into certain pattern and decrypted to check the validity
  */
 public class passwordHash {
 
@@ -19,7 +20,8 @@ public class passwordHash {
 	private final static String cI = "AES/ECB/PKCS7Padding";
 	private final static String key = "0123456789ABCDEF";
 
-	//encode text function
+	// encode text function
+	// using cipher in the javax library
 	public static StringBuffer encrypt(StringBuffer plainText) throws Exception {
 		if(plainText.length() == 0){
 			StringBuffer ERR = new StringBuffer();
@@ -48,7 +50,8 @@ public class passwordHash {
 
 	}
 
-	//decode text function
+	// decode text function
+	// using the provided hash key to decrypt the ciphered text
 	public static StringBuffer decrypt(StringBuffer cipherText) throws Exception {
 
 		try {

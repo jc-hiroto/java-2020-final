@@ -17,7 +17,7 @@ public class searchEngine{
 		ReadJsonFile();
 		JsonToIndex();
 	}
-	// JSON file read-in and return a JSON Array
+	// JSON file read-in and return a JSON Array using JSONParser
 	public void ReadJsonFile(){
 		JSONParser jsonParser = new JSONParser();
 		InputStream in = getClass().getResourceAsStream("/src/hash/travel_code.json");
