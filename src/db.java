@@ -21,7 +21,9 @@ import java.util.TimerTask;
  */
 class db {
     private static Connection connection = null;
-    private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite::resource:src/DB/trip_app_optimized.db");
+    //private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite:"+System.getProperty("user.dir")+ "/src/DB/trip_app_optimized.db");
+    //private static String url = FilenameUtils.separatorsToSystem( "jdbc:sqlite::resource:src/DB/trip_app_optimized.db");
+    private static String url = "jdbc:sqlite::resource:src/DB/trip_app_optimized.db";
     private static UserData usr = new UserData();
     private static ArrayList<ProductData> productDataList = new ArrayList<ProductData>();
     public static ArrayList<Order> orderList = new ArrayList<Order>();
